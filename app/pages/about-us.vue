@@ -4,11 +4,7 @@
 
 <template>
   <div>
-    <AppHeader />
-    <UMain>
-      <slot />
-    </UMain>
-    <AppFooter />
+    about us
   </div>
 </template>
 

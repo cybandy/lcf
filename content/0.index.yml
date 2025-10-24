@@ -1,150 +1,185 @@
-title: Ship Your [SaaS]{class="text-primary"} at light speed
-description: Build production-ready SaaS applications with Nuxt UI's powerful components, authentication flows, and enterprise features. The same component library trusted by the entire Nuxt ecosystem.
+title: Become A Part of Our [community]{class="text-primary"}
+description: Is there any encouragement from belonging to Christ? Any comfort from his love? Any fellowship together in the Spirit? Are your hearts tender and compassionate? Then make me truly happy by agreeing wholeheartedly with each other, loving one another, and working together with one mind and purpose. - Phil 2:1-2
+headline: Welcome
 seo:
-  title: Nuxt UI SaaS Template
-  description: Create stunning, fast and production-ready SaaS applications with Nuxt UI. 100+ Vue components, authentication, dark mode, and enterprise features built on Tailwind CSS.
+  title: L'Aquila Christian Fellowship | An English-Speaking Church in L'Aquila, Italy
+  description: Welcome to L'Aquila Christian Fellowship, an English-speaking Christian community in L'Aquila, Italy.
 navigation: false
 hero:
+  bg_image:
+    src: '/hero1.jpg'
+  orientation: 'horizontal'
   links:
-    - label: Get started
+    - label: Join Us
       icon: i-lucide-arrow-right
       trailing: true
-      to: https://ui.nuxt.com/docs/getting-started/installation/nuxt
-      target: _blank
+      to: '#'
       size: xl
-    - label: Use this template
-      icon: i-simple-icons-github
-      size: xl
+    - label: Visit Us
       color: neutral
       variant: subtle
-      to: https://github.com/nuxt-ui-templates/saas
-      target: _blank
+      to: '#'
 sections:
-  - title: Powered by Nuxt UI Components
-    description: Access the complete Nuxt UI component library with 100+ beautifully styled, accessible, and customizable Vue components. Everything you need to build professional SaaS applications.
-    id: features
-    orientation: horizontal
-    features:
-      - name: 100+ UI Components
-        description: From buttons to modals, data tables to forms - all styled with Tailwind CSS and accessible out of the box.
-        icon: i-lucide-package
-      - name: Authentication Ready
-        description: Pre-built login, signup, and password reset flows. Just connect your backend and start onboarding users.
-        icon: i-lucide-shield
-      - name: TypeScript First
-        description: Full TypeScript support with auto-completion, type safety, and IntelliSense for every component and composable.
-        icon: i-lucide-code-2
-  - title: Built for Modern SaaS
-    description: Everything you need to launch and scale your SaaS. From beautiful marketing pages to complex dashboards, ship faster with production-ready patterns.
+  - title: We Look Forward To See You
+    description: Our doors are opened wide to welcome you to fellowship with us. We are expectant and hope to meet you soon
+    headline: Attend Church
     orientation: horizontal
     reverse: true
+    links:
+      - label: Plan your visit
+        trailing: true
+        icon: i-qb-church-outline
+        to: '#'
+        size: xl
     features:
-      - name: Edge Performance
-        description: Optimized for Core Web Vitals with automatic code splitting, lazy loading, and SSR/SSG support.
-        icon: i-lucide-zap
-      - name: Dark Mode Ready
-        description: Automatic theme switching with smooth transitions. Respects system preferences and remembers user choice.
-        icon: i-lucide-moon
-      - name: Global Ready
-        description: Built-in i18n support for 50+ languages with RTL/LTR layouts and @nuxt/fonts integration.
-        icon: i-lucide-globe
+      - title: Time
+        description: Every Sunday 10:00 am. Check the event page for any update.
+        icon: i-lucide-calendar-clock
+      - title: Venue
+        description: Via Vetoio (Coppito) 67100 L'Aquila, Italy.
+        icon: i-lucide-map
+        to: https://maps.app.goo.gl/n8frHKnVeSgBAgwn8
+        target: _blank
+  - title: Who We Are
+    description: We are an English-speaking Christian community in the heart of L'Aquila, passionate about sharing and admonishing each other in the gospel of our Lord Jesus Christ as one family. Whether you're exploring faith for the first time or looking for a community of believers to fellowship, you are welcome here.
+    headline: About Us
+    orientation: horizontal
+    reverse: false
+    links:
+      - label: Read more
+        color: neutral
+        to: '#'
+        size: xl
+    features:
+      - title: Mission
+        description: To become like Christ at heart, in mind, and in experience.
+        icon: i-qb-goal
+      - title: Vision
+        description: That we all shall meet him in his glory at the second coming of our Lord Jesus.
+        icon: i-qb-vision
+      - title: Belief
+        description: Christ is the Son of God, he came on earth, died for our sins, and rose up from the dead for our justification. He is our Lord and Saviour.
+        icon: i-lucide-heart
 features:
-  title: Everything You Need to Ship
-  description: Stop building from scratch. Focus on your unique features while Nuxt UI handles the foundations with battle-tested components and patterns.
+  title: Everything You Need to Grow
+  icon: i-qb-growth
+  description: We are not ignorant of our identity as children of God, heirs of the Kingdom of God. Therefore through scriptures, sound knowledge, and prayers by the Holy Spirit we all seek to grow and manifest the glory of God upon our lives on earth.
   items:
-    - title: Beautiful Design System
-      description: Semantic color aliases, comprehensive design tokens, and Tailwind Variants for consistent, customizable styling.
-      icon: i-lucide-palette
-    - title: Accessible by Default
-      description: Built on Reka UI for robust accessibility. WCAG compliant components that work for everyone, everywhere.
-      icon: i-lucide-accessibility
-    - title: Developer Experience
-      description: Auto-imports, hot module replacement, and comprehensive documentation. Build faster with less friction.
-      icon: i-lucide-terminal
-    - title: SEO Optimized
-      description: Server-side rendering, automatic meta tags, sitemap generation, and Open Graph images out of the box.
-      icon: i-lucide-search
-    - title: Production Ready
-      description: Error handling, loading states, form validation, and security best practices built into every component.
-      icon: i-lucide-check-circle
-    - title: Infinitely Customizable
-      description: Override any style with the ui prop, customize globally with AppConfig, or use Tailwind classes directly.
-      icon: i-lucide-settings
+    - title: Sermons
+      description: All scripture is given by inspiration of God, and is profitable for doctrine, for reproof, for correction, for instruction in righteousness. - 2 Tim 3:16
+      icon: i-qb-bible-book
+      variant: solid
+      image:
+        src: /sermon-min.jpg
+        alt: man giving sermon
+    - title: Books
+      description: Buy the truth, and sell it not; also wisdom, and instruction, and understanding - Prov 23:23.
+      icon: i-qb-books
+      image:
+        src: /books-min.jpg
+        alt: collection of books in a library
+    - title: Daily Devotion
+      description: Meditate on it day and night so you will be sure to obey everything written in it - Jos 1:8.
+      icon: i-qb-books
+      image:
+        src: /devotion-min.jpg
+        alt: Two people reading the bible
+    - title: Personal Growth
+      description: Herein is my Father glorified, that ye bear much fruit; so shall ye be my disciples. - John 15:8
+      icon: i-qb-plant-growth
+      image:
+        src: /growth-min.jpg
+        alt: A woman stretching at dawn
+    - title: Career
+      description: Work hard and cheerfully at all you do, just as though you were working for the Lord and not merely for your masters - Col 3:23.
+      icon: i-lucide-briefcase
+      image:
+        src: /career-min.jpg
+        alt: A smiling successful career lady in an office
+    - title: Opportunities
+      description: Make good use of every opportunity you have, because these are evil days. - Eph 5:16.
+      icon: i-qb-books
+      image:
+        src: /opportunity-min.jpg
+        alt: two men in suits shaking hands
 testimonials:
   headline: Trusted by Developers
   title: Join Thousands Building with Nuxt UI
   description: See why developers choose Nuxt UI to ship their SaaS applications faster and with more confidence.
   items:
-    - quote: Nuxt UI transformed how we build. The component quality is exceptional - everything just works with perfect TypeScript support, accessibility, and dark mode built in.
+    - quote: From the moment I walked in, I felt like family. L'Aquila Christian Fellowship is such a warm, welcoming community. It's truly a home away from home here in Italy.
       user:
-        name: Sarah Chen
-        description: CTO at TechScale Solutions
+        name: David Lee
+        description: Member since 2023
         avatar:
-          src: https://i.pravatar.cc/120?img=1
-    - quote: We shipped our MVP in 2 weeks instead of 2 months. The authentication flows and form components saved us countless hours of development time.
+          src: https://i.pravatar.cc/120?img=2
+
+    - quote: As an international student, finding an English-speaking church was a blessing. The teaching is fantastic, and the people are genuine. I've made so many friends here.
       user:
-        name: Marcus Rodriguez
-        description: VP of Engineering at DataFlow
-        avatar:
-          src: https://i.pravatar.cc/120?img=7
-    - quote: The design system with AppConfig is brilliant. We maintain brand consistency across all our products while leveraging the full component library.
-      user:
-        name: David Kumar
-        description: Security Director at SecureStack
+        name: Maria Gonzalez
+        description: University of L'Aquila Student
         avatar:
           src: https://i.pravatar.cc/120?img=3
-    - quote: Perfect Lighthouse scores out of the box. Our Core Web Vitals improved dramatically just by switching to Nuxt UI components.
+
+    - quote: We were so happy to find a place with a great children's ministry. Our kids love their Sunday classes, and we love the Christ-centered, biblical messages.
       user:
-        name: Emily Zhang
-        description: Lead Architect at ScaleForce
+        name: The Johnson Family
+        description: New Residents in L'Aquila
+        avatar:
+          src: https://i.pravatar.cc/120?img=4
+
+    - quote: The teaching is always biblical, relevant, and easy to understand. I feel like I'm genuinely growing in my faith every single week. The sermons are a highlight!
+      user:
+        name: Michael Brown
+        description: Long-time Member
         avatar:
           src: https://i.pravatar.cc/120?img=5
-    - quote: The Tailwind Variants system makes customization so intuitive. We can override any component style while keeping the functionality intact.
+
+    - quote: I was just visiting L'Aquila for a few weeks and attended a service. Everyone was incredibly friendly, and I was so encouraged by the worship and the message.
       user:
-        name: James Wilson
-        description: DevOps Lead at CloudPro
+        name: Emily White
+        description: Visitor from Canada
+        avatar:
+          src: https://i.pravatar.cc/120?img=6
+
+    - quote: Getting plugged into a small group here changed everything for me. It's where I found real community, support, and people to do life with. It's more than just a Sunday service.
+      user:
+        name: Kenji Tanaka
+        description: Small Group Leader
+        avatar:
+          src: https://i.pravatar.cc/120?img=7
+
+    - quote: A diverse, international, and Jesus-loving community. If you're looking for an English-speaking church in Abruzzo, this is the place to be. We are so blessed to be a part of it.
+      user:
+        name: Sarah & Tom Williams
+        description: Members
         avatar:
           src: https://i.pravatar.cc/120?img=8
-    - quote: From the SaaS template to production in days. The pre-built layouts, navigation, and content structure accelerated our launch.
+
+    - quote: When I was going through a difficult time, the people at LCF surrounded me with prayer and practical support. This church isn't just talk; they truly live out their faith.
       user:
-        name: Lisa Patel
-        description: CEO at AutoScale
+        name: Chloé Dubois
+        description: Member
         avatar:
           src: https://i.pravatar.cc/120?img=9
-    - quote: Reka UI foundation means accessibility is never an afterthought. We achieved WCAG compliance without any custom work.
+
+    - quote: Finding a solid, Bible-believing community as a young professional in a new city was tough. L'Aquila Christian Fellowship has been an amazing anchor for my faith.
       user:
-        name: Michael Torres
-        description: Frontend Lead at AccessFirst
-        avatar:
-          src: https://i.pravatar.cc/120?img=11
-    - quote: The documentation is outstanding. Every component has clear examples, and the community on Discord is incredibly helpful.
-      user:
-        name: Rachel Kim
-        description: Performance Engineer at APIHub
+        name: Ben Carter
+        description: Young Professional
         avatar:
           src: https://i.pravatar.cc/120?img=10
-    - quote: We replaced three different UI libraries with Nuxt UI. The consistency and quality across all components is unmatched.
+
+    - quote: What I love most is the authenticity. People are real, the worship is heartfelt, and the focus is always on Jesus. It's a refreshing and life-giving place to be.
       user:
-        name: Thomas Weber
-        description: UI Architecture Lead at DesignScale
+        name: Dr. Anna Ibrahim
+        description: Researcher & Member
         avatar:
-          src: https://i.pravatar.cc/120?img=12
-    - quote: The integration with Nuxt modules is seamless. Color mode, fonts, icons - everything works together perfectly.
-      user:
-        name: Sophia Martinez
-        description: Integration Specialist at TechFlow
-        avatar:
-          src: https://i.pravatar.cc/120?img=14
+          src: https://i.pravatar.cc/120?img=11
 cta:
-  title: Ready to build an amazing SaaS?
-  description: Join thousands of developers building with Nuxt and Nuxt UI. Get this template and start shipping today.
+  title: Are you excited to join us?
+  description: So are we. We can't wait to have join us in fellowshiping, praising, and worshiping our Lord Jesus together.
   links:
-    - label: Start building
-      to: 'https://ui.nuxt.com/docs/getting-started/installation/nuxt'
-      target: _blank
+    - label: Come, Let's go
+      to: '#'
       trailingIcon: i-lucide-arrow-right
-    - label: View on GitHub
-      to: 'https://github.com/nuxt-ui-templates/saas'
-      target: _blank
-      variant: subtle
-      icon: i-simple-icons-github

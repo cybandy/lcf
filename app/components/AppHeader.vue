@@ -8,7 +8,7 @@ const items = computed(() => [
   // },
   {
     label: 'About Us',
-    to: '#',
+    to: '/about-us',
   // active: route.path.startsWith('/docs')
   }, 
   {
@@ -34,13 +34,13 @@ const items = computed(() => [
   <UHeader
     mode="slideover"
     :ui="{
-      root: 'bg-inverted'
+      root: 'bg-inverted border-b-0'
     }"
   >
     <template #left>
-      <!-- <NuxtLink to="/"> -->
-      <AppLogo class="w-auto h-6 shrink-0" />
-      <!-- </NuxtLink> -->
+      <NuxtLink to="/">
+        <AppLogo class="w-auto h-7 shrink-0" />
+      </NuxtLink>
     </template>
 
     <UNavigationMenu
@@ -48,7 +48,7 @@ const items = computed(() => [
       variant="link"
     >
       <template #item-label="{ item, active }">
-        <span :class="[active ? 'text-primary' : 'text-inverted', 'uppercase']">
+        <span :class="[active ? 'text-primary' : 'text-inverted']">
           {{ item.label }}
         </span>
       </template>
@@ -61,9 +61,11 @@ const items = computed(() => [
         color="primary"
         variant="solid"
         to="#"
-        label="New Here"
+        label="Join Us"
+        size="xl"
+        trailing-icon="i-lucide-arrow-right"
         class="hidden lg:inline-flex"
-        :ui="{ label: 'uppercase' }"
+        :ui="{ label: '' }"
       />
     </template>
 

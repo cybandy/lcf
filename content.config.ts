@@ -11,7 +11,9 @@ const createBaseSchema = () => z.object({
 })
 
 const createFeatureItemSchema = () => createBaseSchema().extend({
-  icon: z.string().nonempty().editor({ input: 'icon' })
+  icon: z.string().nonempty().editor({ input: 'icon' }),
+  to: z.string().optional(),
+  orientation: orientationEnum.optional(),
 })
 
 const createLinkSchema = () => z.object({
@@ -32,24 +34,34 @@ const createImageSchema = () => z.object({
   srcset: z.string().optional()
 })
 
+const createSectionBaseSchema = () => createBaseSchema().extend({
+  headline: z.string(),
+  links: z.array(createLinkSchema()),
+  orientation: orientationEnum.optional(),
+  reverse: z.boolean().optional(),
+  icon: z.string().optional().editor({ input: 'icon' }),
+})
+
 export const collections = {
   index: defineCollection({
     source: '0.index.yml',
     type: 'page',
     schema: z.object({
-      hero: z.object(({
-        links: z.array(createLinkSchema())
-      })),
+      hero: createSectionBaseSchema().extend({
+        bg_image: createImageSchema()
+      }),
       sections: z.array(
-        createBaseSchema().extend({
-          id: z.string().nonempty(),
-          orientation: orientationEnum.optional(),
-          reverse: z.boolean().optional(),
-          features: z.array(createFeatureItemSchema())
+        createSectionBaseSchema().extend({
+          features: z.array(createFeatureItemSchema()),
+          icon: z.string().optional()
         })
       ),
-      features: createBaseSchema().extend({
-        items: z.array(createFeatureItemSchema())
+      features: createSectionBaseSchema().extend({
+        items: z.array(createFeatureItemSchema().extend({
+          image: createImageSchema(),
+          variant: z.enum(['solid', 'outline', 'subtle', 'soft', 'ghost', 'naked']),
+          reverse: z.boolean().optional().default(true)
+        }))
       }),
       testimonials: createBaseSchema().extend({
         headline: z.string().optional(),
