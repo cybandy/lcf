@@ -16,11 +16,11 @@ const items = computed(() => [
     to: '#'
   },
   {
-    label: 'Blog',
+    label: 'Community',
     to: '#'
   },
   {
-    label: 'Community',
+    label: 'Blog',
     to: '#'
   },
   {
@@ -39,7 +39,7 @@ const items = computed(() => [
   >
     <template #left>
       <NuxtLink to="/">
-        <AppLogo class="w-auto h-7 shrink-0" />
+        <AppLogo class="size-10 shrink-0" />
       </NuxtLink>
     </template>
 
