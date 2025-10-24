@@ -36,6 +36,11 @@ const items = computed(() => [
     :ui="{
       root: 'bg-inverted border-b-0'
     }"
+    :toggle="{
+      ui: {
+        base: 'text-inverted5'
+      }
+    }"
   >
     <template #left>
       <NuxtLink to="/">
@@ -55,7 +60,11 @@ const items = computed(() => [
     </UNavigationMenu>
 
     <template #right>
-      <UColorModeButton />
+      <UColorModeButton
+        :ui="{
+          base: 'text-inverted'
+        }"
+      />
 
       <UButton
         color="primary"

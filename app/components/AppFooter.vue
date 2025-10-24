@@ -71,7 +71,7 @@ function onSubmit() {
         >
           <template #left>
             <div class="space-y-2">
-              <AppLogo class="shrink-0 size-20" />
+              <AppLogo class="shrink-0 size-16" />
               <div class="space-y-0.5">
                 <p class="text-dimmed text-sm">
                   A place of fellowship, growth, and transformation
@@ -139,6 +139,7 @@ function onSubmit() {
     </p>
 
     <template #right>
+      <UColorModeButton />
       <UButton
         to="https://www.facebook.com/share/1FvitgqbKN/?mibextid=wwXIfr"
         target="_blank"
