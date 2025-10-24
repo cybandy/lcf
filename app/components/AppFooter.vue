@@ -70,10 +70,32 @@ function onSubmit() {
           }"
         >
           <template #left>
-            <div class="space-y-4">
-              <AppLogo class="shrink-0 w-auto h-10" />
-              <div class="space-y-2">
-                <p>tel</p>
+            <div class="space-y-2">
+              <AppLogo class="shrink-0 size-20" />
+              <div class="space-y-0.5">
+                <p class="text-dimmed text-sm">
+                  A place of fellowship, growth, and transformation
+                </p>
+                <div class="flex items-center">
+                  <UButton
+                    color="neutral"
+                    variant="ghost"
+                    icon="i-lucide-map-pin"
+                  />
+                  <p class="text-dimmed">
+                    Via Vetoio (coppito), 67100, L'Aquila
+                  </p>
+                </div>
+                <div class="flex items-center">
+                  <UButton
+                    color="neutral"
+                    variant="ghost"
+                    icon="i-lucide-clock"
+                  />
+                  <p class="text-dimmed">
+                    Sundays at 10:00 AM
+                  </p>
+                </div>
               </div>
             </div>
           </template>
@@ -108,9 +130,13 @@ function onSubmit() {
 
     <template #left>
       <p class="text-muted text-sm">
-        All rights reserved | Copyright • © {{ new Date().getFullYear() }}
+        L'Aquila Christian Fellowship
       </p>
     </template>
+
+    <p class="text-muted text-sm">
+      All rights reserved • Copyright • © {{ new Date().getFullYear() }}      
+    </p>
 
     <template #right>
       <UButton
@@ -124,7 +150,7 @@ function onSubmit() {
       <UButton
         to="mailto:info.lcfaquila@gmail.com"
         target="_blank"
-        icon="i-lucide-at-sign"
+        icon="i-lucide-mail"
         aria-label="Send email"
         color="neutral"
         variant="ghost"

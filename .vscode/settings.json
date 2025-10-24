@@ -29,8 +29,11 @@
         "editor.defaultFormatter": "adpyke.vscode-sql-formatter"
     },
     "cSpell.words": [
+        "coppito",
         "lucide",
-        "Rsvps"
+        "Rsvps",
+        "slideover",
+        "Vetoio"
     ],
     "[tailwindcss]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
