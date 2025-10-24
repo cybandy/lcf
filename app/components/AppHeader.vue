@@ -38,7 +38,7 @@ const items = computed(() => [
     }"
     :toggle="{
       ui: {
-        base: 'text-inverted5'
+        base: 'text-inverted'
       }
     }"
   >
