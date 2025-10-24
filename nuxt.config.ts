@@ -4,7 +4,14 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@nuxt/ui',
     '@nuxt/content',
-    '@nuxt/scripts'
+    '@nuxt/scripts',
+    '@vueuse/nuxt',
+    'nuxt-auth-utils',
+    '@nuxthub/core',
+    '@pinia/nuxt',
+    'pinia-plugin-persistedstate',
+    '@nuxt/image',
+    'motion-v/nuxt',
   ],
 
   devtools: {
@@ -26,5 +33,19 @@ export default defineNuxtConfig({
         braceStyle: '1tbs'
       }
     }
+  },
+
+  hub: {
+    database: true,
+    blob: true
+  },
+
+  icon: {
+    customCollections: [
+      {
+        prefix: 'qb',
+        dir: './app/assets/icons'
+      }
+    ]
   }
 })

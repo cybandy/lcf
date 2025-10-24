@@ -1,18 +1,54 @@
-@import "tailwindcss";
-@import "@nuxt/ui";
+@import 'tailwindcss';
+@import '@nuxt/ui';
 
 @theme static {
-  --font-sans: 'Public Sans', sans-serif;
+  --font-sans: 'Roboto Condensed', 'Public Sans', sans-serif;
 
-  --color-green-50: #EFFDF5;
-  --color-green-100: #D9FBE8;
-  --color-green-200: #B3F5D1;
-  --color-green-300: #75EDAE;
-  --color-green-400: #00DC82;
-  --color-green-500: #00C16A;
-  --color-green-600: #00A155;
-  --color-green-700: #007F45;
+  --color-green-50: #effdf5;
+  --color-green-100: #d9fbe8;
+  --color-green-200: #b3f5d1;
+  --color-green-300: #75edae;
+  --color-green-400: #00dc82;
+  --color-green-500: #00c16a;
+  --color-green-600: #00a155;
+  --color-green-700: #007f45;
   --color-green-800: #016538;
-  --color-green-900: #0A5331;
-  --color-green-950: #052E16;
+  --color-green-900: #0a5331;
+  --color-green-950: #052e16;
+
+  --color-vulcan-50: #f5f5fa;
+  --color-vulcan-100: #ebecf3;
+  --color-vulcan-200: #d3d5e4;
+  --color-vulcan-300: #acb2cd;
+  --color-vulcan-400: #7e87b2;
+  --color-vulcan-500: #5e6999;
+  --color-vulcan-600: #4a527f;
+  --color-vulcan-700: #3d4267;
+  --color-vulcan-800: #353957;
+  --color-vulcan-900: #30334a;
+  --color-vulcan-950: #161722;
+
+  --color-white-rock-50: #f8f6ee;
+  --color-white-rock-100: #ece7d2;
+  --color-white-rock-200: #dcd1ac;
+  --color-white-rock-300: #c8b47c;
+  --color-white-rock-400: #b89a57;
+  --color-white-rock-500: #a8874a;
+  --color-white-rock-600: #916d3d;
+  --color-white-rock-700: #745334;
+  --color-white-rock-800: #624631;
+  --color-white-rock-900: #553c2e;
+  --color-white-rock-950: #311f17;
+
+  --color-peach-orange-50: #fff6ed;
+  --color-peach-orange-100: #ffecd5;
+  --color-peach-orange-200: #ffd2a4;
+  --color-peach-orange-300: #ffb672;
+  --color-peach-orange-400: #fd8c3a;
+  --color-peach-orange-500: #fc6c13;
+  --color-peach-orange-600: #ed5009;
+  --color-peach-orange-700: #c43a0a;
+  --color-peach-orange-800: #9c2f10;
+  --color-peach-orange-900: #7d2911;
+  --color-peach-orange-950: #441206;
 }

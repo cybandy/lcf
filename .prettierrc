@@ -1,0 +1,14 @@
+{
+    "printWidth": 80,
+    "singleQuote": true,
+    "vueIndentScriptAndStyle": true,
+    "htmlWhitespaceSensitivity": "ignore",
+    "attributePerLine": true,
+    "trailingComma": "all",
+    "tailwindStylesheet": "./app/assets/css/main.css",
+    "tailwindAttributes": [
+        "class",
+        "ui",
+        "apply"
+    ]
+}

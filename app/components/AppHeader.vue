@@ -1,0 +1,103 @@
+<script setup lang="ts">
+const route = useRoute()
+
+const items = computed(() => [
+  // {
+  //   label: 'New Here',
+  //   to: '/'
+  // },
+  {
+    label: 'About Us',
+    to: '#',
+  // active: route.path.startsWith('/docs')
+  }, 
+  {
+    label: 'Sermon',
+    to: '#'
+  },
+  {
+    label: 'Blog',
+    to: '#'
+  },
+  {
+    label: 'Community',
+    to: '#'
+  },
+  {
+    label: 'Contact',
+    to: '#'
+  }
+])
+</script>
+
+<template>
+  <UHeader
+    mode="slideover"
+    :ui="{
+      root: 'bg-inverted'
+    }"
+  >
+    <template #left>
+      <!-- <NuxtLink to="/"> -->
+      <AppLogo class="w-auto h-6 shrink-0" />
+      <!-- </NuxtLink> -->
+    </template>
+
+    <UNavigationMenu
+      :items="items"
+      variant="link"
+    >
+      <template #item-label="{ item, active }">
+        <span :class="[active ? 'text-primary' : 'text-inverted', 'uppercase']">
+          {{ item.label }}
+        </span>
+      </template>
+    </UNavigationMenu>
+
+    <template #right>
+      <UColorModeButton />
+
+      <UButton
+        color="primary"
+        variant="solid"
+        to="#"
+        label="New Here"
+        class="hidden lg:inline-flex"
+        :ui="{ label: 'uppercase' }"
+      />
+    </template>
+
+    <template #body>
+      <UNavigationMenu
+        :items="items"
+        orientation="vertical"
+        class="-mx-2.5"
+      />
+
+      <USeparator class="my-6" />
+
+      <UButton
+        label="Join Us"
+        color="primary"
+        variant="solid"
+        to="#"
+        block
+        class="mb-3"
+      />
+      <UButton
+        label="Sign in"
+        color="neutral"
+        variant="subtle"
+        to="/login"
+        block
+        class="mb-3"
+      />
+      <UButton
+        label="Sign up"
+        color="neutral"
+        to="/signup"
+        block
+      />
+    </template>
+  </UHeader>
+</template>
