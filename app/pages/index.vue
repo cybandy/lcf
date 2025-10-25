@@ -29,8 +29,8 @@ useSeoMeta({
         :ui="{
           container: 'bg-black/40 max-w-full',
           title: 'text-neutral-50 dark:text-white',
-          description: 'text-neutral-500 dark:text-neutral-400',
-          root: 'bg-cover'
+          description: 'text-neutral-300 dark:text-neutral-300',
+          root: 'bg-center bg-cover'
         }"
       >
         <template #title>

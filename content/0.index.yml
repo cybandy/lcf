@@ -103,9 +103,9 @@ features:
         src: /opportunity-min.jpg
         alt: two men in suits shaking hands
 testimonials:
-  headline: Trusted by Developers
-  title: Join Thousands Building with Nuxt UI
-  description: See why developers choose Nuxt UI to ship their SaaS applications faster and with more confidence.
+  headline: Testimonies
+  title: Finding Home in L'Aquila
+  description: We believe God is building something special at LCF. Here are some stories from people who have found connection, hope, and a place to belong in our community.
   items:
     - quote: From the moment I walked in, I felt like family. L'Aquila Christian Fellowship is such a warm, welcoming community. It's truly a home away from home here in Italy.
       user:
