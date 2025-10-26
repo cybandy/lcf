@@ -47,5 +47,10 @@ export default defineNuxtConfig({
         dir: './app/assets/icons'
       }
     ]
+  },
+  content: {
+    preview: {
+      api: 'https://api.nuxt.studio'
+    }
   }
 })

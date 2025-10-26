@@ -21,7 +21,7 @@ const items = computed(() => [
   },
   {
     label: 'Blog',
-    to: '#'
+    to: '/blog'
   },
   {
     label: 'Contact',
@@ -62,7 +62,7 @@ const items = computed(() => [
     <template #right>
       <UColorModeButton
         :ui="{
-          base: 'text-inverted'
+          base: 'text-inverted hover:bg-inverted active:bg-inverted'
         }"
       />
 
