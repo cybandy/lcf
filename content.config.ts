@@ -7,7 +7,8 @@ const orientationEnum = z.enum(['vertical', 'horizontal'])
 
 const createBaseSchema = () => z.object({
   title: z.string().nonempty(),
-  description: z.string().nonempty()
+  description: z.string().nonempty(),
+  class: z.string().optional()
 })
 
 const createFeatureItemSchema = () => createBaseSchema().extend({

@@ -22,6 +22,7 @@ hero:
   - title: 'Christmas [Feast]{class="text-primary"} is coming soon'
     description: Join us as at the praise banquet this december as we minister to our Lord Jesus in psalms, hymns and food. We do it all to the glory of God.
     headline: Dancing around
+    class: bg-cover
     bg_image:
       src: '/hero2.jpg'
     orientation: 'horizontal'
