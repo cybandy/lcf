@@ -1,24 +1,54 @@
-title: Become A Part of Our [community]{class="text-primary"}
-description: Is there any encouragement from belonging to Christ? Any comfort from his love? Any fellowship together in the Spirit? Are your hearts tender and compassionate? Then make me truly happy by agreeing wholeheartedly with each other, loving one another, and working together with one mind and purpose. - Phil 2:1-2
-headline: Welcome
 seo:
   title: L'Aquila Christian Fellowship | An English-Speaking Church in L'Aquila, Italy
   description: Welcome to L'Aquila Christian Fellowship, an English-speaking Christian community in L'Aquila, Italy.
 navigation: false
 hero:
-  bg_image:
-    src: '/hero1.jpg'
-  orientation: 'horizontal'
-  links:
-    - label: Join Us
-      icon: i-lucide-arrow-right
-      trailing: true
-      to: '#'
-      size: xl
-    - label: Visit Us
-      color: neutral
-      variant: subtle
-      to: '#'
+  - title: Become A Part of Our [community]{class="text-primary"}
+    description: Is there any encouragement from belonging to Christ? Any comfort from his love? Any fellowship together in the Spirit? Are your hearts tender and compassionate? Then make me truly happy by agreeing wholeheartedly with each other, loving one another, and working together with one mind and purpose. - Phil 2:1-2
+    headline: Welcome
+    bg_image:
+      src: '/hero1.jpg'
+    orientation: 'horizontal'
+    links:
+      - label: Join Us
+        icon: i-lucide-arrow-right
+        trailing: true
+        to: '#'
+        size: xl
+      - label: Visit Us
+        color: neutral
+        variant: subtle
+        to: '#'
+  - title: 'Christmas [Feast]{class="text-primary"} is coming soon'
+    description: Join us as at the praise banquet this december as we minister to our Lord Jesus in psalms, hymns and food. We do it all to the glory of God.
+    headline: Dancing around
+    bg_image:
+      src: '/hero2.jpg'
+    orientation: 'horizontal'
+    links:
+      - label: Join Us
+        icon: i-lucide-arrow-right
+        trailing: true
+        to: '#'
+        size: xl
+      - label: Register
+        color: neutral
+        variant: subtle
+        icon: i-lucide-calendar-days
+        to: '#'
+  - title: '[Prayer]{class="text-primary"} & [Fasting]{class="text-primary"} On 21 December 2025'
+    description: Do not be anxious for anything but through prayer and supplications let your request be known to God.
+    headline: Throne Room
+    bg_image:
+      src: '/hero3.jpg'
+      alt: 'prayer and worshiping people'
+    orientation: 'horizontal'
+    links:
+      - label: Join Us
+        icon: i-lucide-arrow-right
+        trailing: true
+        to: '#'
+        size: xl
 sections:
   - title: We Look Forward To See You
     description: Our doors are opened wide to welcome you to fellowship with us. We are expectant and hope to meet you soon

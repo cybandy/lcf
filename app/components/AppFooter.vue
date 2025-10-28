@@ -1,36 +1,36 @@
 <script setup lang="ts">
 const columns = [
   {
-    label: 'Resources',
+    label: 'Quicklinks',
     children: [
       {
-        label: 'Help center'
+        label: 'Events'
       }, 
       {
-        label: 'Docs'
+        label: 'Gallery'
       }, 
       {
-        label: 'Roadmap'
+        label: 'Blog'
       }, 
       {
-        label: 'Changelog'
+        label: 'Sermons'
       }
     ]
   }, 
   {
-    label: 'Features',
+    label: 'Resources',
     children: [
       {
-        label: 'Affiliates'
+        label: 'Sunday School'
       },
       {
-        label: 'Portal'
+        label: 'Books'
       },
       {
-        label: 'Jobs'
+        label: 'Opportunities'
       }, 
       {
-        label: 'Sponsors'
+        label: 'Sponsorship'
       }
     ]
   }

@@ -16,31 +16,10 @@ useSeoMeta({
 <template>
   <div>
     <div v-if="page">
-      <UPageHero
-        :title="page.title"
-        :description="page.description"
-        :links="page.hero.links"
-        :orientation="page.hero.orientation"
-        :reverse="page.hero.reverse"
-        :headline="page.hero.headline"
-        :style="{
-          'background-image': `url(${page.hero.bg_image.src})`
-        }"
-        :ui="{
-          container: 'bg-black/40 max-w-full',
-          title: 'text-neutral-50 dark:text-white',
-          description: 'text-neutral-300 dark:text-neutral-300',
-          root: 'bg-center bg-cover'
-        }"
-      >
-        <template #title>
-          <MDC
-            :value="page.title"
-            unwrap="p"
-            class=""
-          />
-        </template>
-      </UPageHero>
+      <hero-slider
+        v-if="page.hero"
+        v-model="page.hero"
+      />
 
       <UPageSection
         v-for="(section, index) in page.sections"

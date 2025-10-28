@@ -47,9 +47,11 @@ export const collections = {
     source: '0.index.yml',
     type: 'page',
     schema: z.object({
-      hero: createSectionBaseSchema().extend({
-        bg_image: createImageSchema()
-      }),
+      hero: z.array(
+        createSectionBaseSchema().extend({
+          bg_image: createImageSchema()
+        })
+      ),
       sections: z.array(
         createSectionBaseSchema().extend({
           features: z.array(createFeatureItemSchema()),
@@ -103,18 +105,46 @@ export const collections = {
       badge: z.object({ label: z.string().nonempty() })
     })
   }),
-  // changelog: defineCollection({
-  //   source: '4.changelog.yml',
-  //   type: 'page'
-  // }),
-  // versions: defineCollection({
-  //   source: '4.changelog/**/*',
-  //   type: 'page',
-  //   schema: z.object({
-  //     title: z.string().nonempty(),
-  //     description: z.string(),
-  //     date: z.date(),
-  //     image: z.string()
-  //   })
-  // })
+  dev: defineCollection({
+    source: 'dev.yml',
+    type: 'page',
+    schema: z.object({
+      hero: z.array(
+        createSectionBaseSchema().extend({
+          bg_image: createImageSchema()
+        })
+      ),
+      // sections: z.array(
+      //   createSectionBaseSchema().extend({
+      //     features: z.array(createFeatureItemSchema()),
+      //     icon: z.string().optional()
+      //   })
+      // ),
+      // features: createSectionBaseSchema().extend({
+      //   items: z.array(createFeatureItemSchema().extend({
+      //     image: createImageSchema(),
+      //     variant: z.enum(['solid', 'outline', 'subtle', 'soft', 'ghost', 'naked']),
+      //     reverse: z.boolean().optional().default(true)
+      //   }))
+      // }),
+      // testimonials: createBaseSchema().extend({
+      //   headline: z.string().optional(),
+      //   items: z.array(
+      //     z.object({
+      //       quote: z.string().nonempty(),
+      //       user: z.object({
+      //         name: z.string().nonempty(),
+      //         description: z.string().nonempty(),
+      //         to: z.string().nonempty(),
+      //         target: z.string().nonempty(),
+      //         avatar: createImageSchema()
+      //       })
+      //     })
+      //   )
+      // }),
+      // cta: createBaseSchema().extend({
+      //   links: z.array(createLinkSchema())
+      // })
+    })
+  }),
 }

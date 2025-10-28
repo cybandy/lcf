@@ -15,7 +15,7 @@ useSeoMeta({
 })
 
 // defineOgImageComponent('Saas')
-console.log(posts.value)
+// console.log(posts.value)
 </script>
 
 <template>
