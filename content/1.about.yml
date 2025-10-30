@@ -1,0 +1,390 @@
+seo:
+  title: About Us | L'Aquila Christian Fellowship | International Church in L'Aquila
+  description: Learn about L'Aquila Christian Fellowship (LCF), a vibrant international community for students, professionals, and families in L'Aquila, Italy. Discover our mission, vision, and how we're building a spiritual home.
+navigation: false
+hero:
+  title: 'A [Family]{class="text-primary"} Of Believers'
+  description: "A vibrant international fellowship of students, professionals, and families united by faith in Jesus Christ."
+  icon: i-mdi-handshake-outline
+  image:
+    src: '/hero3.jpg'
+    alt: 'prayer and worshiping people'
+  orientation: 'vertical'
+  links:
+    - label: Join Us
+      icon: i-lucide-arrow-right
+      trailing: true
+      to: '#'
+      size: xl
+verses:
+  - quote: 'And let us consider how we may spur one another on toward love and good deeds, not giving up meeting together, as some are in the habit of doing, but encouraging one another.'
+    reference: Hebrews 10:24-25
+    target: _blank
+    source:
+      url: https://www.biblegateway.com/verse/en/Hebrews%2010%3A24-25
+
+  - quote: 'They devoted themselves to the apostles' teaching and to fellowship, to the breaking of bread and to prayer.'
+    reference: Acts 2:42
+    target: _blank
+    source:
+      url: https://www.biblegateway.com/verse/en/Acts%202%3A42
+
+  - quote: 'A new command I give you: Love one another. As I have loved you, so you must love one another. By this everyone will know that you are my disciples, if you love one another.'
+    reference: John 13:34-35
+    target: _blank
+    source:
+      url: https://www.biblegateway.com/verse/en/John%2013%3A34-35
+
+  - quote: 'Let the message of Christ dwell among you richly as you teach and admonish one another with all wisdom through psalms, hymns, and songs from the Spirit, singing to God with gratitude in your hearts.'
+    reference: Colossians 3:16
+    target: _blank
+    source:
+      url: https://www.biblegateway.com/verse/en/Colossians%203%3A16
+
+  - quote: 'Accept one another, then, just as Christ accepted you, in order to bring praise to God.'
+    reference: Romans 15:7
+    target: _blank
+    source:
+      url: https://www.biblegateway.com/verse/en/Romans%2015%3A7
+
+  - quote: 'Consequently, you are no longer foreigners and strangers, but fellow citizens with God's people and also members of his household.'
+    reference: Ephesians 2:19
+    target: _blank
+    source:
+      url: https://www.biblegateway.com/verse/en/Ephesians%202%3A19
+
+  - quote: 'Each of you should use whatever gift you have received to serve others, as faithful stewards of God's grace in its various forms.'
+    reference: 1 Peter 4:10
+    target: _blank
+    source:
+      url: https://www.biblegateway.com/verse/en/1%20Peter%204%3A10
+
+  - quote: 'You are the light of the world. A town built on a hill cannot be hidden.'
+    reference: Matthew 5:14
+    target: _blank
+    source:
+      url: https://www.biblegateway.com/verse/en/Matthew%205%3A14
+
+  - quote: 'Therefore go and make disciples of all nations, baptizing them in the name of the Father and of the Son and of the Holy Spirit, and teaching them to obey everything I have commanded you.'
+    reference: Matthew 28:19-20a
+    target: _blank
+    source:
+      url: https://www.biblegateway.com/verse/en/Matthew%2028%3A19-20
+
+  - quote: '...then make my joy complete by being like-minded, having the same love, being one in spirit and of one mind.'
+    reference: Philippians 2:2
+    target: _blank
+    source:
+      url: https://www.biblegateway.com/verse/en/Philippians%202%3A2
+
+  - quote: 'All Scripture is God-breathed and is useful for teaching, rebuking, correcting and training in righteousness, so that the servant of God may be thoroughly equipped for every good work.'
+    reference: 2 Timothy 3:16-17
+    target: _blank
+    source:
+      url: https://www.biblegateway.com/verse/en/2%20Timothy%203%3A16-17
+
+  - quote: 'You, my brothers and sisters, were called to be free. But do not use your freedom to indulge the flesh; rather, serve one another humbly in love.'
+    reference: Galatians 5:13
+    target: _blank
+    source:
+      url: https://www.biblegateway.com/verse/en/Galatians%205%3A13
+
+  - quote: 'Come near to God and he will come near to you.'
+    reference: James 4:8a
+    target: _blank
+    source:
+      url: https://www.biblegateway.com/verse/en/James%204%3A8
+
+  - quote: 'Be completely humble and gentle; be patient, bearing with one another in love. Make every effort to keep the unity of the Spirit through the bond of peace.'
+    reference: Ephesians 4:2-3
+    target: _blank
+    source:
+      url: https://www.biblegateway.com/verse/en/Ephesians%204%3A2-3
+
+  - quote: 'Now you are the body of Christ, and each one of you is a part of it.'
+    reference: 1 Corinthians 12:27
+    target: _blank
+    source:
+      url: https://www.biblegateway.com/verse/en/1%20Corinthians%2012%3A27
+
+  - quote: 'For just as each of us has one body with many members, and these members do not all have the same function, so in Christ we, though many, form one body, and each member belongs to all the others.'
+    reference: Romans 12:4-5
+    target: _blank
+    source:
+      url: https://www.biblegateway.com/verse/en/Romans%2012%3A4-5
+
+  - quote: 'The LORD is near to all who call on him, to all who call on him in truth.'
+    reference: Psalm 145:18
+    target: _blank
+    source:
+      url: https://www.biblegateway.com/verse/en/Psalm%20145%3A18
+
+  - quote: 'If we love one another, God lives in us and his love is made complete in us.'
+    reference: 1 John 4:12b
+    target: _blank
+    source:
+      url: https://www.biblegateway.com/verse/en/1%20John%204%3A12
+
+  - quote: 'But you are a chosen people, a royal priesthood, a holy nation, God's special possession, that you may declare the praises of him who called you out of darkness into his wonderful light.'
+    reference: 1 Peter 2:9
+    target: _blank
+    source:
+      url: https://www.biblegateway.com/verse/en/1%20Peter%202%3A9
+
+  - quote: 'As iron sharpens iron, so one person sharpens another.'
+    reference: Proverbs 27:17
+    target: _blank
+    source:
+      url: https://www.biblegateway.com/verse/en/Proverbs%2027%3A17
+
+  - quote: 'And let us consider how we may spur one another on toward love and good deeds, not giving up meeting together, as some are in the habit of doing, but encouraging one another—and all the more as you see the Day approaching.'
+    reference: 'Hebrews 10:24-25'
+    source:
+      url: 'https://www.biblegateway.com/verse/en/Hebrews%2010%2A24-25'
+
+  - quote: "They devoted themselves to the apostles' teaching and to fellowship, to the breaking of bread and to prayer."
+    reference: 'Acts 2:42'
+    source:
+      url: 'https://www.biblegateway.com/verse/en/Acts%202%3A42'
+
+  - quote: 'As iron sharpens iron, so one person sharpens another.'
+    reference: 'Proverbs 27:17'
+    source:
+      url: 'https://www.biblegateway.com/verse/en/Proverbs%2027%3A17'
+
+  - quote: 'For where two or three gather in my name, there am I with them.'
+    reference: 'Matthew 18:20'
+    source:
+      url: 'https://www.biblegateway.com/verse/en/Matthew%2018%3A20'
+
+  - quote: 'And the Gentiles shall come to thy light, and kings to the brightness of thy rising.'
+    reference: 'Isaiah 60:3'
+    source:
+      url: 'https://www.biblegateway.com/verse/en/Isaiah%2060%3A3'
+
+  - quote: 'You are the light of the world. A town built on a hill cannot be hidden.'
+    reference: 'Matthew 5:14'
+    source:
+      url: 'https://www.biblegateway.com/verse/en/Matthew%205%3A14'
+
+  - quote: 'So in Christ we, though many, form one body, and each member belongs to all the others.'
+    reference: 'Romans 12:5'
+    source:
+      url: 'https://www.biblegateway.com/verse/en/Romans%2012%3A5'
+
+  - quote: "Carry each other's burdens, and in this way you will fulfill the law of Christ."
+    reference: 'Galatians 6:2'
+    source:
+      url: 'https://www.biblegateway.com/verse/en/Galatians%206%3A2'
+
+  - quote: 'If you have any encouragement from being united with Christ, if any comfort from his love, if any common sharing in the Spirit, if any tenderness and compassion, then make my joy complete by being like-minded, having the same love, being one in spirit and of one mind.'
+    reference: 'Philippians 2:1-2'
+    source:
+      url: 'https://www.biblegateway.com/verse/en/Philippians%202%3A1-2'
+
+  - quote: 'Above all, love each other deeply, because love covers over a multitude of sins. Offer hospitality to one another without grumbling.'
+    reference: '1 Peter 4:8-9'
+    source:
+      url: 'https://www.biblegateway.com/verse/en/1%20Peter%204%3A8-9'
+
+  - quote: 'And let the peace of Christ rule in your hearts, to which indeed you were called in one body. And be thankful. Let the message of Christ dwell among you richly as you teach and admonish one another with all wisdom through psalms, hymns, and songs from the Spirit, singing to God with gratitude in your hearts.'
+    reference: 'Colossians 3:15-16'
+    source:
+      url: 'https://www.biblegateway.com/verse/en/Colossians%203%3A15-16'
+
+  - quote: 'But if we walk in the light, as he is in the light, we have fellowship with one another, and the blood of Jesus, his Son, purifies us from all sin.'
+    reference: '1 John 1:7'
+    source:
+      url: 'https://www.biblegateway.com/verse/en/1%20John%201%3A7'
+
+  - quote: "Each of you should use whatever gift you have received to serve others, as faithful stewards of God's grace in its various forms."
+    reference: '1 Peter 4:10'
+    source:
+      url: 'https://www.biblegateway.com/verse/en/1%20Peter%204%3A10'
+
+  - quote: 'Therefore welcome one another as Christ has welcomed you, for the glory of God.'
+    reference: 'Romans 15:7'
+    source:
+      url: 'https://www.biblegateway.com/verse/en/Romans%2015%3A7'
+
+  - quote: 'My command is this: Love each other as I have loved you.'
+    reference: 'John 15:12'
+    source:
+      url: 'https://www.biblegateway.com/verse/en/John%2015%3A12'
+
+  - quote: "I long to see you so that I may impart to you some spiritual gift to make you strong— that is, that you and I may be mutually encouraged by each other's faith."
+    reference: 'Romans 1:11-12'
+    source:
+      url: 'https://www.biblegateway.com/verse/en/Romans%201%3A11-12'
+
+  - quote: 'And let us not grow weary of doing good, for in due season we will reap, if we do not give up. So then, as we have opportunity, let us do good to everyone, and especially to those who are of the household of faith.'
+    reference: 'Galatians 6:9-10'
+    source:
+      url: 'https://www.biblegateway.com/verse/en/Galatians%206%3A9-10'
+
+  - quote: "How good and pleasant it is when God's people live together in unity!"
+    reference: 'Psalm 133:1'
+    source:
+      url: 'https://www.biblegateway.com/verse/en/Psalm%20133%3A1'
+
+  - quote: "But you are a chosen people, a royal priesthood, a holy nation, God's special possession, that you may declare the praises of him who called you out of darkness into his wonderful light."
+    reference: '1 Peter 2:9'
+    source:
+      url: 'https://www.biblegateway.com/verse/en/1%20Peter%202%3A9'
+
+  - quote: "Consequently, you are no longer foreigners and strangers, but fellow citizens with God's people and also members of his household, built on the foundation of the apostles and prophets, with Christ Jesus himself as the chief cornerstone."
+    reference: 'Ephesians 2:19-20'
+    source:
+      url: 'https://www.biblegateway.com/verse/en/Ephesians%202%3A19-20'
+sections:
+  - title: About Us
+    description: "L'Aquila Christian Fellowship (LCF) is a vibrant community of believers based in L'Aquila, Italy, united by faith in Jesus Christ and a shared desire to grow in God's Word, love, and service."
+    headline: Who We Are
+    orientation: horizontal
+    reverse: false
+    features:
+      - title: Community
+        description: international fellowship of students, professionals, and families who love Jesus and seek to grow in His word.
+        icon: i-lucide-globe
+      - title: Home
+        description: To create a spiritual home for both newcomers and residents in L'Aquila, a place where believers can grow in intimacy with God, build lasting friendships, and influence their world with the light of Christ.
+        icon: i-lucide-building-2
+      - title: Belief
+        description: At LCF, we believe that faith thrives in community. We are passionate about discipleship, outreach, and living out the gospel practically on campus, in the city, and beyond.
+        icon: i-lucide-heart
+  - title: Mission
+    description: To build a community of fellowship with God and man through prayer, discipleship, and the word.
+    orientation: horizontal
+    reverse: true
+    features:
+      - description: To create a nurturing environment where believers grow in fellowship with God and one another through prayer, discipleship, and the Word.
+        icon: i-qb-goal
+      - description: To share the revelation of Christ with both the international and local community of L'Aquila, that many may come to know and experience true fellowship with the Father and His Son, Jesus Christ.
+        icon: i-qb-goal
+      - description: To equip believers as kingdom ambassadors who reflect Christ in academics, careers, and everyday living.
+        icon: i-qb-goal
+      - description: To foster unity and love among believers across all nations, denominations, and backgrounds, revealing the heart of God's family on earth.
+        icon: i-qb-goal
+features:
+  title: Gallery
+  icon: i-lucide-heart
+  description: A glimpse into our vibrant community life at L'Aquila Christian Fellowship. Here, faith meets fellowship in a diverse and welcoming environment.
+  items:
+    - title: Sermons
+      description: All scripture is given by inspiration of God, and is profitable for doctrine, for reproof, for correction, for instruction in righteousness. - 2 Tim 3:16
+      icon: i-qb-bible-book
+      variant: solid
+      image:
+        src: /sermon-min.jpg
+        alt: man giving sermon
+    - title: Books
+      description: Buy the truth, and sell it not; also wisdom, and instruction, and understanding - Prov 23:23.
+      icon: i-qb-books
+      image:
+        src: /books-min.jpg
+        alt: collection of books in a library
+    - title: Daily Devotion
+      description: Meditate on it day and night so you will be sure to obey everything written in it - Jos 1:8.
+      icon: i-qb-books
+      image:
+        src: /devotion-min.jpg
+        alt: Two people reading the bible
+    - title: Personal Growth
+      description: Herein is my Father glorified, that ye bear much fruit; so shall ye be my disciples. - John 15:8
+      icon: i-qb-plant-growth
+      image:
+        src: /growth-min.jpg
+        alt: A woman stretching at dawn
+    - title: Career
+      description: Work hard and cheerfully at all you do, just as though you were working for the Lord and not merely for your masters - Col 3:23.
+      icon: i-lucide-briefcase
+      image:
+        src: /career-min.jpg
+        alt: A smiling successful career lady in an office
+    - title: Opportunities
+      description: Make good use of every opportunity you have, because these are evil days. - Eph 5:16.
+      icon: i-qb-books
+      image:
+        src: /opportunity-min.jpg
+        alt: two men in suits shaking hands
+testimonials:
+  headline: Testimonies
+  title: Finding Home in L'Aquila
+  description: We believe God is building something special at LCF. Here are some stories from people who have found connection, hope, and a place to belong in our community.
+  items:
+    - quote: From the moment I walked in, I felt like family. L'Aquila Christian Fellowship is such a warm, welcoming community. It's truly a home away from home here in Italy.
+      user:
+        name: David Lee
+        description: Member since 2023
+        avatar:
+          src: https://i.pravatar.cc/120?img=2
+
+    - quote: As an international student, finding an English-speaking church was a blessing. The teaching is fantastic, and the people are genuine. I've made so many friends here.
+      user:
+        name: Maria Gonzalez
+        description: University of L'Aquila Student
+        avatar:
+          src: https://i.pravatar.cc/120?img=3
+
+    - quote: We were so happy to find a place with a great children's ministry. Our kids love their Sunday classes, and we love the Christ-centered, biblical messages.
+      user:
+        name: The Johnson Family
+        description: New Residents in L'Aquila
+        avatar:
+          src: https://i.pravatar.cc/120?img=4
+
+    - quote: The teaching is always biblical, relevant, and easy to understand. I feel like I'm genuinely growing in my faith every single week. The sermons are a highlight!
+      user:
+        name: Michael Brown
+        description: Long-time Member
+        avatar:
+          src: https://i.pravatar.cc/120?img=5
+
+    - quote: I was just visiting L'Aquila for a few weeks and attended a service. Everyone was incredibly friendly, and I was so encouraged by the worship and the message.
+      user:
+        name: Emily White
+        description: Visitor from Canada
+        avatar:
+          src: https://i.pravatar.cc/120?img=6
+
+    - quote: Getting plugged into a small group here changed everything for me. It's where I found real community, support, and people to do life with. It's more than just a Sunday service.
+      user:
+        name: Kenji Tanaka
+        description: Small Group Leader
+        avatar:
+          src: https://i.pravatar.cc/120?img=7
+
+    - quote: A diverse, international, and Jesus-loving community. If you're looking for an English-speaking church in Abruzzo, this is the place to be. We are so blessed to be a part of it.
+      user:
+        name: Sarah & Tom Williams
+        description: Members
+        avatar:
+          src: https://i.pravatar.cc/120?img=8
+
+    - quote: When I was going through a difficult time, the people at LCF surrounded me with prayer and practical support. This church isn't just talk; they truly live out their faith.
+      user:
+        name: Chloé Dubois
+        description: Member
+        avatar:
+          src: https://i.pravatar.cc/120?img=9
+
+    - quote: Finding a solid, Bible-believing community as a young professional in a new city was tough. L'Aquila Christian Fellowship has been an amazing anchor for my faith.
+      user:
+        name: Ben Carter
+        description: Young Professional
+        avatar:
+          src: https://i.pravatar.cc/120?img=10
+
+    - quote: What I love most is the authenticity. People are real, the worship is heartfelt, and the focus is always on Jesus. It's a refreshing and life-giving place to be.
+      user:
+        name: Dr. Anna Ibrahim
+        description: Researcher & Member
+        avatar:
+          src: https://i.pravatar.cc/120?img=11
+cta:
+  title: Are you excited to join us?
+  description: So are we. We can't wait to have you join us in fellowship, praise, and worship to our heavenly Father.
+  links:
+    - label: Come, Let's go
+      to: '#'
+      trailingIcon: i-lucide-arrow-right

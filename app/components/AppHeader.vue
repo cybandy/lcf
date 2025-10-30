@@ -8,7 +8,7 @@ const items = computed(() => [
   // },
   {
     label: 'About Us',
-    to: '#',
+    to: '/about-us',
   // active: route.path.startsWith('/docs')
   }, 
   {

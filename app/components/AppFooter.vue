@@ -74,9 +74,9 @@ function onSubmit() {
               <AppLogo class="shrink-0 size-16" />
               <div class="space-y-0.5">
                 <p class="text-dimmed text-sm">
-                  A place of fellowship, growth, and transformation
+                  Raising Christ Ambassadors in Every Sphere.>
                 </p>
-                <div class="flex items-center">
+                <div class="flex items-center text-sm">
                   <UButton
                     color="neutral"
                     variant="ghost"
@@ -86,7 +86,7 @@ function onSubmit() {
                     Via Vetoio (coppito), 67100, L'Aquila
                   </p>
                 </div>
-                <div class="flex items-center">
+                <div class="flex items-center text-sm">
                   <UButton
                     color="neutral"
                     variant="ghost"
