@@ -25,7 +25,7 @@ const items = computed(() => [
   },
   {
     label: 'Contact',
-    to: '#'
+    to: '/contact'
   }
 ])
 </script>

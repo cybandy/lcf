@@ -1,4 +1,6 @@
 <script setup lang="ts">
+// api in misc plugin
+const c_d = computed(() => useNuxtData('contact_details').data.value)
 const columns = [
   {
     label: 'Quicklinks',
@@ -83,7 +85,7 @@ function onSubmit() {
                     icon="i-lucide-map-pin"
                   />
                   <p class="text-dimmed">
-                    Via Vetoio (coppito), 67100, L'Aquila
+                    {{ c_d.address }}
                   </p>
                 </div>
                 <div class="flex items-center text-sm">
@@ -140,21 +142,33 @@ function onSubmit() {
 
     <template #right>
       <UColorModeButton />
-      <UButton
-        to="https://www.facebook.com/share/1FvitgqbKN/?mibextid=wwXIfr"
-        target="_blank"
-        icon="i-simple-icons-facebook"
-        aria-label="LCF on facebook"
-        color="neutral"
+      <u-button
         variant="ghost"
+        color="neutral"
+        :to="c_d.social_media.instagram"
+        target="_blank"
+        icon="i-simple-icons-instagram"
       />
-      <UButton
-        to="mailto:info.lcfaquila@gmail.com"
-        target="_blank"
-        icon="i-lucide-mail"
-        aria-label="Send email"
-        color="neutral"
+      <u-button
         variant="ghost"
+        color="neutral"
+        target="_blank"
+        :to="c_d.social_media.facebook"
+        icon="i-simple-icons-facebook"
+      />
+      <u-button
+        variant="ghost"
+        color="neutral"
+        target="_blank"
+        :to="c_d.social_media.x"
+        icon="i-simple-icons-x"
+      />
+      <u-button
+        variant="ghost"
+        color="neutral"
+        target="_blank"
+        :to="c_d.social_media.youtube"
+        icon="i-simple-icons-youtube"
       />
     </template>
   </UFooter>

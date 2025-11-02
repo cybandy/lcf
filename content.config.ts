@@ -200,4 +200,26 @@ export const collections = {
       })
     })
   }),
+  contact: defineCollection({
+    source: '2.contact.yml',
+    type: 'page',
+    schema: z.object({
+      hero: createSectionBaseSchema()
+    })
+  }),
+  contact_details: defineCollection({
+    type: 'data',
+    source: 'contact_details.json',
+    schema: z.object({
+      address: z.string(),
+      phone: z.string(),
+      email: z.string(),
+      social_media: z.object({
+        facebook: z.string(),
+        instagram: z.string(),
+        x: z.string(),
+        youtube: z.string(),
+      })
+    })
+  })
 }
