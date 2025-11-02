@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// api in misc plugin
+// api in app.vue
 const c_d = computed(() => useNuxtData('contact_details').data.value)
 const columns = [
   {
@@ -85,7 +85,7 @@ function onSubmit() {
                     icon="i-lucide-map-pin"
                   />
                   <p class="text-dimmed">
-                    {{ c_d.address }}
+                    {{ c_d?.address }}
                   </p>
                 </div>
                 <div class="flex items-center text-sm">
@@ -145,7 +145,7 @@ function onSubmit() {
       <u-button
         variant="ghost"
         color="neutral"
-        :to="c_d.social_media.instagram"
+        :to="c_d?.social_media.instagram"
         target="_blank"
         icon="i-simple-icons-instagram"
       />
@@ -153,21 +153,21 @@ function onSubmit() {
         variant="ghost"
         color="neutral"
         target="_blank"
-        :to="c_d.social_media.facebook"
+        :to="c_d?.social_media.facebook"
         icon="i-simple-icons-facebook"
       />
       <u-button
         variant="ghost"
         color="neutral"
         target="_blank"
-        :to="c_d.social_media.x"
+        :to="c_d?.social_media.x"
         icon="i-simple-icons-x"
       />
       <u-button
         variant="ghost"
         color="neutral"
         target="_blank"
-        :to="c_d.social_media.youtube"
+        :to="c_d?.social_media.youtube"
         icon="i-simple-icons-youtube"
       />
     </template>

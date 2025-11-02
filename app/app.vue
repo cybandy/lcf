@@ -1,5 +1,7 @@
 <script setup lang='ts'>
-
+onBeforeMount(async () => {
+  await useAsyncData('contact_details', () => queryCollection('contact_details').first())
+})
 </script>
 
 <template>

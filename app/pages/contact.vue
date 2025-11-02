@@ -12,7 +12,7 @@ useSeoMeta({
   ogDescription: description
 })
 
-// api in misc plugin
+// api in app.vue
 const c_d = computed(() => useNuxtData('contact_details').data.value)
 </script>
 
@@ -48,8 +48,8 @@ const c_d = computed(() => useNuxtData('contact_details').data.value)
                   <u-button
                     variant="ghost"
                     color="neutral"
-                    :label="c_d.phone"
-                    :to="`tel:${c_d.phone}`"
+                    :label="c_d?.phone"
+                    :to="c_d?.phone ? `tel:${c_d?.phone}` : undefined"
                     target="_blank"
                   />
                 </div>
@@ -65,8 +65,8 @@ const c_d = computed(() => useNuxtData('contact_details').data.value)
                 <u-button
                   variant="ghost"
                   color="neutral"
-                  :label="c_d.email"
-                  :to="`mailto:${c_d.email}`"
+                  :label="c_d?.email"
+                  :to="c_d?.email ? `mailto:${c_d?.email}` : undefined"
                   target="_blank"
                 />
               </div>
@@ -83,7 +83,7 @@ const c_d = computed(() => useNuxtData('contact_details').data.value)
                     <u-button
                       variant="ghost"
                       color="neutral"
-                      :to="c_d.social_media.instagram"
+                      :to="c_d?.social_media.instagram"
                       target="_blank"
                       icon="i-simple-icons-instagram"
                     />
@@ -91,21 +91,21 @@ const c_d = computed(() => useNuxtData('contact_details').data.value)
                       variant="ghost"
                       color="neutral"
                       target="_blank"
-                      :to="c_d.social_media.facebook"
+                      :to="c_d?.social_media.facebook"
                       icon="i-simple-icons-facebook"
                     />
                     <u-button
                       variant="ghost"
                       color="neutral"
                       target="_blank"
-                      :to="c_d.social_media.x"
+                      :to="c_d?.social_media.x"
                       icon="i-simple-icons-x"
                     />
                     <u-button
                       variant="ghost"
                       color="neutral"
                       target="_blank"
-                      :to="c_d.social_media.youtube"
+                      :to="c_d?.social_media.youtube"
                       icon="i-simple-icons-youtube"
                     />
                   </div>
