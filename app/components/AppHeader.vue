@@ -1,33 +1,7 @@
 <script setup lang="ts">
-const route = useRoute()
+const global = useAppConfig().global
 
-const items = computed(() => [
-  // {
-  //   label: 'New Here',
-  //   to: '/'
-  // },
-  {
-    label: 'About Us',
-    to: '/about-us',
-  // active: route.path.startsWith('/docs')
-  }, 
-  {
-    label: 'Sermon',
-    to: '#'
-  },
-  {
-    label: 'Community',
-    to: '#'
-  },
-  {
-    label: 'Blog',
-    to: '/blog'
-  },
-  {
-    label: 'Contact',
-    to: '/contact'
-  }
-])
+const items = global.header.menu.columns
 </script>
 
 <template>

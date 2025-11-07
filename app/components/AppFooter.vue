@@ -1,42 +1,7 @@
 <script setup lang="ts">
 // api in app.vue
 const c_d = computed(() => useNuxtData('contact_details').data.value)
-const columns = [
-  {
-    label: 'Quicklinks',
-    children: [
-      {
-        label: 'Events'
-      }, 
-      {
-        label: 'Gallery'
-      }, 
-      {
-        label: 'Blog'
-      }, 
-      {
-        label: 'Sermons'
-      }
-    ]
-  }, 
-  {
-    label: 'Resources',
-    children: [
-      {
-        label: 'Sunday School'
-      },
-      {
-        label: 'Books'
-      },
-      {
-        label: 'Opportunities'
-      }, 
-      {
-        label: 'Sponsorship'
-      }
-    ]
-  }
-]
+const { columns } = useAppConfig().global.footer
 
 const toast = useToast()
 
@@ -76,7 +41,7 @@ function onSubmit() {
               <AppLogo class="shrink-0 size-16" />
               <div class="space-y-0.5">
                 <p class="text-dimmed text-sm">
-                  Raising Christ Ambassadors in Every Sphere.>
+                  Raising Christ Ambassadors in Every Sphere
                 </p>
                 <div class="flex items-center text-sm">
                   <UButton
