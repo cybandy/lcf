@@ -18,11 +18,30 @@ const state = reactive<Partial<Schema>>({
   msg: undefined,
 })
 
+function reset() {
+  state.email = undefined
+  state.name = undefined
+  state.subject = undefined
+  state.msg = undefined
+}
+
+const open = ref(false)
+const _msg = ref('')
+const status = ref<'success' | 'error'>('success')
 const toast = useToast()
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  toast.add({ title: 'Success', description: 'The form has been submitted.', color: 'success' })
-  console.log(event.data)
+  open.value = true
+  status.value = 'success'
+  _msg.value = 'We have received your message and we will get contact you shortly'
+  // toast.add({ title: 'Success', description: 'The form has been submitted.', color: 'success' })
+  // console.log(event.data)
 }
+
+watch(open, () => {
+  if (open.value || status.value === 'error') return
+
+  reset()
+})
 </script>
 
 <template>
@@ -72,5 +91,44 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       icon="i-lucide-arrow-right"
       block
     />
+    <UModal
+      v-model:open="open"
+      title="Contact form response"
+      description="Status on the submited form"
+    >
+      <template #content>
+        <UPageCard
+          variant="subtle"
+          :ui="{
+            container: 'flex items-center justify-center'
+          }"
+        >
+          <div class="flex items-center justify-end">
+            <UButton
+              icon="i-lucide-x"
+              variant="ghost"
+              color="neutral"
+              class="fixed top-0.5 right-0.5"
+              @click="() => {
+                open = !open
+              }"
+            />
+          </div>
+          <div class="text-center space-y-2">
+            <UIcon
+              :name="status==='error' ? 'i-lucide-x' : 'i-lucide-check'"
+              class="size-10"
+              :class="[status==='error' ? 'text-error' : 'text-success']"
+            />
+            <p class="text-highlighted text-lg xl:text-2xl capitalize">
+              {{ status }}
+            </p>
+            <p class="text-sm sm:text-base text-muted">
+              {{ _msg }}
+            </p>
+          </div>
+        </UPageCard>
+      </template>
+    </UModal>
   </UForm>
 </template>

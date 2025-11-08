@@ -85,6 +85,11 @@ const breakPoints = useBreakpoints(breakpointsTailwind)
 const sm = breakPoints.smallerOrEqual('sm')
 const md = breakPoints.smallerOrEqual('md')
 const lg = breakPoints.smallerOrEqual('lg')
+
+function progressCalculator(n: number, t: number) {
+  if (t <= 0) return 0
+  return Math.floor((n / t) * 100)
+}
 </script>
 
 <template>
@@ -100,8 +105,10 @@ const lg = breakPoints.smallerOrEqual('lg')
       <div class="text-6xl font-mono font-bold text-highlighted">
         {{ formatTime(remainingTime) }}
       </div>
-      
-      <UProgress :value="progress" />
+      <UProgress
+        :model-value="progressCalculator(elapsedTime, totalDuration)"
+        :max="progressCalculator(totalDuration, totalDuration)"
+      />
 
       <div class="flex justify-between text-sm text-default">
         <span>Elapsed: {{ formatTime(elapsedTime) }}</span>
@@ -120,17 +127,26 @@ const lg = breakPoints.smallerOrEqual('lg')
       <UButton
         :disabled="isRunning || remainingTime <= 0"
         label="Start"
-        icon="i-heroicons-play"
+        icon="i-lucide-play"
         size="xl"
         @click="start"
       />
       <UButton
         :disabled="!isRunning"
         label="Pause"
-        icon="i-heroicons-pause"
+        icon="i-lucide-pause"
         variant="outline"
         size="xl"
         @click="pause"
+      />
+      <UButton
+        :disabled="elapsedTime===0"
+        label="Reset"
+        icon="i-lucide-timer-reset"
+        variant="soft"
+        color="neutral"
+        size="xl"
+        @click="setupTimer"
       />
     </div>
 

@@ -13,6 +13,7 @@ export interface TimerSegment {
 
 export const useEventTimer = () => {
   const toast = useToast()
+  const { vibrate: startVibrate, stop: stopVibrate, isSupported: isVibrateSupported } = useVibrate()
 
   const totalDuration = ref(0) // Total time in seconds
   const elapsedTime = ref(0) // Time elapsed in seconds
@@ -40,22 +41,26 @@ export const useEventTimer = () => {
 
     const justEndedSegment = segments.value.find(s => s.endTime === elapsedTime.value)
     if (justEndedSegment) {
+      startVibrate()
       toast.add({
         title: 'Segment Finished',
         description: `Time for "${justEndedSegment.label}" is up.`,
         icon: 'i-heroicons-clock',
         duration: 5000
       })
+      setTimeout(() => stopVibrate(), 1000)
     }
 
     if (elapsedTime.value >= totalDuration.value) {
       stop()
+      startVibrate()
       toast.add({
         title: 'Event Finished',
         description: 'The total allocated time has expired.',
         icon: 'i-heroicons-check-circle',
         color: 'primary'
       })
+      setTimeout(() => stopVibrate(), 1000)
     }
   }
 
@@ -171,133 +176,3 @@ export const useEventTimer = () => {
     updateSegment
   }
 }
-
-// // composables/useEventTimer.ts
-// import { ref, computed, onUnmounted, shallowRef } from 'vue'
-
-// // Define the structure for a speaker's time segment
-// interface TimerSegment {
-//   id: number
-//   label: string
-//   // When this segment *ends* (in seconds from the start)
-//   endTime: number
-//   // The duration of this specific segment
-//   duration: number
-// }
-
-// export const useEventTimer = () => {
-//   // We'll use Nuxt UI's toast for notifications
-//   const toast = useToast()
-
-//   const totalDuration = ref(0) // Total time in seconds
-//   const elapsedTime = ref(0) // Time elapsed in seconds
-//   const isRunning = ref(false)
-//   const segments = ref<TimerSegment[]>([])
-//   const timerHandle = shallowRef<ReturnType<typeof setInterval> | null>(null)
-
-//   // --- Computed State ---
-
-//   const remainingTime = computed(() => totalDuration.value - elapsedTime.value)
-//   const progress = computed(() => {
-//     if (totalDuration.value === 0) return 0
-//     return (elapsedTime.value / totalDuration.value) * 100
-//   })
-
-//   // Finds the segment that is currently active
-//   const currentSegment = computed(() => {
-//     return segments.value.find(s => elapsedTime.value < s.endTime) || null
-//   })
-
-//   // --- Core Timer Logic ---
-
-//   const tick = () => {
-//     elapsedTime.value += 1
-
-//     // Check if a segment just *ended*
-//     const justEndedSegment = segments.value.find(s => s.endTime === elapsedTime.value)
-//     if (justEndedSegment) {
-//       toast.add({
-//         title: 'Segment Finished',
-//         description: `Time for "${justEndedSegment.label}" is up.`,
-//         icon: 'i-heroicons-clock',
-//         duration: 5000
-//       })
-//     }
-
-//     // Check if the total time is up
-//     if (elapsedTime.value >= totalDuration.value) {
-//       stop()
-//       toast.add({
-//         title: 'Event Finished',
-//         description: 'The total allocated time has expired.',
-//         icon: 'i-heroicons-check-circle',
-//         color: 'primary'
-//       })
-//     }
-//   }
-
-//   // --- Public Methods ---
-
-//   const start = () => {
-//     if (isRunning.value || totalDuration.value === 0 || remainingTime.value <= 0) return
-//     isRunning.value = true
-//     timerHandle.value = setInterval(tick, 1000)
-//   }
-
-//   const pause = () => {
-//     if (timerHandle.value) {
-//       clearInterval(timerHandle.value)
-//       timerHandle.value = null
-//     }
-//     isRunning.value = false
-//   }
-
-//   const stop = () => {
-//     pause()
-//     elapsedTime.value = totalDuration.value // Mark as finished
-//   }
-
-//   const reset = (durationInSeconds: number) => {
-//     pause()
-//     totalDuration.value = durationInSeconds
-//     elapsedTime.value = 0
-//     segments.value = []
-//     isRunning.value = false
-//   }
-
-//   // Add a segment based on its *duration*, not its timestamp
-//   const addSegment = (label: string, durationInMinutes: number) => {
-//     const durationInSeconds = durationInMinutes * 60
-//     const lastEndTime = segments.value.length > 0 ? segments.value[segments.value.length - 1]!.endTime : 0
-//     const newEndTime = lastEndTime + durationInSeconds
-
-//     if (newEndTime > totalDuration.value) {
-//       toast.add({ title: 'Error', description: 'Segment duration exceeds total event time.', color: 'error' })
-//       return
-//     }
-
-//     segments.value.push({
-//       id: Date.now(),
-//       label,
-//       duration: durationInSeconds,
-//       endTime: newEndTime
-//     })
-//   }
-
-//   // Ensure we clear the interval when the component is unmounted
-//   onUnmounted(pause)
-
-//   return {
-//     totalDuration,
-//     elapsedTime,
-//     remainingTime,
-//     isRunning,
-//     segments,
-//     currentSegment,
-//     progress,
-//     start,
-//     pause,
-//     reset,
-//     addSegment
-//   }
-// }
