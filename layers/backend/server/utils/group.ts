@@ -33,7 +33,7 @@ export async function applyToGroup(payload: GroupApplications[]) {
 }
 
 export async function GetGroupInvitations(userId: string) {
-  const inviter = alias(tables.users, 'inviter')
+  // const inviter = alias(tables.users, 'inviter')
   const invited = alias(tables.users, 'invited')
   return useDrizzle()
     .select({

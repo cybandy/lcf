@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer, primaryKey, sqliteView } from 'drizzle-orm/sqlite-core';
+import { sqliteTable, text, integer, primaryKey, sqliteView, index } from 'drizzle-orm/sqlite-core';
 import { relations } from 'drizzle-orm';
 
 // -- CORE TABLES --
@@ -20,7 +20,7 @@ export const users = sqliteTable('users', {
   address: text('address'),
   bio: text('bio'),
   nationality: text('nationality'),
-  db: integer('db', { mode: 'timestamp' }),
+  dob: integer('dob', { mode: 'timestamp' }),
   status: text('status', { enum: ['active', 'inactive', 'visitor'] }).default('active').notNull(),
   githubId: integer('github_id').unique(),
   githubToken: text('github_token'),
@@ -28,7 +28,10 @@ export const users = sqliteTable('users', {
   googleToken: text('google_token'),
   createdAt: integer('created_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
-});
+}, (t) => [
+  index('users_first-name').on(t.firstName),
+  index('users_last-name').on(t.lastName),
+]);
 
 /**
  * Groups Table
@@ -75,7 +78,7 @@ export const timers = sqliteTable('timers', {
   // Links this timer to the specific speaker (who is a user)
   speakerId: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
   // Links to the organizer (who is also a user) who created/manages this timer
-  organizerId: text('organizer_id').notNull().references(() => users.id, { onDelete: 'set null' }),
+  organizerId: text('organizer_id').references(() => users.id, { onDelete: 'set null' }),
   // --- Timestamps ---
   createdAt: integer('created_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
@@ -139,7 +142,7 @@ export const posts = sqliteTable('posts', {
   title: text('title').notNull(),
   content: text('content').notNull(),
   // The author is a member/user from the users table.
-  authorId: text('author_id').notNull().references(() => users.id, { onDelete: 'set null' }),
+  authorId: text('author_id').references(() => users.id, { onDelete: 'set null' }),
   publishedAt: integer('published_at', { mode: 'timestamp' }),
   status: text('status', { enum: ['draft', 'published', 'archived'] }).default('draft').notNull(),
   createdAt: integer('created_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
@@ -158,10 +161,14 @@ export const events = sqliteTable('events', {
   endTime: integer('end_time', { mode: 'timestamp' }),
   location: text('location'),
   // The creator is a member/user from the users table.
-  creatorId: text('creator_id').notNull().references(() => users.id, { onDelete: 'set null' }),
+  creatorId: text('creator_id').references(() => users.id, { onDelete: 'set null' }),
   createdAt: integer('created_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
-});
+}, (t) => [
+  index('event_start_time').on(t.startTime),
+  index('event_end_time').on(t.endTime),
+  index('event_location').on(t.location),
+]);
 
 /**
  * Attendance Tracking Table

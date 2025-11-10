@@ -1,4 +1,4 @@
-import type { FilePlugin } from '../utils/types'
+import type { FilePlugin } from '~/utils/types'
 
 export default defineNuxtPlugin(() => {
   const images = ref()

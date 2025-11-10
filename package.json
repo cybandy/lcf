@@ -9,7 +9,6 @@
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
-    "db:generate": "drizzle-kit generate",
     "typecheck": "nuxt typecheck"
   },
   "dependencies": {
@@ -26,6 +25,7 @@
     "@vueuse/nuxt": "14.0.0",
     "better-sqlite3": "^12.4.1",
     "drizzle-orm": "^0.44.7",
+    "drizzle-seed": "^0.3.1",
     "drizzle-zod": "^0.8.3",
     "es-toolkit": "^1.40.0",
     "h3-zod": "^0.5.3",

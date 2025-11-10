@@ -1,0 +1,1023 @@
+# https://content.nuxt.com/docs/getting-started llms-full.txt
+
+## Nuxt Content v3 Overview
+Getting Started
+
+# Nuxt Content v3
+
+Copy page
+
+The powerful Git-based CMS designed specifically for Nuxt developers.
+
+Welcome to Nuxt Content v3, a major upgrade that brings enhanced performance and innovative features to your Nuxt projects. This latest iteration of our Git-based CMS is optimized for modern application development.
+
+## [What's New?](https://content.nuxt.com/docs/getting-started\#whats-new)
+
+### [Content Collections](https://content.nuxt.com/docs/getting-started\#content-collections)
+
+Collections organize related items within your project, helping you manage large datasets more efficiently. Key benefits include:
+
+- **Structured Data**: Configure database architecture and define collections in [`content.config.ts`](https://content.nuxt.com/docs/collections/define#defining-collections)
+- **Type-safe Queries**: Direct TypeScript integration across all utilities
+- **Automatic Validation**: Ensure data consistency across frontmatter fields and data files (json, yml...)
+- **Advanced Query Builder**: Filter, sort, and paginate your collections with ease
+- **Studio Integration**: Enhanced form generation and optimal editing experience through [Studio](https://content.nuxt.com/studio)
+
+Learn more about [Content Collections](https://content.nuxt.com/docs/collections/define).
+
+### [Improved Performance](https://content.nuxt.com/docs/getting-started\#improved-performance)
+
+A significant challenge in v2 was the large bundle size needed for storing files, particularly affecting serverless deployments.
+
+V3 addresses this by transitioning to SQL-based storage in production. This switch requires zero configuration, supporting development mode, static generation, server hosting, serverless and edge deployments.
+
+The new database system enhances the way your data files are stored and structured, ensuring better performance and scalability. This update is entirely behind the scenes and does not affect the file types you can use in Content (`yml`, `json`, and `markdown` ).
+
+Benefits include:
+
+- **Optimized Queries**: SQL storage enables ultra-fast data retrieval
+- **Universal Compatibility**: Our adapter-based system integrates SQL databases across all deployment modes ( [server](https://content.nuxt.com/docs/deploy/server), [serverless](https://content.nuxt.com/docs/deploy/serverless) and [static](https://content.nuxt.com/docs/deploy/static)). We welcome community contributions for additional adapters.
+
+### [TypeScript Integration](https://content.nuxt.com/docs/getting-started\#typescript-integration)
+
+The new collections system provides automatic TypeScript types for all your data. Every utility and API is strongly typed based on your collection definitions, ensuring robust type safety throughout development.
+
+### [Nuxt Studio Integration Soon](https://content.nuxt.com/docs/getting-started\#nuxt-studio-integration-soon)
+
+[Nuxt Studio](https://content.nuxt.com/docs/studio/setup) and v3 are designed to complement each other perfectly.. The [studio module](https://github.com/nuxtlabs/studio-module) is now integrated directly into Nuxt Content, creating an ideal environment where developers can focus on code while team members manage content through an intuitive interface.
+
+* * *
+
+We're excited for you to explore these new capabilities. Dive into our documentation to learn more about integrating the module and implementing best practices in your next project.
+
+## [Content V2 Migration](https://content.nuxt.com/docs/getting-started\#content-v2-migration)
+
+Learn how to migrate from Content v2 to v3 in the [migration guide](https://content.nuxt.com/docs/getting-started/migration).
+
+[Edit this page](https://github.com/nuxt/content/edit/main/docs/content/docs/1.getting-started/1.index.md) or [Report an issue](https://github.com/nuxt/content/issues/new/choose)
+
+[Installation\\
+\\
+Get started with Nuxt Content v3 in your Nuxt application.](https://content.nuxt.com/docs/getting-started/installation)
+
+## Nuxt Content Installation Guide
+Getting Started
+
+# Installation
+
+Copy page
+
+Get started with Nuxt Content v3 in your Nuxt application.
+
+### [Install the Package](https://content.nuxt.com/docs/getting-started/installation\#install-the-package)
+
+Choose your preferred package manager to install Nuxt Content v3:
+
+pnpmyarnnpmbun
+
+```bash
+pnpm add @nuxt/content
+```
+
+```bash
+yarn add @nuxt/content
+```
+
+```bash
+npm install @nuxt/content
+```
+
+```bash
+bun add @nuxt/content
+```
+
+### [Register the Module](https://content.nuxt.com/docs/getting-started/installation\#register-the-module)
+
+Add the Nuxt Content module to your `nuxt.config.ts`:
+
+nuxt.config.ts
+
+```ts
+export default defineNuxtConfig({
+  modules: ['@nuxt/content']
+})
+```
+
+### [Automatic Setup](https://content.nuxt.com/docs/getting-started/installation\#automatic-setup)
+
+When starting a new Nuxt project with the `create-nuxt` CLI, you can simply select `@nuxt/content` from the interactive module selector. This will automatically install and register the module for you.
+
+npmyarnpnpmbundeno
+
+```bash
+npm create nuxt <project-name>
+```
+
+```bash
+yarn create nuxt <project-name>
+```
+
+```bash
+pnpm create nuxt <project-name>
+```
+
+```bash
+bun create nuxt <project-name>
+```
+
+```bash
+deno -A npm:create-nuxt@latest <project-name>
+```
+
+When you run your project in Node.js, Nuxt Content will ask you about the database connector to use.
+You can choose to install `better-sqlite3` or `sqlite3` package.
+
+If you don't want to install any package, you can use native SQLite from Node.js@v22.5.0 or newer.
+Checkout [`experimental.nativeSqlite` configuration](https://content.nuxt.com/docs/getting-started/configuration#experimentalnativesqlite-deprecated-use-sqliteconnector).
+
+### [Create your First Collection](https://content.nuxt.com/docs/getting-started/installation\#create-your-first-collection)
+
+Create a `content.config.ts` file in your project root directory:
+
+content.config.ts
+
+```ts
+import { defineContentConfig, defineCollection } from '@nuxt/content'
+
+export default defineContentConfig({
+  collections: {
+    content: defineCollection({
+      type: 'page',
+      source: '**/*.md'
+    })
+  }
+})
+```
+
+This configuration creates a default `content` collection that processes all Markdown files located in the `content` folder of your project. You can customize the collection settings based on your needs.
+
+The `type: page` means there is a 1-to-1 relationship between content files and pages on your site.
+
+Learn more in our **Collections guide**.
+
+### [Create your First Markdown Page](https://content.nuxt.com/docs/getting-started/installation\#create-your-first-markdown-page)
+
+Create a `content/index.md` file in your project root directory:
+
+content/index.md
+
+```md
+# My First Page
+
+Here is some content.
+```
+
+Read more about writing [Markdown pages](https://content.nuxt.com/docs/files/markdown).
+
+### [Display your Page](https://content.nuxt.com/docs/getting-started/installation\#display-your-page)
+
+Create a `pages/index.vue` file and display the page content:
+
+pages/index.vue
+
+```vue
+<script setup lang="ts">
+const { data: home } = await useAsyncData(() => queryCollection('content').path('/').first())
+
+useSeoMeta({
+  title: home.value?.title,
+  description: home.value?.description
+})
+</script>
+
+<template>
+  <ContentRenderer v-if="home" :value="home" />
+  <div v-else>Home not found</div>
+</template>
+```
+
+If you are installing Nuxt Content in a new Nuxt project and you didn't have `pages` directory, you also need to update the `app.vue` file to allow rendering the pages by adding the `NuxtPage` component. (If you already have some pages in your project, you are good to go.)
+
+app.vue
+
+```vue
+<template>
+  <NuxtLayout>
+    <NuxtPage />
+  </NuxtLayout>
+</template>
+```
+
+That's it! You've now created your first Nuxt Content page.
+
+[Edit this page](https://github.com/nuxt/content/edit/main/docs/content/docs/1.getting-started/2.installation.md) or [Report an issue](https://github.com/nuxt/content/issues/new/choose)
+
+[Introduction\\
+\\
+The powerful Git-based CMS designed specifically for Nuxt developers.](https://content.nuxt.com/docs/getting-started) [Configuration\\
+\\
+Nuxt Content is configured with sensible defaults.](https://content.nuxt.com/docs/getting-started/configuration)
+
+## Nuxt Content Migration
+Getting Started
+
+# Migration
+
+Copy page
+
+How to migrate from v2 to v3
+
+Nuxt Content v3 has been rebuilt from the ground up, resulting in a new library with enhanced capabilities. While we've redesigned concepts and components in a similar way as Content v2, breaking changes are inevitable.
+
+Don't worry, you don't need to modify your content files. We made sure that Content v3 handles content in the same way as Content v2.
+
+## [Changes](https://content.nuxt.com/docs/getting-started/migration\#changes)
+
+### [Vue utils](https://content.nuxt.com/docs/getting-started/migration\#vue-utils)
+
+- `queryContent()` API is replaced with new `queryCollection()`
+
+The new API is backed by SQL and content queries happens within a specific collection.
+
+- `fetchContentNavigation()` API is replaced with new `queryCollectionNavigation()`
+- Surroundings now has its own separate API `queryCollectionItemSurroundings()`
+- Document driven mode is dropped: `Markdown` files will not convert to Nuxt pages automatically, you need to create pages, [check this section to see how](https://content.nuxt.com/docs/components/content-renderer#example-usage).
+- `useContent()` composable is removed
+- `searchContent()` is dropped in favor of the new `queryCollectionSearchSections` API
+- Full text search can easily be done using the `queryCollectionSearchSections` API, [check this section to see how](https://content.nuxt.com/docs/advanced/fulltext-search)
+
+### [Components](https://content.nuxt.com/docs/getting-started/migration\#components)
+
+- All content should be rendered using `<ContentRenderer>` component. `<ContentDoc>`, `<ContentList>`, `<ContentNavigation>` and `<ContentQuery>` components are dropped in v3.
+- `<ContentSlot>` and `<MDCSlot>` components are not supported in v3. Instead components can simply use Vue's native `<slot>` component
+
+`<ContentSlot>` and `<MDCSlot>` was initially pro to manipulate content before rendering and removing wrapping paragraphs from slot content. This unwrapping behavior is now supported via `mdc-unwrap` attribute in `<slot>` component. Example: `<slot mdc-unwrap="p" />`
+
+- Components created under the `components/content` directory are no longer automatically registered as global components. If you use [dynamic rendering](https://vuejs.org/guide/essentials/component-basics.html#dynamic-components) to render these components outside markdown files, you must manually register them in your Nuxt app. Check out the [Nuxt - Custom Components Directories](https://nuxt.com/docs/guide/directory-structure/components#custom-directories) documentation for more information on how to do so.
+
+### [Types](https://content.nuxt.com/docs/getting-started/migration\#types)
+
+- `import type { NavItem } from '@nuxt/content/dist/runtime/types'` is replaced with `import type { ContentNavigationItem } from '@nuxt/content'`
+
+### [General](https://content.nuxt.com/docs/getting-started/migration\#general)
+
+- `_dir.yml` files are renamed to `.navigation.yml`
+- There is no source option in module options, instead you can define [multiple sources](https://content.nuxt.com/docs/collections/sources) for your collections in `content.config.ts`.
+- Document `._path` is now renamed to `.path`, likewise all internal fields with `_` prefix are removed or renamed.
+- `useContentHelpers()` is removed
+- Module does not ignore dot files by default, you can ignore them by adding `ignore: ['**/.*']` in `exclude` options of your collection source.
+- Due to SQL limitations, sort order now uses alphabetical order instead for numerical order. Check out the [Ordering Files](https://content.nuxt.com/docs/collections/types#ordering-files) section for more information.
+- Module options have changed from v2. Check out [configuration page](https://content.nuxt.com/docs/getting-started/configuration) for details.
+
+### [Nuxt Studio integration](https://content.nuxt.com/docs/getting-started/migration\#nuxt-studio-integration)
+
+- The [studio module](https://nuxt.studio/) has been deprecated and a new generic `Preview API` has been implemented directly into Nuxt Content, you can remove the `@nuxthq/studio` package from your dependencies and from the `nuxt.config.ts` modules. Instead we just need to enable the preview mode in the Nuxt configuration file by binding the Studio API.
+
+nuxt.config.ts
+
+```ts
+export default defineNuxtConfig({
+  content: {
+    preview: {
+      api: 'https://api.nuxt.studio'
+    }
+  },
+})
+```
+
+- In order to keep the [app config file](https://content.nuxt.com/docs/studio/config) updatable from Studio we just need to update the helper import of the `nuxt.schema.ts` file from `@nuxthq/studio/theme` to `@nuxt/content/preview`.
+
+## [Implement Document Driven mode in v3](https://content.nuxt.com/docs/getting-started/migration\#implement-document-driven-mode-in-v3)
+
+Implementing document driven mode in Content v3 is quite easy. All you need is to create a catch-all page in Nuxt and fetch contents based on route path.
+
+pages/\[...slug\].vue
+
+```vue
+<script lang="ts" setup>
+const route = useRoute()
+const { data: page } = await useAsyncData(route.path, () => {
+  return queryCollection('content').path(route.path).first()
+})
+</script>
+
+<template>
+  <div>
+    <header><!-- ... --></header>
+
+    <ContentRenderer v-if="page" :value="page" />
+
+    <footer><!-- ... --></footer>
+  </div>
+</template>
+```
+
+## [Converting `queryContent` to `queryCollections`](https://content.nuxt.com/docs/getting-started/migration\#converting-querycontent-to-querycollections)
+
+As we mentioned above, `queryContent` is dropped in favor of new collection based `queryCollection`. There are two main differences between these two:
+
+1. `queryCollection` is building a query for an SQL database.
+2. `queryCollection` does the search only inside the specified collection. You should know the collection's name (key on config).
+
+Find content with path
+
+```ts
+// Content v2
+const v2Query = await queryContent(route.path).findOne()
+// Content v3 - don't forget to create `content` collection in `content.config.ts`
+const v3Query = await queryCollection('content').path(route.path).first()
+```
+
+Find contents with custom filter
+
+```ts
+// Content v2
+const v2Query = await queryContent()
+  .where({ path: /^\/hello\/.*/ })
+  .find()
+// Content v3 - don't forget to create `content` collection in `content.config.ts`
+const v3Query = await queryCollection('content')
+  .where('path', 'LIKE', '/hello%')
+  .first()
+```
+
+Check the dedicated section for more info about collections
+
+## [Convert `queryContent().findSurround()`](https://content.nuxt.com/docs/getting-started/migration\#convert-querycontentfindsurround)
+
+Surround now has its own separate API.
+
+```ts
+const targetPath = '/docs'
+
+// Content v2
+const v2Surround = await queryContent(targetPath)
+  .only(['title', 'description', 'navigation'])
+  .findSurround(withoutTrailingSlash(route.path))
+
+// Content v3 - don't forget to create `content` collection in `content.config.ts`
+const v3Surround = await queryCollectionItemSurroundings(
+  'content',
+  targetPath,
+  {
+    fields: ['title', 'description', 'navigation']
+  }
+)
+```
+
+Check the dedicated section for more information about the
+
+## [Consolidate `ProsePre`, `ProseCode`, and `ProseCodeInline` components](https://content.nuxt.com/docs/getting-started/migration\#consolidate-prosepre-prosecode-and-prosecodeinline-components)
+
+Many `ProsePre` components are thin wrappers around the `ProseCode` component. We've consolidated these three components into two components. There is now no difference between `ProsePre` and multi-line code blocks.
+
+1. MDC will now map and parse single backticks ````` as `ProseCode` instead of `ProseCodeInline`.
+2. MDC will now map and parse block code starting with three backticks````````` as `ProsePre` component.
+
+**Suggested Changes:**
+
+1. Your current `ProseCode` logic should be moved to `ProsePre`
+2. Rename your `ProseCodeInline` components to `ProseCode`
+
+## [`_dir.yml` files are renamed to `.navigation.yml`](https://content.nuxt.com/docs/getting-started/migration\#_diryml-files-are-renamed-to-navigationyml)
+
+In Content v3, we renamed `_dir.yml` to `.navigation.yml`. The new name better reflects the purpose of these files.
+
+Module uses these files to gather information about directories for generating navigation.
+
+Note that in order to make these files available for Module, you should define your collection's source in
+a way that includes these files. For example `source: '**'` and `source: '**/*.{md,yml}'` will include these files
+in collection, but `source: '**/*.md'` will not include them.
+
+## [Ignore dot files](https://content.nuxt.com/docs/getting-started/migration\#ignore-dot-files)
+
+By default, Content v3 does not ignore dot files. If you want to ignore them, you can add `ignore: ['**/.*']` in the `exclude` option of your collection source.
+
+```ts
+defineCollection({
+  source: {
+    include: '**',
+    exclude: ['**/.*']
+  }
+})
+```
+
+Note that the above pattern will also exclude `.navigation.yml` file from collection. If you use `.navigation.yml` and want to keep them
+you can use `**/.(!(navigation.yml))` pattern to exclude all dot files except `.navigation.yml`.
+
+```ts
+defineCollection({
+  source: {
+    include: '**',
+    exclude: ['**/.!(navigation.yml)']
+  }
+})
+```
+
+[Edit this page](https://github.com/nuxt/content/edit/main/docs/content/docs/1.getting-started/4.migration.md) or [Report an issue](https://github.com/nuxt/content/issues/new/choose)
+
+[Configuration\\
+\\
+Nuxt Content is configured with sensible defaults.](https://content.nuxt.com/docs/getting-started/configuration) [Define\\
+\\
+Learn how to define and configure content collections in your Nuxt application.](https://content.nuxt.com/docs/collections/define)
+
+## Nuxt Content Configuration
+Getting Started
+
+# Configuration
+
+Copy page
+
+Nuxt Content is configured with sensible defaults.
+
+To configure the content module and customize its behavior, you can use the `content` property in your `nuxt.config`:
+
+nuxt.config.ts
+
+```ts
+export default defineNuxtConfig({
+  content: {
+    // Options
+  }
+})
+```
+
+In addition to configuring via `content.markdown`, you can use Markdown Components (MDC) to customize the rendering of Markdown elements with `mdc` property.
+
+## [`build`](https://content.nuxt.com/docs/getting-started/configuration\#build)
+
+Nuxt Content read and parse all the available contents at build time. This option gives you control over parsing contents.
+
+### [`markdown`](https://content.nuxt.com/docs/getting-started/configuration\#markdown)
+
+Configure markdown parser.
+
+#### [`toc`](https://content.nuxt.com/docs/getting-started/configuration\#toc)
+
+DefaultSignature
+
+```ts
+toc: {
+  depth: 2,
+  searchDepth: 2
+}
+```
+
+```ts
+type Toc = {
+  depth: number
+  searchDepth: number
+}
+```
+
+Control behavior of Table of Contents generation.
+
+Value:
+
+- `depth`: Maximum heading depth to include in the table of contents.
+- `searchDepth`: Maximum depth of nested tags to search for heading.
+
+nuxt.config.ts
+
+```ts
+export default defineNuxtConfig({
+  content: {
+    build: {
+      markdown: {
+        toc: {
+          depth: 3, // include h3 headings
+        }
+      }
+    }
+  }
+})
+```
+
+#### [`remarkPlugins`](https://content.nuxt.com/docs/getting-started/configuration\#remarkplugins)
+
+DefaultSignature
+
+```ts
+remarkPlugins: {}
+```
+
+```ts
+type RemarkPlugins = Record<string, false | MarkdownPlugin>
+```
+
+A list of [remark](https://github.com/remarkjs/remark) plugins to use.
+
+nuxt.config.ts
+
+```ts
+export default defineNuxtConfig({
+  content: {
+    build: {
+      markdown: {
+        // Object syntax can be used to override default options
+        remarkPlugins: {
+          // Override remark-emoji options
+          'remark-emoji': {
+            options: {
+              emoticon: true
+            }
+          },
+          // Disable remark-gfm
+          'remark-gfm': false,
+          // Add remark-oembed
+          'remark-oembed': {
+            // Options
+          }
+        },
+      }
+    }
+  }
+})
+```
+
+#### [`rehypePlugins`](https://content.nuxt.com/docs/getting-started/configuration\#rehypeplugins)
+
+DefaultSignature
+
+```ts
+rehypePlugins: {}
+```
+
+```ts
+type RehypePlugins = object
+```
+
+A list of [rehype](https://github.com/remarkjs/remark-rehype) plugins to use.
+
+nuxt.config.ts
+
+```ts
+export default defineNuxtConfig({
+  content: {
+    build: {
+      markdown: {
+        // Object syntax can be used to override default options
+        rehypePlugins: {
+          'rehype-figure': {
+
+          }
+        },
+      }
+    }
+  }
+})
+```
+
+#### [`highlight`](https://content.nuxt.com/docs/getting-started/configuration\#highlight)
+
+DefaultSignature
+
+```ts
+highlight: false
+```
+
+```ts
+type Highlight = false | object
+```
+
+Nuxt Content uses [Shiki](https://github.com/shikijs/shiki) to provide syntax highlighting for [`ProsePre`](https://content.nuxt.com/docs/components/prose#prosepre) and [`ProseCode`](https://content.nuxt.com/docs/components/prose#prosecode).
+
+| Option | Type | Description |
+| --- | --- | --- |
+| `theme` | `ShikiTheme` or `Record<string, ShikiTheme>` | The [color theme](https://github.com/shikijs/shiki/blob/main/docs/themes.md) to use. |
+| `langs` | `ShikiLang[]` | The [loaded languages](https://github.com/shikijs/shiki/blob/main/docs/languages.md) available for highlighting. |
+
+- `highlight.theme`
+
+Theme can be specified by a single string but also supports an object with multiple themes.
+
+This option is compatible with [Color Mode module](https://color-mode.nuxtjs.org/).
+
+If you are using multiple themes, it's recommended to always have a `default` theme specified.
+
+nuxt.config.ts
+
+```ts
+export default defineNuxtConfig({
+  content: {
+    build: {
+      markdown: {
+        highlight: {
+          // Theme used in all color schemes.
+          theme: 'github-light',
+          // OR
+          theme: {
+            // Default theme (same as single string)
+            default: 'github-light',
+            // Theme used if `html.dark`
+            dark: 'github-dark',
+            // Theme used if `html.sepia`
+            sepia: 'monokai'
+          }
+        }
+      }
+    }
+  }
+})
+```
+
+- `highlight.langs`
+
+By default, the module loads a couple of languages for syntax highlighting:
+
+Default
+
+```ts
+['json', 'js', 'ts', 'html', 'css', 'vue', 'shell', 'mdc', 'md', 'yaml']
+```
+
+If you plan to use code samples of other languages, you need to define the language in these options.
+
+nuxt.config.ts
+
+```ts
+export default defineNuxtConfig({
+  content: {
+    build: {
+      markdown: {
+        highlight: {
+          langs: [\
+            'c',\
+            'cpp',\
+            'java'\
+          ]
+        }
+      }
+    }
+  }
+})
+```
+
+If you wish to add highlighting for an unsupported language, you can do so by loading the grammar file for the language.
+
+nuxt.config.ts
+
+```ts
+import { readFileSync } from 'node:fs'
+
+export default defineNuxtConfig({
+  content: {
+    build: {
+      markdown: {
+        highlight: {
+          langs: [\
+            // Read more about Shiki languages: https://shiki.style/guide/load-lang\
+            JSON.parse(\
+              readFileSync('./shiki/languages/gdscript.tmLanguage.json', 'utf-8'),\
+            ),\
+          ]
+        }
+      }
+    }
+  }
+})
+```
+
+Read more about adding languages in the [Shiki documentation](https://github.com/shikijs/shiki/blob/main/docs/languages.md#adding-grammar).
+
+### [`pathMeta`](https://content.nuxt.com/docs/getting-started/configuration\#pathmeta)
+
+Content module uses files path to generate the slug, default title and content order, you can customize this behavior with `pathMeta` option.
+
+#### [`pathMeta.forceLeadingSlash`](https://content.nuxt.com/docs/getting-started/configuration\#pathmetaforceleadingslash)
+
+If set to `true`, the path will be prefixed with a leading slash. Default value is `true`.
+
+#### [`pathMeta.slugifyOptions`](https://content.nuxt.com/docs/getting-started/configuration\#pathmetaslugifyoptions)
+
+Content module uses [slugify](https://github.com/simov/slugify) to generate the slug, you can customize the behavior of slugify with this option.
+
+Checkout [slugify options](https://github.com/simov/slugify#options) for more information.
+
+### [`transformers`](https://content.nuxt.com/docs/getting-started/configuration\#transformers)
+
+Nuxt Content has specific transformers for each content type to parse the raw content and prepare it for querying and rendering. Using this option you can define custom transformers to support new content types or improve functionalities of supported content types.
+
+nuxt.config.ts~/transformers/title-suffix.ts
+
+```ts
+export default defineNuxtConfig({
+  content: {
+    build: {
+      transformers: [\
+        '~/transformers/title-suffix',\
+      ],
+    },
+  },
+})
+```
+
+```ts
+import { defineTransformer } from '@nuxt/content'
+
+export default defineTransformer({
+  name: 'title-suffix',
+  extensions: ['.md'],
+  transform(file) {
+    return {
+      ...file,
+      title: file.title + ' (suffix)',
+    }
+  },
+})
+```
+
+Read more about transformers in the [Transformers](https://content.nuxt.com/docs/advanced/transformers) documentation.
+
+## [`database`](https://content.nuxt.com/docs/getting-started/configuration\#database)
+
+By default Nuxt Content uses a local SQLite database to store and query content. If you like to use another database or you plan to deploy on Cloudflare Workers, you can modify this option.
+
+Here is the list of supported database adapters:
+
+### [`SQLite`](https://content.nuxt.com/docs/getting-started/configuration\#sqlite)
+
+If you want to change the default database location and move it to elsewhere you can use `sqlite` adapter to do so. This is the default value to the `database` option. Depending on your runtime-environment different sqlite adapters will be used (Node: better-sqlite-3, Bun: bun:sqlite).
+
+nuxt.config.ts
+
+```ts
+export default defineNuxtConfig({
+  content: {
+    database: {
+      type: 'sqlite',
+      filename: 'SQLITE_DB_LOCATION'
+    }
+  }
+})
+```
+
+### [`D1`](https://content.nuxt.com/docs/getting-started/configuration\#d1)
+
+If you plan to deploy your application to Cloudflare workers, you need to use the `d1` database adapter. Create a `d1` binding in the Cloudflare dashboard and fill in the `bindingName` field.
+
+nuxt.config.ts
+
+```ts
+export default defineNuxtConfig({
+  content: {
+    database: {
+      type: 'd1',
+      bindingName: 'CF_BINDING_NAME'
+    }
+  }
+})
+```
+
+### [`Postgres`](https://content.nuxt.com/docs/getting-started/configuration\#postgres)
+
+If you plan to deploy your application using PostgreSQL database you need to use the `postgresql` database adapter.
+
+First, make sure to install the `pg` package:
+
+Terminal
+
+```bash
+npm i pg
+```
+
+Then, configure the `postgresql` adapter in your `nuxt.config.ts`:
+
+nuxt.config.ts
+
+```ts
+export default defineNuxtConfig({
+  content: {
+    database: {
+      type: 'postgresql',
+      url: process.env.POSTGRES_URL,
+      /* Other options for `pg` */
+    }
+  }
+})
+```
+
+### [`LibSQL`](https://content.nuxt.com/docs/getting-started/configuration\#libsql)
+
+If you plan to deploy your application using a LibSQL database you need to use the `libsql` database adapter.
+
+First, make sure to install the `@libsql/client` package:
+
+Terminal
+
+```bash
+npm i @libsql/client
+```
+
+Then, configure the `libsql` adapter in your `nuxt.config.ts`:
+
+nuxt.config.ts
+
+```ts
+export default defineNuxtConfig({
+  content: {
+    database: {
+      type: 'libsql',
+      url: process.env.TURSO_DATABASE_URL,
+      authToken: process.env.TURSO_AUTH_TOKEN,
+    }
+  }
+})
+```
+
+The most popular LibSQL hosting services is [Turso](https://turso.tech/).
+
+### [`PGlite`](https://content.nuxt.com/docs/getting-started/configuration\#pglite)
+
+If you plan to deploy your application using a PGlite database you need to use the `pglite` database adapter.
+
+First, make sure to install the `@electric-sql/pglite` package:
+
+Terminal
+
+```bash
+npm i @electric-sql/pglite
+```
+
+Then, configure the `pglite` adapter in your `nuxt.config.ts`:
+
+nuxt.config.ts
+
+```ts
+export default defineNuxtConfig({
+  content: {
+    database: {
+      type: 'pglite',
+      dataDir: '.data/content/pglite'
+    }
+  }
+})
+```
+
+We recommend to only use PGlite in development.
+
+## [`renderer`](https://content.nuxt.com/docs/getting-started/configuration\#renderer)
+
+Configure content renderer.
+
+### [`anchorLinks`](https://content.nuxt.com/docs/getting-started/configuration\#anchorlinks)
+
+DefaultSignature
+
+```ts
+{ h2: true, h3: true, h4: true }
+```
+
+```ts
+type AnchorLinks = boolean | Record<'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6', boolean>
+```
+
+Control anchor link generation, by default it generates anchor links for `h2`, `h3` and `h4` heading
+
+Value:
+
+- `false`: will disable link generation.
+- `true`: will enable link generation for all headings.
+
+### [`alias`](https://content.nuxt.com/docs/getting-started/configuration\#alias)
+
+DefaultSignature
+
+```ts
+alias: {}
+```
+
+```ts
+type Alias = Record<string, string>
+```
+
+Aliases will be used to replace markdown components and render custom components instead of default ones.
+
+nuxt.config.ts
+
+```ts
+export default defineNuxtConfig({
+  content: {
+    renderer: {
+      alias: {
+        p: 'MyCustomParagraph'
+      }
+    }
+  }
+})
+```
+
+## [`watch`](https://content.nuxt.com/docs/getting-started/configuration\#watch)
+
+Default
+
+```ts
+watch: {
+  enabled: true,
+  port: 4000,
+  showURL: false
+}
+```
+
+Configure content hot reload in development.
+
+Value:
+
+- `enabled`: Enable/Disable hot reload.
+- `port`: Select the port used for the WebSocket server.
+- `showURL`: Toggle URL display in dev server boot message.
+
+Nuxt Content uses [listhen](https://github.com/unjs/listhen) to provide a local development server. Check out the [listhen documentation](https://github.com/unjs/listhen#options) for more information.
+
+The watcher is a development feature and will not be included in production.
+
+EnabledDisabled
+
+```ts
+export default defineNuxtConfig({
+  content: {
+    watch: {
+      port: 4000,
+      showURL: true
+    }
+  }
+})
+```
+
+```ts
+export default defineNuxtConfig({
+  content: {
+    watch: {
+      enabled: false
+    }
+  }
+})
+```
+
+## [`preview`](https://content.nuxt.com/docs/getting-started/configuration\#preview)
+
+Enable `Preview API`
+
+This is needed to enable live preview on [Nuxt Studio](https://content.nuxt.com/studio).
+
+Value:
+
+- `dev`: Enable in development mode
+- `api`: Activate the preview mode and set the `API` to be linked with.
+
+Enable Studio
+
+```ts
+preview: {
+  api: 'https://api.nuxt.studio',
+}
+```
+
+## [`experimental`](https://content.nuxt.com/docs/getting-started/configuration\#experimental)
+
+Experimental features that are not yet stable.
+
+### [`experimental.sqliteConnector`](https://content.nuxt.com/docs/getting-started/configuration\#experimentalsqliteconnector)
+
+SQLite connectors have limitations in different environments. Some work in serverless environments, while others do not. Nuxt Content supports three different SQLite connectors to cover all environments:
+
+- `better-sqlite3`: Works in all Node environments, GitHub CI, Vercel CI and production, Cloudflare CI pipelines, etc. (Does **not** work in WebContainers and StackBlitz)
+- `sqlite3`: Works in Node environments, GitHub CI, and StackBlitz. (Does **not** work in Vercel or Cloudflare)
+- `native`: As of Node.js v22.5.0, the `node:sqlite` module is available natively in Node.js. This connector works in all Node environments with Node.js version 22.5.0 or newer.
+
+nuxt.config.ts
+
+```ts
+export default defineNuxtConfig({
+  content: {
+    experimental: { sqliteConnector: 'native' },
+  },
+});
+```
+
+### [`experimental.nativeSqlite` (deprecated, use `sqliteConnector`)](https://content.nuxt.com/docs/getting-started/configuration\#experimentalnativesqlite-deprecated-use-sqliteconnector)
+
+As of Node.js v22.5.0, the `node:sqlite` module is available natively in Node.js.
+This allows Nuxt Content to use SQLite as a database without the need for an external package.
+
+nuxt.config.ts
+
+```ts
+export default defineNuxtConfig({
+  content: {
+    experimental: { nativeSqlite: true },
+  },
+});
+```
+
+This feature is only available in Node.js v22.5.0 and above. Enabling this feature in older version will not do anything.
+
+[Edit this page](https://github.com/nuxt/content/edit/main/docs/content/docs/1.getting-started/3.configuration.md) or [Report an issue](https://github.com/nuxt/content/issues/new/choose)
+
+[Installation\\
+\\
+Get started with Nuxt Content v3 in your Nuxt application.](https://content.nuxt.com/docs/getting-started/installation) [Migration\\
+\\
+How to migrate from v2 to v3](https://content.nuxt.com/docs/getting-started/migration)
+
