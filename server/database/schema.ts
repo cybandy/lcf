@@ -53,6 +53,49 @@ export const roles = sqliteTable('roles', {
   description: text('description'),
 });
 
+// -- NEW: EVENT TIMER TABLES --
+
+/**
+ * Timers Table
+ * Stores the main configuration for a specific speaker's timer at an event.
+ * Accessed via a unique, shareable ID.
+ */
+export const timers = sqliteTable('timers', {
+  // This text ID is the unique, shareable identifier for the URL parameter
+  id: text('id').primaryKey().$defaultFn(() => generateId('timer')),
+  label: text('label').notNull(), // e.g., "John Doe - Keynote"
+  
+  // Total duration in seconds. Can be set by the organizer
+  // or calculated from the sum of segments.
+  totalDuration: integer('total_duration').notNull(), 
+  
+  // --- Relationships ---
+  // Links this timer to a specific event
+  eventId: integer('event_id').notNull().references(() => events.id, { onDelete: 'cascade' }),
+  // Links this timer to the specific speaker (who is a user)
+  speakerId: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  // Links to the organizer (who is also a user) who created/manages this timer
+  organizerId: text('organizer_id').notNull().references(() => users.id, { onDelete: 'set null' }),
+  // --- Timestamps ---
+  createdAt: integer('created_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
+  updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
+});
+
+/**
+ * Timer Segments Table
+ * Stores the individual segments (e.g., "Intro", "Main", "Q&A") for a timer.
+ */
+export const timerSegments = sqliteTable('timer_segments', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  // Foreign key to the parent timer
+  timerId: text('timer_id').notNull().references(() => timers.id, { onDelete: 'cascade' }),
+  label: text('label').notNull(), // e.g., "Introduction"
+  duration: integer('duration').notNull(), // Segment duration in seconds
+  // Defines the sequence of this segment (e.g., 1, 2, 3...)
+  order: integer('order').notNull().default(0), 
+  createdAt: integer('created_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
+});
+
 // -- JOIN TABLES (Many-to-Many Relationships) --
 
 /**
@@ -227,6 +270,8 @@ export const usersRelations = relations(users, ({ many }) => ({
   applicationsReviewed: many(groupApplications, { relationName: 'reviewer' }),
   groupInvitationsSent: many(groupInvitations, { relationName: 'inviter' }),
   groupInvitationsReceived: many(groupInvitations, { relationName: 'invitee' }),
+  timersAsSpeaker: many(timers, { relationName: 'timerSpeaker' }),
+  timersAsOrganizer: many(timers, { relationName: 'timerOrganizer' }),
 }));
 
 export const groupsRelations = relations(groups, ({ many }) => ({
@@ -257,6 +302,7 @@ export const eventsRelations = relations(events, ({ one, many }) => ({
   creator: one(users, { fields: [events.creatorId], references: [users.id] }),
   attendees: many(attendance),
   rsvps: many(eventRsvps),
+  timers: many(timers),
 }));
 
 export const attendanceRelations = relations(attendance, ({ one }) => ({
@@ -293,6 +339,40 @@ export const groupInvitationsRelations = relations(groupInvitations, ({ one }) =
   group: one(groups, { fields: [groupInvitations.groupId], references: [groups.id] }),
   invitee: one(users, { fields: [groupInvitations.invitedUserId], references: [users.id], relationName: 'invitee' }),
   inviter: one(users, { fields: [groupInvitations.inviterUserId], references: [users.id], relationName: 'inviter' }),
+}));
+
+// -- Timer Relations --
+export const timersRelations = relations(timers, ({ one, many }) => ({
+  // Each timer belongs to one event
+  event: one(events, {
+    fields: [timers.eventId],
+    references: [events.id],
+  }),
+  
+  // Each timer is assigned to one speaker (a user)
+  speaker: one(users, {
+    fields: [timers.speakerId],
+    references: [users.id],
+    relationName: 'timerSpeaker', // Use a relationName to avoid conflicts
+  }),
+  
+  // Each timer was created by one organizer (a user)
+  organizer: one(users, {
+    fields: [timers.organizerId],
+    references: [users.id],
+    relationName: 'timerOrganizer', // Use a relationName to avoid conflicts
+  }),
+  
+  // Each timer can have many segments
+  segments: many(timerSegments),
+}));
+
+export const timerSegmentsRelations = relations(timerSegments, ({ one }) => ({
+  // Each segment belongs to one timer
+  timer: one(timers, {
+    fields: [timerSegments.timerId],
+    references: [timers.id],
+  }),
 }));
 
 // views

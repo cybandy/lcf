@@ -12,6 +12,7 @@ export default defineNuxtConfig({
     'pinia-plugin-persistedstate',
     '@nuxt/image',
     'motion-v/nuxt',
+    // 'nuxt-security'
   ],
 
   devtools: {
@@ -52,5 +53,20 @@ export default defineNuxtConfig({
     preview: {
       api: 'https://api.nuxt.studio'
     }
-  }
+  },
+
+  nitro: {
+    experimental: {
+      tasks: true,
+      websocket: true
+    }
+  },
+
+  // security: {
+  //   headers: {
+  //     crossOriginResourcePolicy: import.meta.dev ? 'cross-origin' : "same-origin",
+  //     contentSecurityPolicy: import.meta.dev ? false : {}
+  //   },
+    
+  // }
 })
