@@ -1,13 +1,14 @@
 import { useDrizzle, tables, eq } from './drizzle';
 
-export async function createEvent(ev: {
+interface eventInsert {
   title: string;
   description?: string;
   startTime: Date;
   endTime?: Date;
   location?: string;
   creatorId?: string;
-}) {
+}
+export async function createEvents(ev: eventInsert) {
   return useDrizzle().insert(tables.events).values(ev).returning().get();
 }
 
