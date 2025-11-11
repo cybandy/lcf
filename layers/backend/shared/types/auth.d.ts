@@ -1,15 +1,15 @@
 // import * as schema from '../server/database/schema'
 import type * as z from 'zod';
-import type { USerSchema } from './zod_schemas';
+import type { User } from '../utils/zod_schemas';
 
 // type TUser = z.infer<typeof UserSchema.select>;
 
 export declare module '#auth-utils' {
-  type User = z.infer<typeof UserSchema.select>;
+  type User = User; //z.infer<typeof UserSchema.select>;
 
   interface UserSession {
-    user: z.infer<typeof UserSchema.select>
+    user: User; //z.infer<typeof UserSchema.select>
   }
 }
 
-export { }
+export {};

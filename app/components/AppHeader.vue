@@ -43,7 +43,7 @@ const items = global.header.menu.columns
       <UButton
         color="primary"
         variant="solid"
-        to="#"
+        to="join-us"
         label="Join Us"
         size="xl"
         trailing-icon="i-lucide-arrow-right"

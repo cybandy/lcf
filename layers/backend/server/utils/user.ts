@@ -30,10 +30,7 @@ export async function findUserBy(query: SQL | undefined) {
 }
 
 export async function createUser(user: UserInsert) {
-  return useDrizzle()
-    .insert(tables.users)
-    .values(user)
-    .returning().get()
+  return useDrizzle().insert(tables.users).values(user).returning().get();
 }
 
 export async function updateUser(id: string, user: Partial<UserInsert>) {
@@ -42,6 +39,7 @@ export async function updateUser(id: string, user: Partial<UserInsert>) {
     .set(user)
     .where(eq(tables.users.id, id))
     .returning()
+    .get();
 }
 
 export async function deleteAvatar(avatar: string) {
