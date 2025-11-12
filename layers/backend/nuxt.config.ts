@@ -6,9 +6,11 @@ export default defineNuxtConfig({
     name: 'backend',
   },
 
-  modules: ['@nuxthub/core', 'nuxt-auth-utils'],
+  modules: ['@nuxthub/core', 'nuxt-auth-utils', '@nuxt/image'],
 
   compatibilityDate: '2025-11-10',
+
+  
 
   hub: {
     database: true,

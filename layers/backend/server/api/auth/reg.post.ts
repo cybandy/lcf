@@ -1,4 +1,5 @@
 import { useValidatedBody, z } from 'h3-zod';
+import { safeUserParsing } from '#layers/backend/server/utils/user';
 // import { z } from 'zod/v3';
 
 export default defineEventHandler(async (event) => {
@@ -89,7 +90,8 @@ export default defineEventHandler(async (event) => {
   }
 
   // Remove sensitive data before setting session
-  const { password, githubToken, googleToken, ...safeUser } = newUser;
+  // const { password, githubToken, googleToken, ...safeUser } = newUser;
+  const safeUser = safeUserParsing(newUser)
 
   // Set user session
   await updateUserSession(event, safeUser);

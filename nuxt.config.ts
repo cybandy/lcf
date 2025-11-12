@@ -27,6 +27,10 @@ export default defineNuxtConfig({
 
   compatibilityDate: '2025-01-15',
 
+  extends: [
+    // 'github:danielkellyio/nuxt-email-layer/layer'
+  ],
+
   eslint: {
     config: {
       stylistic: {
@@ -49,10 +53,15 @@ export default defineNuxtConfig({
       }
     ]
   },
+
   content: {
     preview: {
       api: 'https://api.nuxt.studio'
     }
+  },
+
+  image: {
+    provider: 'none'
   },
 
   nitro: {

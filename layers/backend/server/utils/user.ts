@@ -47,3 +47,12 @@ export async function deleteAvatar(avatar: string) {
     await hubBlob().delete(avatar);
   }
 }
+
+export function safeUserParsing(user: User) {
+  const { password, githubToken, googleToken, avatar, ...safeUser } = user;
+
+  return {
+    avatar: avatar ? `/files/${avatar}` : avatar,
+    ...safeUser
+  }
+}

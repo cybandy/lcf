@@ -16,7 +16,7 @@ const user = computed(() => ({
   name: `${_user.value?.firstName} ${_user.value?.lastName}`.trim(),
   avatar: {
     src: `${_user.value?.avatar}`.trim(),
-    alt: `${_user.value?.firstName} ${_user.value?.lastName}`.trim()
+    alt: `${_user.value?.firstName} ${_user.value?.lastName}`.trim(),
   } })
 )
 
@@ -144,6 +144,17 @@ const items = computed<DropdownMenuItem[][]>(() => ([
         trailingIcon: 'text-dimmed'
       }"
     />
+    <!-- <UUser 
+      :name="collapsed ? undefined : user.name"
+    >
+      <template #avatar>
+        <UAvatar
+          size="sm"
+          :src="user.avatar.src"
+          :alt="user.avatar.alt"
+        />
+      </template>
+    </UUser> -->
 
     <template #chip-leading="{ item }">
       <span
