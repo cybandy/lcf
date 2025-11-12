@@ -2,11 +2,21 @@
 import * as z from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui'
 
-const props = withDefaults(defineProps<{ file?: File | null, src?: string, alt: string, isSkip?: boolean }>(), {
-  file: null,
-  src: '',
-  isSkip: false
-})
+const props = withDefaults(
+  defineProps<{
+    file?: File | null
+    src?: string
+    alt: string
+    isSkip?: boolean
+    loading?: boolean
+  }>(),
+  {
+    file: null,
+    src: '',
+    isSkip: false,
+    loading: false,
+  },
+)
 const emits = defineEmits(['update:file', 'update:src', 'update:alt', 'submit', 'skip'])
 const { file, src, alt } = useVModels(props, emits)
 
@@ -68,11 +78,8 @@ const state = computed({
   }
 })
 
-function createObjectUrl(file: File): string {
-  return URL.createObjectURL(file)
-}
-
 async function onSubmit(event: FormSubmitEvent<schema>) {
+  console.log('file upload')
   emits('submit', event.data.avatar)
 }
 </script>
@@ -88,6 +95,7 @@ async function onSubmit(event: FormSubmitEvent<schema>) {
       name="avatar"
       label="Avatar"
       description="JPG, GIF or PNG. 1MB Max."
+      :ui="{ container: 'grid justify-center' }"
     >
       <u-file-upload
         v-model="file"
@@ -106,12 +114,14 @@ async function onSubmit(event: FormSubmitEvent<schema>) {
         label="Skip"
         color="neutral"
         variant="ghost"
+        :disabled="loading"
         @click="() => emits('skip')"
       />
       <UButton
         type="submit"
         label="Upload"
         color="neutral"
+        :loading="loading"
       />
     </div>
   </UForm>

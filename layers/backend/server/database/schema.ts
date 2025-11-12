@@ -54,6 +54,25 @@ export const users = sqliteTable(
 );
 
 /**
+ * Password Reset Tokens Table
+ * Stores temporary tokens for password reset functionality
+ */
+export const passwordResetTokens = sqliteTable('password_reset_tokens', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => generateId('reset')),
+  userId: text('user_id')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  token: text('token').notNull().unique(),
+  expiresAt: integer('expires_at', { mode: 'timestamp' }).notNull(),
+  used: integer('used', { mode: 'boolean' }).default(false).notNull(),
+  createdAt: integer('created_at', { mode: 'timestamp' })
+    .notNull()
+    .$defaultFn(() => new Date()),
+});
+
+/**
  * Groups Table
  * Represents small groups, ministries, committees, etc.
  */
@@ -400,7 +419,18 @@ export const usersRelations = relations(users, ({ many }) => ({
   groupInvitationsReceived: many(groupInvitations, { relationName: 'invitee' }),
   timersAsSpeaker: many(timers, { relationName: 'timerSpeaker' }),
   timersAsOrganizer: many(timers, { relationName: 'timerOrganizer' }),
+  passwordResetTokens: many(passwordResetTokens),
 }));
+
+export const passwordResetTokensRelations = relations(
+  passwordResetTokens,
+  ({ one }) => ({
+    user: one(users, {
+      fields: [passwordResetTokens.userId],
+      references: [users.id],
+    }),
+  }),
+);
 
 export const groupsRelations = relations(groups, ({ many }) => ({
   membersToGroups: many(membersToGroups),

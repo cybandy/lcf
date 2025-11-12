@@ -60,7 +60,8 @@ export default defineEventHandler(async (event) => {
     }
 
     // Update session with new avatar
-    const { password, githubToken, googleToken, ...safeUser } = updatedUser;
+    // const { password, githubToken, googleToken, ...safeUser } = updatedUser;
+    const safeUser = safeUserParsing(updatedUser)
     await updateUserSession(event, safeUser);
 
     return {

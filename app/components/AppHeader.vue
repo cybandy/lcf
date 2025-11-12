@@ -2,6 +2,8 @@
 const global = useAppConfig().global
 
 const items = global.header.menu.columns
+
+const { loggedIn } = useMyUserSession()
 </script>
 
 <template>
@@ -41,9 +43,21 @@ const items = global.header.menu.columns
       />
 
       <UButton
+        v-if="loggedIn"
         color="primary"
         variant="solid"
-        to="join-us"
+        to="/dashboard"
+        label="Dashboard"
+        size="xl"
+        trailing-icon="i-lucide-layout-grid"
+        class="hidden lg:inline-flex"
+        :ui="{ label: '' }"
+      />
+      <UButton
+        v-else
+        color="primary"
+        variant="solid"
+        to="/join-us"
         label="Join Us"
         size="xl"
         trailing-icon="i-lucide-arrow-right"

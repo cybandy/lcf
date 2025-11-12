@@ -185,10 +185,14 @@ watch(submitTrigger, async () => {
           v-model="state.bio"
           placeholder="Myself..."
           :maxrows="4"
+          autoresize
         />
       </UFormField>
 
-      <div class="flex items-center justify-center gap-3">
+      <div
+        class="flex items-center gap-3"
+        :class="[isSkip && 'justify-center']"
+      >
         <u-button
           v-if="isSkip"
           label="Skip"

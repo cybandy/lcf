@@ -141,6 +141,9 @@ onMounted(async () => {
       <template #footer="{ collapsed }">
         <ClientOnly>
           <DashboardUserMenu :collapsed="collapsed" />
+          <template #fallback>
+            <div class="h-[49px]"></div>
+          </template>
         </ClientOnly>
       </template>
     </UDashboardSidebar>

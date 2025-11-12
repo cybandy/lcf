@@ -7,38 +7,57 @@ const df = new DateFormatter('en-US', {
   dateStyle: 'medium'
 })
 
-const modelValue = computed({
-  get: () => model.value ? toCalendarDate((model.value)) : new CalendarDate(2000, 1, 1),
-  set: (newValue: CalendarDate) => {
-    model.value = newValue
-      ? newValue.toDate(getLocalTimeZone())
-      : new Date()
-  }
-})
-
 const toCalendarDate = (_date: Date) => {
   const date = new Date(_date)
   return new CalendarDate(
     date.getFullYear(),
     date.getMonth() + 1,
     date.getDate(),
-  );
-};
+  )
+}
+
+const open = ref(false)
+
+// Use a ref for the calendar value to ensure immediate updates
+const calendarValue = ref<CalendarDate>(
+  model.value ? toCalendarDate(model.value) : new CalendarDate(2000, 1, 1)
+)
+
+// Watch model changes from parent
+watch(model, (newValue) => {
+  if (newValue) {
+    calendarValue.value = toCalendarDate(newValue)
+  }
+}, { immediate: true })
+
+// Watch calendar changes and update model
+watch(calendarValue, (newValue) => {
+  if (newValue) {
+    model.value = newValue.toDate(getLocalTimeZone())
+    // Close popover after selection
+    open.value = false
+  }
+})
+
+// Format the display value
+const displayValue = computed(() => {
+  return model.value ? df.format(model.value) : 'Select a date'
+})
 </script>
 
 <template>
-  <UPopover>
+  <UPopover v-model:open="open">
     <UButton
       color="neutral"
       variant="outline"
       icon="i-lucide-calendar"
     >
-      {{ modelValue ? df.format(modelValue.toDate(getLocalTimeZone())) : 'Select a date' }}
+      {{ displayValue }}
     </UButton>
 
     <template #content>
       <UCalendar
-        v-model="modelValue"
+        v-model="calendarValue"
         class="p-2"
       />
     </template>

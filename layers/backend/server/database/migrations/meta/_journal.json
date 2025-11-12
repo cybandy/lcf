@@ -15,6 +15,13 @@
       "when": 1762882250463,
       "tag": "0001_member_view",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1762911451935,
+      "tag": "0002_reset-password",
+      "breakpoints": true
     }
   ]
 }

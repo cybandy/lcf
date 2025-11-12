@@ -102,7 +102,7 @@ useSeoMeta({
   <UPageCard
     title="Account"
     description="No longer want to use the platform? You can delete your account here. This action is not reversible. All information related to this account will be deleted permanently."
-    class="bg-gradient-to-tl from-error/10 from-5% to-default"
+    class="bg-linear-to-tl from-error/10 from-5% to-default"
   >
     <template #footer>
       <UButton
