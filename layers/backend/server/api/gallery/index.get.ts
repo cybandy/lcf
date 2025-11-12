@@ -1,5 +1,5 @@
 export default eventHandler(async () => {
-  // return Array.from(Array(200).keys()).map(i => `https://picsum.photos/id/${i}/800/640`)
+  // this endpoint will be used to make the gallery accessible to the public
 
   const { blobs } = await hubBlob().list({
     limit: 1000,

@@ -1,5 +1,5 @@
 import { useValidatedBody, z } from 'h3-zod';
-import { safeUserParsing } from '#layers/backend/server/utils/user';
+import { safeUserParsingWithRoles, findUserByIdWithRoles } from '#layers/backend/server/utils/user';
 // import { z } from 'zod/v3';
 
 export default defineEventHandler(async (event) => {
@@ -90,8 +90,9 @@ export default defineEventHandler(async (event) => {
   }
 
   // Remove sensitive data before setting session
-  // const { password, githubToken, googleToken, ...safeUser } = newUser;
-  const safeUser = safeUserParsing(newUser)
+  // Fetch the user again with roles (new users won't have roles yet, but we need consistent structure)
+  const userWithRoles = await findUserByIdWithRoles(newUser.id);
+  const safeUser = safeUserParsingWithRoles(userWithRoles || newUser);
 
   // Set user session
   await updateUserSession(event, safeUser);

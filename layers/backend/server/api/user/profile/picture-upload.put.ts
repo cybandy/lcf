@@ -1,3 +1,5 @@
+import { findUserByIdWithRoles, safeUserParsingWithRoles } from '#layers/backend/server/utils/user';
+
 export default defineEventHandler(async (event) => {
   // Require authenticated user
   const session = await myRequireUserSession(event);
@@ -59,9 +61,9 @@ export default defineEventHandler(async (event) => {
       });
     }
 
-    // Update session with new avatar
-    // const { password, githubToken, googleToken, ...safeUser } = updatedUser;
-    const safeUser = safeUserParsing(updatedUser)
+    // Update session with new avatar (fetch with roles)
+    const userWithRoles = await findUserByIdWithRoles(userId);
+    const safeUser = safeUserParsingWithRoles(userWithRoles || updatedUser);
     await updateUserSession(event, safeUser);
 
     return {

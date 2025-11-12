@@ -1,9 +1,14 @@
 import { useValidatedBody, z } from 'h3-zod';
+import { findUserByIdWithRoles, safeUserParsingWithRoles } from '#layers/backend/server/utils/user';
 
 export default defineEventHandler(async (event) => {
   // Require authenticated user
   const session = await myRequireUserSession(event);
   const userId = session.user.id;
+
+  // Users can only update their own profile
+  // (This endpoint is for self-service profile updates)
+  // Admin updates of other users should be a separate endpoint
 
   // Validate input - allow updating most user fields
   const body = await useValidatedBody(
@@ -62,9 +67,9 @@ export default defineEventHandler(async (event) => {
       });
     }
 
-    // Update session with new user data
-    // const { password, githubToken, googleToken, ...safeUser } = updatedUser;
-    const safeUser = safeUserParsing(updatedUser)
+    // Update session with new user data (fetch with roles)
+    const userWithRoles = await findUserByIdWithRoles(userId);
+    const safeUser = safeUserParsingWithRoles(userWithRoles || updatedUser);
     await updateUserSession(event, safeUser);
 
     return {

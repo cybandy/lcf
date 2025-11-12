@@ -3,6 +3,10 @@ export default defineEventHandler(async (event) => {
   const session = await myRequireUserSession(event);
   const userId = session.user.id;
 
+  // Users can only delete their own account
+  // (This endpoint is for self-service account deletion)
+  // Admin deletion of other users should be a separate endpoint
+
   try {
     // Get user to check if exists
     const user = await findUserById(userId);

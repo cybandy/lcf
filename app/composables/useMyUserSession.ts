@@ -15,7 +15,7 @@ interface MyUserSessionComposable extends UserSessionComposable {
   /**
    * The user object if logged in, null otherwise.
    */
-  user: ComputedRef<User>
+  user: ComputedRef<User & { roles: UserWithRoles[] }>
   /**
    * The session object.
    */

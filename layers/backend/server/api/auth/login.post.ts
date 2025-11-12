@@ -1,5 +1,5 @@
 import { useValidatedBody, z } from 'h3-zod';
-import { safeUserParsing } from '#layers/backend/server/utils/user';
+import { findUserByWithRoles, safeUserParsingWithRoles } from '#layers/backend/server/utils/user';
 // import { z } from 'zod/v3';
 
 export default defineEventHandler(async (event) => {
@@ -24,7 +24,7 @@ export default defineEventHandler(async (event) => {
   // Fetch user by email with error handling
   let user;
   try {
-    user = await findUserBy(
+    user = await findUserByWithRoles(
       eq(lower(tables.users.email), body.email.toLowerCase()),
     );
   } catch (error) {
@@ -86,7 +86,7 @@ export default defineEventHandler(async (event) => {
   }
 
   // Remove sensitive data before setting session
-  const safeUser = safeUserParsing(user)
+  const safeUser = safeUserParsingWithRoles(user)
 
   // Update user session
   await updateUserSession(event, safeUser);

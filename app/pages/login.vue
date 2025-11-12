@@ -3,7 +3,7 @@ import * as z from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui'
 
 definePageMeta({
-  middleware: 'guest'
+  middleware: ['guest']
 })
 
 useSeoMeta({
@@ -51,6 +51,8 @@ const schema = z.object({
 
 type Schema = z.output<typeof schema>
 
+const { fetch: fetchUser } = useMyUserSession()
+
 async function onSubmit(payload: FormSubmitEvent<Schema>) {
   // console.log('Submitted', payload)
   const _u = await $fetch('/api/auth/login', {
@@ -59,8 +61,14 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
   })
   if (_u.success) {
     toast.add({ title: `Welcome ${_u.user.firstName}`, description: 'Redirecting...', icon: 'i-lucide-bell', color: 'success' })
-    navigateTo('/dashboard')
+
+    // Redirect to onboarding page
+    await fetchUser()
+    setTimeout(() => {
+      navigateTo('/dashboard')
+    }, 1000)
   } else {
+    //
     toast.add({ title: `Oops!!!`, description: _u.message, icon: 'i-lucide-x-circle', color: 'error', duration: 5000 })
   }
 }
