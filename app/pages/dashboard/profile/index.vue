@@ -11,7 +11,7 @@ useSeoMeta({
   description: 'Manage your profile information',
 });
 
-const { user, fetch: fetchUser } = useMyUserSession();
+const { user, fetch: fetchUser, clear: logout } = useMyUserSession();
 
 const _user = ref<User>();
 
@@ -123,6 +123,51 @@ const menu = ref<DropdownMenuItem[][]>([
     },
   ],
 ]);
+
+// Delete account
+const deleteDialogOpen = ref(false);
+const deleteLoading = ref(false);
+
+function onDelete() {
+  deleteDialogOpen.value = true;
+}
+
+async function confirmDelete() {
+  deleteLoading.value = true;
+  try {
+    const response = await $fetch<{
+      success: boolean
+      message: string
+    }>('/api/user', {
+      method: 'DELETE' as const,
+    });
+
+    toast.add({
+      title: 'Account Deleted',
+      description: response.message || 'Your account has been permanently deleted',
+      color: 'success',
+      icon: 'i-heroicons-check-circle',
+    });
+
+    // Logout and redirect to home
+    await logout();
+    navigateTo('/');
+  } catch (error) {
+    const err = error as {
+      data?: { statusMessage?: string }
+      message?: string
+    };
+    toast.add({
+      title: 'Deletion failed',
+      description: err?.data?.statusMessage || 'Failed to delete account',
+      color: 'error',
+      icon: 'i-heroicons-exclamation-triangle',
+    });
+  } finally {
+    deleteLoading.value = false;
+    deleteDialogOpen.value = false;
+  }
+}
 </script>
 
 <template>
@@ -186,6 +231,7 @@ const menu = ref<DropdownMenuItem[][]>([
         <UButton
           label="Delete account"
           color="error"
+          @click="onDelete"
         />
       </template>
     </UPageCard>
@@ -198,13 +244,37 @@ const menu = ref<DropdownMenuItem[][]>([
       <template #body>
         <dashboard-profile-upload-picture
           v-model:file="profileFile"
-          :alt="_name"
+          :alt="user.firstName"
           :src="user?.avatar!"
           class="w-full"
           @submit="onAvatarUpload"
         />
       </template>
     </UModal>
+
+    <ConfirmDialog
+      v-model:open="deleteDialogOpen"
+      title="Delete Account"
+      description="Are you sure you want to delete your account? This action cannot be undone and all your data will be permanently removed."
+      confirm-text="Yes, Delete My Account"
+      cancel-text="Cancel"
+      confirm-color="error"
+      icon="i-heroicons-exclamation-triangle"
+      :loading="deleteLoading"
+      @confirm="confirmDelete"
+    >
+      <div class="mt-4 p-4 bg-error/10 rounded-lg">
+        <p class="text-sm font-semibold text-error">
+          This will permanently:
+        </p>
+        <ul class="mt-2 text-sm text-default space-y-1 list-disc list-inside">
+          <li>Delete your profile and all personal information</li>
+          <li>Remove you from all groups</li>
+          <li>Delete all your applications and invitations</li>
+          <li>Remove all notifications</li>
+        </ul>
+      </div>
+    </ConfirmDialog>
   </div>
 </template>
 
