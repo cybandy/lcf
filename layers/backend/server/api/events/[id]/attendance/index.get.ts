@@ -3,8 +3,8 @@
  * Get attendance list for an event (staff/usher function)
  */
 
-import { myRequireUserSession } from '../../../utils/session'
-import { requireFellowshipPermission } from '../../../utils/authorization'
+import { myRequireUserSession } from '#layers/backend/server/utils/session'
+import { requireFellowshipPermission } from '#layers/backend/server/utils/authorization'
 import { FellowshipPermission } from '#layers/backend/shared/utils/authorization'
 
 export default defineEventHandler(async (event) => {
@@ -38,7 +38,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Get all attendance records with user details
-    const attendanceList = await db
+    let attendanceList = await db
       .select({
         userId: tables.attendance.userId,
         checkInTime: tables.attendance.checkInTime,
@@ -56,6 +56,14 @@ export default defineEventHandler(async (event) => {
       .where(eq(tables.attendance.eventId, parseInt(eventId)))
       .orderBy(desc(tables.attendance.checkInTime))
       .all()
+    
+    attendanceList = attendanceList.map(x => ({
+      ...x,
+      user: x.user ? {
+        ...x.user,
+        avatar: x.user.avatar ? `/files/${x.user.avatar}` : null
+      }: null
+    }))
 
     return {
       attendance: attendanceList,

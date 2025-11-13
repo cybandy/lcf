@@ -1,56 +1,25 @@
 <script setup lang="ts">
 import { h, resolveComponent } from 'vue'
 import type { TableColumn, TableRow } from '@nuxt/ui'
+import type { EventStat } from './Stats.vue';
+import type { RsvpSummary } from '~/composables/useEvents';
 
 const UBadge = resolveComponent('UBadge')
 const UCheckbox = resolveComponent('UCheckbox')
 
-const props = defineProps<{ id: number }>()
-const loading = ref(false)
+const props = withDefaults(defineProps<{ id: number, title?: string, description?: string }>(), {
+  title: 'Reservations',
+  description: 'All event reservations'
+})
 
-type Rsvps = {
-  userId: string
-  status: "attending" | "not_attending" | "maybe"
-  guestCount: number
-  createdAt: string
-  updatedAt: string
-  user: {
-    id: string
-    firstName: string
-    lastName: string
-    email: string
-    phoneNumber: string | null
-    avatar: string | null
-  } | null
-}
+const data = ref<RsvpData[]>([])
+const summary = ref<RsvpSummary>()
+const _ = useEvents()
 
-const data = ref<Rsvps[]>([])
-const toast = useToast()
-// const { data, execute: fetchRsvps } = useFetch(`/api/events/${props.id}/rsvps`, {
-//   key: `rsvps-${props.id}`,
-//   method: 'get'
-// })
-
-async function fetchRsvps() {
-  loading.value = true
-  try {
-    const response = await $fetch(`/api/events/${props.id}/rsvps`, {
-      method: 'GET',
-    })
-    data.value = response.rsvps
-  } catch (error) {
-    toast.add({
-      title: 'Error',
-      description: (error as { data?: { message?: string } }).data?.message || 'Failed to fetch rsvps',
-      color: 'error',
-    })
-  } finally {
-    loading.value = false
-  }
-}
-
-onMounted(async () => {
-  await fetchRsvps()
+await useAsyncData(`rsvp-${props.id}`, async () => {
+  const d = await _.fetchEventRsvps(props.id)
+  data.value = d.rsvps
+  summary.value = d.summary
 })
 
 const ULink = resolveComponent('ULink')
@@ -58,7 +27,7 @@ const UUser = resolveComponent('UUser')
 // const UButton = resolveComponent('UButton')
 // const UIcon = resolveComponent('UIcon')
 // const UDropdownMenu = resolveComponent('UDropdownMenu')
-const columns: TableColumn<Rsvps>[] = [
+const columns: TableColumn<RsvpData>[] = [
   {
     id: 'select',
     header: ({ table }) =>
@@ -146,25 +115,73 @@ const table = useTemplateRef('table')
 
 const rowSelection = ref<Record<string, boolean>>({})
 
-function onSelect(e: Event, row: TableRow<Rsvps>) {
+function onSelect(e: Event, row: TableRow<RsvpData>) {
   /* If you decide to also select the column you can do this  */
   row.toggleSelected(!row.getIsSelected())
 }
+
+const stats = computed(() => [
+  {
+    title: 'Attending',
+    icon: 'i-lucide-check-circle',
+    value: summary.value?.attending,
+    color: 'secondary',
+    guests: summary.value?.attendingGuests,
+  },
+  {
+    title: 'Maybe',
+    icon: 'i-lucide-help-circle',
+    value: summary.value?.maybe,
+    color: 'warning',
+    guests: summary.value?.maybeGuests,
+  },
+  // {
+  //   title: 'Not Attending',
+  //   icon: 'i-lucide-help-circle',
+  //   value: 12,
+  //   color: 'error',
+  //   guests: undefined,
+  // },
+  {
+    title: 'Total',
+    icon: 'i-lucide-users',
+    value: summary.value?.total,
+    color: 'success',
+    guests: undefined,
+  },
+] as EventStat[])
 </script>
 
 <template>
-  <div class="flex w-full flex-1 gap-1">
-    <div
-      v-if="data"
-      class="flex-1"
+  <div class="space-y-8">
+    <DashboardEventsStats
+      v-if="summary"
+      :stats="stats"
+      class="lg:grid-cols-3"
+    />
+
+    <u-page-card
+      :title="title"
+      :description="description"
+      :ui="{
+        title: 'text-xl sm:text-2xl'
+      }"
     >
-      <UTable
-        ref="table"
-        v-model:row-selection="rowSelection"
-        :data="data"
-        :columns="columns"
-        @select="onSelect"
-      />
-    </div>
+      <div class="flex w-full flex-1 gap-1">
+        <div
+          v-if="data"
+          class="flex-1"
+        >
+          <UTable
+            ref="table"
+            v-model:row-selection="rowSelection"
+            :data="data"
+            :loading="_.loading.value"
+            :columns="columns"
+            @select="onSelect"
+          />
+        </div>
+      </div>
+    </u-page-card>
   </div>
 </template>

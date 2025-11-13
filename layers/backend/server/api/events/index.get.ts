@@ -3,6 +3,7 @@
  * List all events with optional filtering
  */
 
+import { not } from 'drizzle-orm'
 import { myRequireUserSession } from '../../utils/session'
 import { useValidatedQuery, z, zh } from 'h3-zod'
 
@@ -34,7 +35,7 @@ export default defineEventHandler(async (event) => {
       whereConditions.push(gte(tables.events.startTime, now))
     }
     else if (status==='past') {
-      whereConditions.push(lt(tables.events.startTime, now))
+      whereConditions.push(lt(tables.events.endTime, now))
     }
     else if (status==='ongoing') {
       whereConditions.push(
