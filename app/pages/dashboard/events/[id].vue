@@ -1,0 +1,242 @@
+<script setup lang='ts'>
+definePageMeta({
+  middleware: 'auth',
+  layout: 'dashboard',
+})
+
+const id = computed(() => Number(useRoute().params.id))
+const permissions = usePermissions()
+const loading = ref(false)
+const toast = useToast()
+const { data, execute: fetchData, } = useFetch(`/api/events/${id.value}`, {
+  method: 'get',
+  key: `e-${id.value}`,
+  onRequest() {
+    loading.value = true
+  },
+  onResponse({ response }) {
+    loading.value = false
+    if (!response.ok) {
+      toast.add({
+        title: 'Oops!!!',
+        description: 'Failed to load event',
+        color: 'error',
+      })
+    }
+  }
+})
+
+const current_menu = ref<'view' | 'edit'>('view')
+const menu = [
+  {
+    label: 'View',
+    icon: 'i-lucide-eye',
+    onSelect: () => {
+      if (current_menu.value === 'view') return
+      current_menu.value = 'view'
+    }
+  },
+  {
+    label: 'Edit',
+    icon: 'i-lucide-pencil',
+    onSelect: () => {
+      if (current_menu.value === 'edit') return
+      current_menu.value = 'edit'
+    },
+    disabled: !permissions.can(permissions.FellowshipPermission.EDIT_ALL_EVENTS)
+  },
+]
+
+const stats = computed(() => [
+  {
+    title: 'Attending',
+    icon: 'i-lucide-check-circle',
+    value: data.value?.rsvpCounts.attending?.count || 0,
+    color: 'bg-secondary/10 ring ring-secondary/25',
+    iconColor: 'text-secondary' as const
+  },
+  {
+    title: 'Maybe',
+    icon: 'i-lucide-help-circle',
+    value: data.value?.rsvpCounts.maybe?.count || 0,
+    color: 'bg-warning/10 ring ring-warning/25',
+    iconColor: 'text-warning' as const
+  },
+  {
+    title: 'Checked In',
+    icon: 'i-lucide-users',
+    value: data.value?.attendanceCount || 0,
+    color: 'bg-success/10 ring ring-success/25',
+    iconColor: 'text-success' as const
+  },
+])
+
+function formatDate(date: string) {
+  return new Date(date).toLocaleString('en-US', {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+  })
+}
+
+const canViewAllRsvp = computed(() => permissions.isOwnerOrAdminOrPastorCheck(data.value?.event.creatorId))
+</script>
+
+<template>
+  <u-dashboard-panel :id="`e-${id}`">
+    <template #header>
+      <u-dashboard-navbar :title="data?.event.title">
+        <template #leading>
+          <u-dashboard-sidebar-collapse />
+        </template>
+        <template #right>
+          <UButton
+            v-if="permissions.can(permissions.FellowshipPermission.VIEW_USERS)"
+            icon="i-lucide-clipboard-check"
+            color="primary"
+            variant="ghost"
+            label="Check-In"
+          />
+          <UDropdownMenu
+            v-if="permissions.can(permissions.FellowshipPermission.EDIT_ALL_EVENTS) || permissions.can(permissions.FellowshipPermission.DELETE_EVENTS)"
+            :items="[[
+              ...(permissions.can(permissions.FellowshipPermission.EDIT_ALL_EVENTS) ? [{
+                label: 'Edit Event',
+                icon: 'i-lucide-pencil',
+                onSelect: () => {
+                  current_menu = 'edit'
+                }
+              }] : []),
+              ...(permissions.can(permissions.FellowshipPermission.DELETE_EVENTS) ? [{
+                label: 'Delete Event',
+                icon: 'i-lucide-trash-2',
+                color: 'error' as const,
+                onSelect: () => {
+                    
+                }
+              }] : [])
+            ]]"
+          >
+            <UButton
+              icon="i-lucide-ellipsis-vertical"
+              color="neutral"
+              variant="ghost"
+            />
+          </UDropdownMenu>
+        </template>
+      </u-dashboard-navbar>
+
+      <u-dashboard-toolbar>
+        <template #left>
+          <u-navigation-menu :items="menu" />
+        </template>
+      </u-dashboard-toolbar>
+    </template>
+
+    <template #body>
+      <div
+        v-if="current_menu==='view'"
+        class="space-y-8"
+      >
+        <!-- Stats Card -->
+        <u-page-grid class="gap-4 sm:gap-6 lg:gap-px">
+          <u-page-card
+            v-for="(stat, ind) of stats"
+            :key="ind"
+            :title="stat.title"
+            :icon="stat.icon"
+            variant="subtle"
+            orientation="horizontal"
+            :ui="{
+              container: 'gap-y-1.5',
+              wrapper: 'items-start',
+              leading: ['p-2.5 rounded-full ring ring-inset flex-col', stat.color].join(' '),
+              title: 'font-normal text-muted text-xs uppercase',
+              leadingIcon: stat.iconColor
+            }"
+            class="lg:rounded-none first:rounded-l-lg last:rounded-r-lg hover:z-1"
+          >
+            <span class="text-2xl font-semibold text-highlighted">
+              {{ stat.value }}
+            </span>
+          </u-page-card>
+        </u-page-grid>
+
+        <!-- general information -->
+        <u-page-card
+          v-if="data"
+          :title="data.event.title"
+          :description="data.event.description || undefined"
+          :ui="{
+            title: 'text-xl sm:text-2xl'
+          }"
+        >
+          <div class="flex-1 gap-1.5">
+            <u-button
+              variant="ghost"
+              color="neutral"
+              icon="i-lucide-calendar"
+              :label="data.event.startTime"
+            />
+            <u-button
+              v-if="data.event.location"
+              variant="ghost"
+              color="neutral"
+              icon="i-lucide-map"
+              :label="data.event.location"
+            />
+          </div>
+
+          <div class="mt-4 flex items-center gap-1">
+            <span class="text-dimmed">
+              Created by: 
+            </span>
+
+            <u-user
+              :name="data.event.creator.firstName + ' ' + data.event.creator.lastName"
+              :avatar="{ src: data.event.creator.avatar || undefined, alt: `${data.event.creator.firstName} ${data.event.creator.lastName}` }"
+            />
+          </div>
+        </u-page-card>
+
+        <u-page-card
+          v-if="data?.userRsvp"
+          title="My reservation"
+          :ui="{
+            title: 'text-xl sm:text-2xl'
+          }"
+        >
+          <DashboardEventsEventRsvp
+            :event-id="id"
+            :initial-status="data.userRsvp?.status"
+            :initial-guest-count="data.userRsvp?.guestCount"
+            @cancel="fetchData"
+            @success="fetchData"
+          />
+        </u-page-card>
+
+        <u-page-card
+          v-if="data?.rsvpCounts"
+          title="Reservations"
+          description="All event reservations"
+          :ui="{
+            title: 'text-xl sm:text-2xl'
+          }"
+        >
+          <dashboard-events-all-rsvp :id="id" />
+        </u-page-card>
+        
+        <!-- <dashboard-events-event-detail
+          :event-id="id"
+          @fetch="fetchData"
+        /> -->
+      </div>
+      <div v-else-if="current_menu==='edit'">
+        // edit
+      </div>
+    </template>
+  </u-dashboard-panel>
+</template>

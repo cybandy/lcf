@@ -19,7 +19,8 @@ const toCalendarDate = (_date: Date) => {
 const open = ref(false)
 
 // Use a ref for the calendar value to ensure immediate updates
-const calendarValue = ref<CalendarDate>(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const calendarValue = ref<any>(
   model.value ? toCalendarDate(model.value) : new CalendarDate(2000, 1, 1)
 )
 

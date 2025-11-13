@@ -21,7 +21,7 @@ const links = [[{
 {
   label: 'Events',
   icon: 'i-lucide-calendar-days',
-  to: '/dashboard/event',
+  to: '/dashboard/events',
   onSelect: () => {
     open.value = false
   }

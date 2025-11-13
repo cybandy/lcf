@@ -179,6 +179,12 @@ export function usePermissions() {
   function isOwnerOrAdminCheck(resourceOwnerId: string | null | undefined): boolean {
     return isOwner(resourceOwnerId) || userIsAdmin.value;
   }
+  /**
+   * Check if user is owner OR admin
+   */
+  function isOwnerOrAdminOrPastorCheck(resourceOwnerId: string | null | undefined): boolean {
+    return isOwner(resourceOwnerId) || userIsAdmin.value || userHasRole('pastor');
+  }
 
   // ============================================================================
   // UTILITY FUNCTIONS
@@ -270,6 +276,7 @@ export function usePermissions() {
     canPerform,
     isOwner,
     isOwnerOrAdminCheck,
+    isOwnerOrAdminOrPastorCheck,
 
     // Utilities
     getUserPermissions,
