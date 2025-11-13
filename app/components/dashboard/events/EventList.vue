@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { h } from 'vue'
-import type { TableColumn, TableRow, DropdownMenuItem } from '@nuxt/ui'
+import type { TableColumn, TableRow, DropdownMenuItem, NavigationMenuItem } from '@nuxt/ui'
 import { formatDistance } from 'date-fns'
 
 interface EventData {
@@ -30,6 +30,8 @@ const toast = useToast()
 const loading = ref(false)
 const events = ref<EventData[]>([])
 const filterUpcoming = ref(true)
+type EventStatus = "past" | "ongoing" | "upcoming"
+const eventStatus = ref<EventStatus>('upcoming')
 
 // Fetch events
 async function fetchEvents() {
@@ -37,8 +39,7 @@ async function fetchEvents() {
   try {
     const response = await $fetch<{ events: EventData[], total: number }>('/api/events', {
       query: {
-        upcoming: filterUpcoming.value ? 'true' : undefined,
-        past: !filterUpcoming.value ? 'true' : undefined,
+        status: eventStatus.value
       },
     })
     events.value = response.events
@@ -59,7 +60,7 @@ onMounted(() => {
 })
 
 // Watch filter changes
-watch(filterUpcoming, () => {
+watch(eventStatus, () => {
   fetchEvents()
 })
 
@@ -206,56 +207,86 @@ function onSelect(e: Event, row: TableRow<EventData>) {
     navigateTo(`/dashboard/events/${row.original.id}`)
   }, 500)
 }
+
+const statusMenu = computed(() => [
+  [
+    {
+      label: 'Upcoming',
+      active: eventStatus.value === 'upcoming',
+      onSelect: () => {
+        eventStatus.value = 'upcoming'
+      }
+    },
+    {
+      label: 'Past',
+      active: eventStatus.value === 'past',
+      onSelect: () => {
+        eventStatus.value = 'past'
+      }
+    },
+    {
+      label: 'Ongoing',
+      active: eventStatus.value === 'ongoing',
+      onSelect: () => {
+        eventStatus.value = 'ongoing'
+      }
+    },
+  ],
+  [
+    {
+      label: 'Refresh',
+      icon: 'i-lucide-refresh-cw',
+      onSelect: async () => {
+        await fetchEvents()
+      }
+    }
+  ]
+] as NavigationMenuItem[][])
+
+const description_ = {
+  upcoming: 'You are invited to all our upcoming events',
+  past: 'Check our ongoing and upcoming events for a similar impactful events',
+  ongoing: "Kindly join us and your life won't be the same"
+}
 </script>
 
 <template>
   <div class="space-y-4">
-    <div class="flex items-center justify-between">
-      <div class="flex gap-2">
-        <UButton
-          :color="filterUpcoming ? 'primary' : 'neutral'"
-          :variant="filterUpcoming ? 'solid' : 'ghost'"
-          @click="filterUpcoming = true"
-        >
-          Upcoming
-        </UButton>
-        <UButton
-          :color="!filterUpcoming ? 'primary' : 'neutral'"
-          :variant="!filterUpcoming ? 'solid' : 'ghost'"
-          @click="filterUpcoming = false"
-        >
-          Past
-        </UButton>
-      </div>
+    <u-dashboard-toolbar>
+      <UNavigationMenu
+        :items="statusMenu"
+        variant="pill"
+        :highlight="true"
+        class="w-full"
+      />
+    </u-dashboard-toolbar>
 
-      <UButton
-        icon="i-lucide-refresh-cw"
-        color="neutral"
-        variant="ghost"
-        :loading="loading"
-        @click="fetchEvents"
-      >
-        Refresh
-      </UButton>
-    </div>
-
-    <UTable
-      ref="table"
-      v-model:row-selection="rowSelection"
-      :data="events"
-      :columns="columns"
-      :loading="loading"
-      class="flex-1"
-      @select="onSelect"
+    <u-page-card
+      :title="eventStatus"
+      :description="description_[eventStatus]"
+      variant="outline"
+      :ui="{
+        title: 'uppercase'
+      }"
     >
-      <template #empty>
-        <div class="text-center py-12">
-          <div class="i-lucide-calendar-off text-4xl text-muted mx-auto mb-2" />
-          <p class="text-muted">
-            {{ filterUpcoming ? 'No upcoming events' : 'No past events' }}
-          </p>
-        </div>
-      </template>
-    </UTable>
+      <UTable
+        ref="table"
+        v-model:row-selection="rowSelection"
+        :data="events"
+        :columns="columns"
+        :loading="loading"
+        class="flex-1"
+        @select="onSelect"
+      >
+        <template #empty>
+          <div class="text-center py-12">
+            <div class="i-lucide-calendar-off text-4xl text-muted mx-auto mb-2" />
+            <p class="text-muted">
+              {{ filterUpcoming ? 'No upcoming events' : 'No past events' }}
+            </p>
+          </div>
+        </template>
+      </UTable>
+    </u-page-card>
   </div>
 </template>

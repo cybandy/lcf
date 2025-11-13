@@ -8,6 +8,7 @@ const id = computed(() => Number(useRoute().params.id))
 const permissions = usePermissions()
 const loading = ref(false)
 const toast = useToast()
+// data fetching
 const { data, execute: fetchData, } = useFetch(`/api/events/${id.value}`, {
   method: 'get',
   key: `e-${id.value}`,
@@ -25,8 +26,10 @@ const { data, execute: fetchData, } = useFetch(`/api/events/${id.value}`, {
     }
   }
 })
-
-const current_menu = ref<'view' | 'edit'>('view')
+// permissions
+const canViewAllRsvp = computed(() => permissions.isOwnerOrAdminOrPastorCheck(data.value?.event.creatorId))
+// menu
+const current_menu = ref<'view' | 'edit' | 'all'>('view')
 const menu = [
   {
     label: 'View',
@@ -36,23 +39,45 @@ const menu = [
       current_menu.value = 'view'
     }
   },
-  {
-    label: 'Edit',
-    icon: 'i-lucide-pencil',
-    onSelect: () => {
-      if (current_menu.value === 'edit') return
-      current_menu.value = 'edit'
-    },
-    disabled: !permissions.can(permissions.FellowshipPermission.EDIT_ALL_EVENTS)
-  },
 ]
 
+// menus to include based on your permissions
+onMounted(() => {
+  if (permissions.can(permissions.FellowshipPermission.EDIT_ALL_EVENTS)) {
+    menu.push(
+      {
+        label: 'Edit',
+        icon: 'i-lucide-pencil',
+        onSelect: () => {
+          if (current_menu.value === 'edit') return
+          current_menu.value = 'edit'
+        },
+      },
+    )
+  }
+
+  if (canViewAllRsvp.value) {
+    menu.push(
+      {
+        label: 'All reservations',
+        icon: 'i-lucide-users',
+        onSelect: () => {
+          if (current_menu.value === 'all') return
+          current_menu.value = 'all'
+        },
+      },
+    )
+  }
+})
+
+// stats
 const stats = computed(() => [
   {
     title: 'Attending',
     icon: 'i-lucide-check-circle',
     value: data.value?.rsvpCounts.attending?.count || 0,
     color: 'bg-secondary/10 ring ring-secondary/25',
+    guests: data.value?.rsvpCounts.attending?.totalGuests || undefined,
     iconColor: 'text-secondary' as const
   },
   {
@@ -60,13 +85,23 @@ const stats = computed(() => [
     icon: 'i-lucide-help-circle',
     value: data.value?.rsvpCounts.maybe?.count || 0,
     color: 'bg-warning/10 ring ring-warning/25',
+    guests: data.value?.rsvpCounts.maybe?.totalGuests || undefined,
     iconColor: 'text-warning' as const
+  },
+  {
+    title: 'Not Attending',
+    icon: 'i-lucide-help-circle',
+    value: data.value?.rsvpCounts.not_attending?.count || 0,
+    color: 'bg-error/10 ring ring-error/25',
+    guests: undefined,
+    iconColor: 'text-error' as const
   },
   {
     title: 'Checked In',
     icon: 'i-lucide-users',
     value: data.value?.attendanceCount || 0,
     color: 'bg-success/10 ring ring-success/25',
+    guests: undefined,
     iconColor: 'text-success' as const
   },
 ])
@@ -81,8 +116,6 @@ function formatDate(date: string) {
     minute: '2-digit',
   })
 }
-
-const canViewAllRsvp = computed(() => permissions.isOwnerOrAdminOrPastorCheck(data.value?.event.creatorId))
 </script>
 
 <template>
@@ -129,7 +162,7 @@ const canViewAllRsvp = computed(() => permissions.isOwnerOrAdminOrPastorCheck(da
         </template>
       </u-dashboard-navbar>
 
-      <u-dashboard-toolbar>
+      <u-dashboard-toolbar v-if="menu.length>1">
         <template #left>
           <u-navigation-menu :items="menu" />
         </template>
@@ -137,12 +170,18 @@ const canViewAllRsvp = computed(() => permissions.isOwnerOrAdminOrPastorCheck(da
     </template>
 
     <template #body>
-      <div
+      <Motion
         v-if="current_menu==='view'"
+        :initial="{ opacity: 0, scale: 1.2 }"
+        :animate="{ opacity: 1, scale: 1 }"
+        :transition="{
+          duration: 0.4,
+          scale: { type: 'spring', visualDuration: 0.4, bounce: 0.5 }
+        }"
         class="space-y-8"
       >
         <!-- Stats Card -->
-        <u-page-grid class="gap-4 sm:gap-6 lg:gap-px">
+        <u-page-grid class="lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-px">
           <u-page-card
             v-for="(stat, ind) of stats"
             :key="ind"
@@ -159,9 +198,21 @@ const canViewAllRsvp = computed(() => permissions.isOwnerOrAdminOrPastorCheck(da
             }"
             class="lg:rounded-none first:rounded-l-lg last:rounded-r-lg hover:z-1"
           >
-            <span class="text-2xl font-semibold text-highlighted">
-              {{ stat.value }}
-            </span>
+            <div class="flex flex-col items-center gap-2">
+              <span class="text-2xl font-semibold text-highlighted">
+                {{ stat.value }}
+              </span>
+
+              <!-- <UBadge
+                v-if="stat.guests"
+                :color="'neutral'"
+                variant="subtle"
+                size="xs"
+                class="text-xs shrink"
+              >
+                Guest: #{{ stat.guests }}
+              </UBadge> -->
+            </div>
           </u-page-card>
         </u-page-grid>
 
@@ -203,7 +254,7 @@ const canViewAllRsvp = computed(() => permissions.isOwnerOrAdminOrPastorCheck(da
         </u-page-card>
 
         <u-page-card
-          v-if="data?.userRsvp"
+          v-if="data"
           title="My reservation"
           :ui="{
             title: 'text-xl sm:text-2xl'
@@ -217,7 +268,33 @@ const canViewAllRsvp = computed(() => permissions.isOwnerOrAdminOrPastorCheck(da
             @success="fetchData"
           />
         </u-page-card>
-
+        
+        <!-- <dashboard-events-event-detail
+          :event-id="id"
+          @fetch="fetchData"
+        /> -->
+      </Motion>
+      <Motion
+        v-else-if="current_menu==='edit'"
+        :initial="{ opacity: 0, scale: 0 }"
+        :animate="{ opacity: 1, scale: 1 }"
+        :transition="{
+          duration: 0.4,
+          scale: { type: 'spring', visualDuration: 0.4, bounce: 0.5 }
+        }"
+      >
+        // edit
+      </Motion>
+      <Motion
+        v-else-if="current_menu==='all'"
+        :initial="{ opacity: 0, scale: 0 }"
+        :animate="{ opacity: 1, scale: 1 }"
+        :transition="{
+          duration: 0.4,
+          scale: { type: 'spring', visualDuration: 0.4, bounce: 0.5 }
+        }"
+        class="space-y-8"
+      >
         <u-page-card
           v-if="data?.rsvpCounts"
           title="Reservations"
@@ -228,15 +305,7 @@ const canViewAllRsvp = computed(() => permissions.isOwnerOrAdminOrPastorCheck(da
         >
           <dashboard-events-all-rsvp :id="id" />
         </u-page-card>
-        
-        <!-- <dashboard-events-event-detail
-          :event-id="id"
-          @fetch="fetchData"
-        /> -->
-      </div>
-      <div v-else-if="current_menu==='edit'">
-        // edit
-      </div>
+      </Motion>
     </template>
   </u-dashboard-panel>
 </template>

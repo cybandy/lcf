@@ -183,7 +183,7 @@ export function usePermissions() {
    * Check if user is owner OR admin
    */
   function isOwnerOrAdminOrPastorCheck(resourceOwnerId: string | null | undefined): boolean {
-    return isOwner(resourceOwnerId) || userIsAdmin.value || userHasRole('pastor');
+    return isOwner(resourceOwnerId) || userIsAdmin.value || userIsPastor.value;
   }
 
   // ============================================================================

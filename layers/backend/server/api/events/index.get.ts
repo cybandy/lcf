@@ -4,6 +4,7 @@
  */
 
 import { myRequireUserSession } from '../../utils/session'
+import { useValidatedQuery, z, zh } from 'h3-zod'
 
 export default defineEventHandler(async (event) => {
   // Require authentication
@@ -13,20 +14,35 @@ export default defineEventHandler(async (event) => {
   const query = getQuery(event)
 
   // Optional filters
-  const upcoming = query.upcoming === 'true'
-  const past = query.past === 'true'
-  const limit = query.limit ? parseInt(query.limit as string) : undefined
+  const { status, limit, offset } = await useValidatedQuery(event, z.object({
+    status: z.enum(['upcoming', 'past', 'ongoing']).optional().default('upcoming'),
+    limit: zh.intAsString.optional().default('50'),
+    offset: zh.intAsString.optional().default('0'),
+  }))
+  
+  // const upcoming = query.upcoming === 'true'
+  // const past = query.past === 'true'
+  // const ongoing = query.past === 'true'
+  // const limit = query.limit ? parseInt(query.limit as string) : undefined
 
   const now = new Date()
 
   try {
     // Build query with filters
     const whereConditions = []
-    if (upcoming) {
+    if (status==='upcoming') {
       whereConditions.push(gte(tables.events.startTime, now))
     }
-    else if (past) {
+    else if (status==='past') {
       whereConditions.push(lt(tables.events.startTime, now))
+    }
+    else if (status==='ongoing') {
+      whereConditions.push(
+        and(
+          gt(tables.events.endTime, now),
+          lt(tables.events.startTime, now)
+        )
+      )
     }
 
     let eventsQuery = db
@@ -57,14 +73,17 @@ export default defineEventHandler(async (event) => {
     }
 
     // Apply order
-    eventsQuery = eventsQuery.orderBy(
-      upcoming ? asc(tables.events.startTime) : desc(tables.events.startTime),
+    if (status === 'upcoming' || status === 'ongoing') {
+      eventsQuery.orderBy(asc(tables.events.startTime))
+    } else if (status === 'past') {
+      eventsQuery = eventsQuery.orderBy(desc(tables.events.startTime),
     )
+    }
 
     // Apply limit
-    if (limit) {
       eventsQuery = eventsQuery.limit(limit)
-    }
+    // Apply offset
+    eventsQuery = eventsQuery.offset(limit*offset)
 
     const events = (await eventsQuery).map(x=>({...x, creator:{...x.creator, avatar: x.creator?.avatar ? `/files/${x.creator?.avatar}` : undefined}}))
 

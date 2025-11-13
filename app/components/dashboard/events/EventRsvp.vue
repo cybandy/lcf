@@ -20,7 +20,7 @@ const loading = ref(false)
 
 // Form schema
 const schema = z.object({
-  status: z.enum(['attending', 'not_attending', 'maybe']),
+  status: z.enum(['attending', 'not_attending', 'maybe']).optional(),
   guestCount: z.number().int().min(0).max(50),
 })
 
@@ -28,7 +28,7 @@ type Schema = z.output<typeof schema>
 
 // Form state
 const state = ref<Schema>({
-  status: props.initialStatus || 'attending',
+  status: props.initialStatus,
   guestCount: props.initialGuestCount || 0,
 })
 
@@ -112,8 +112,11 @@ async function cancelRsvp() {
   }
 }
 
-function handleCancel() {
-  emit('cancel')
+function changeOption(status: Props['initialStatus']) {
+  // not already selected
+  if (status !== state.value.status) {
+    state.value.status = status
+  }
 }
 </script>
 
@@ -141,7 +144,7 @@ function handleCancel() {
                 ? 'border-primary bg-primary/5'
                 : 'border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700'
             ]"
-            @click="state.status = option.value as Schema['status']"
+            @click="() => changeOption(option.value as Schema['status'])"
           >
             <div
               class="shrink-0 w-5 h-5"
@@ -152,9 +155,10 @@ function handleCancel() {
                 {{ option.label }}
               </div>
             </div>
-            <div
+            <UIcon
               v-if="state.status === option.value"
-              class="shrink-0 w-5 h-5 i-lucide-check text-primary"
+              name="i-lucide-check"
+              class="shrink-0 size-5 text-primary"
             />
           </button>
         </div>
