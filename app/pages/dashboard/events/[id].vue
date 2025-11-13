@@ -1,6 +1,7 @@
 <script setup lang='ts'>
 import type { EventStat } from '~/components/dashboard/events/Stats.vue'
 import type { NavigationMenuItem } from '@nuxt/ui'
+import type { DashboardEventForm } from '~/components/dashboard/events/EventForm.vue'
 
 definePageMeta({
   middleware: 'auth',
@@ -14,6 +15,8 @@ if (!id.value) {
 const events = useEvents()
 const { user } = useMyUserSession()
 const permissions = usePermissions()
+const data = ref<EventDetail>()
+const editData = ref<DashboardEventForm>()
 
 const pastData = ref({
   attendance: {
@@ -27,12 +30,33 @@ const pastData = ref({
 })
 
 // data fetching
-const { data, execute: fetchData } = await useAsyncData(``, async () => {
+const { execute: fetchData } = await useAsyncData(`ev-${id.value}`, async () => {
   const _d = await events.fetchEventDetail(id.value)
   if (_d) {
+    data.value = _d
+
+    // data for editing
+    editData.value = {
+      eventId: id.value,
+      initialData: {
+        title: _d.event.title,
+        description: _d.event.description,
+        startTime: new Date(_d.event.startTime),
+        endTime: new Date(_d.event.endTime!),
+        location: _d.event.location,
+      }
+    }
+
+    // check past data status
     if (events.isPastEvent(_d.event)) {
       const _at = await events.checkUserAttended(id.value, user.value.id)
       pastData.value.attendance = _at
+      return {
+        data: _d,
+        pastData: {
+          attendance: _at
+        }
+      }
     }
   }
   return _d
@@ -226,11 +250,11 @@ function formatDate(date: string) {
       <div v-if="data">
         <Motion
           v-if="current_menu==='view'"
-          :initial="{ opacity: 0, scale: 1.2 }"
-          :animate="{ opacity: 1, scale: 1 }"
+          :initial="{ opacity: 0, scale: 0.9, filter: 'blur(20px)' }"
+          :animate="{ opacity: 1, scale: 1, filter: 'blur(0px)' }"
           :transition="{
-            duration: 0.4,
-            scale: { type: 'spring', visualDuration: 0.4, bounce: 0.5 }
+            duration: 0.2,
+            ease: ['easeInOut']
           }"
           class="space-y-8"
         >
@@ -410,22 +434,33 @@ function formatDate(date: string) {
         </Motion>
         <Motion
           v-else-if="current_menu==='edit'"
-          :initial="{ opacity: 0, scale: 0 }"
-          :animate="{ opacity: 1, scale: 1 }"
+          :initial="{ opacity: 0, scale: 1.1, filter: 'blur(10px)' }"
+          :animate="{ opacity: 1, scale: 1, filter: 'blur(0px)' }"
           :transition="{
-            duration: 0.4,
-            scale: { type: 'spring', visualDuration: 0.4, bounce: 0.5 }
+            duration: 0.2,
+            ease: ['easeInOut']
           }"
         >
-          // edit
+          <UPageCard
+            title="Edit event"
+            description="Enter the details in the form below"
+          >
+            <DashboardEventsEventForm
+              v-bind="editData"
+              @success="() => {
+                fetchData()
+                current_menu = 'view'
+              }"
+            />
+          </UPageCard>
         </Motion>
         <Motion
           v-else-if="current_menu==='all'"
-          :initial="{ opacity: 0, scale: 0 }"
-          :animate="{ opacity: 1, scale: 1 }"
+          :initial="{ opacity: 0, scale: 0.9, filter: 'blur(20px)' }"
+          :animate="{ opacity: 1, scale: 1, filter: 'blur(0px)' }"
           :transition="{
-            duration: 0.4,
-            scale: { type: 'spring', visualDuration: 0.4, bounce: 0.5 }
+            duration: 0.2,
+            ease: ['easeInOut']
           }"
           class="space-y-8"
         >

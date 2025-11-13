@@ -200,6 +200,7 @@ function changeOption(status: Props['initialStatus']) {
           <UButton
             type="submit"
             :loading="loading"
+            :disabled="!state.status"
           >
             Save RSVP
           </UButton>

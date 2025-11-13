@@ -200,12 +200,15 @@ const tabs = computed(() => {
 
           <!-- Create Event Tab -->
           <template #create>
-            <UCard>
+            <UPageCard
+              title="Add a new event"
+              description="Enter the details in the form below"
+            >
               <DashboardEventsEventForm
                 @success="handleEventSuccess"
                 @cancel="activeTab = 'list'"
               />
-            </UCard>
+            </UPageCard>
           </template>
         </UTabs>
 

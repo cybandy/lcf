@@ -178,6 +178,7 @@ const stats = computed(() => [
             :data="data"
             :loading="_.loading.value"
             :columns="columns"
+            empty="No reservations yet"
             @select="onSelect"
           />
         </div>

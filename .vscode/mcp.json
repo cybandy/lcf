@@ -1,0 +1,15 @@
+{
+	"servers": {
+		"nuxt-ui": {
+			"type": "http",
+			"url": "https://ui.nuxt.com/mcp"
+		},
+		"antfu/nuxt-mcp": {
+			"type": "http",
+			"url": "https://mcp.nuxt.com/sse",
+			"gallery": "https://api.mcp.github.com",
+			"version": "1.0.0"
+		}
+	},
+	"inputs": []
+}

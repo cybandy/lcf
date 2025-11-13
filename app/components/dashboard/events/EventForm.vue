@@ -2,7 +2,7 @@
 import { z } from 'zod'
 import type { FormSubmitEvent } from '#ui/types'
 
-interface Props {
+export interface DashboardEventForm {
   eventId?: number
   initialData?: {
     title: string
@@ -13,22 +13,23 @@ interface Props {
   }
 }
 
-const props = defineProps<Props>()
+const props = defineProps<DashboardEventForm>()
 
 const emit = defineEmits<{
   success: [event: unknown]
   cancel: []
 }>()
 
+const _events = useEvents()
 const toast = useToast()
-const loading = ref(false)
+// const loading = ref(false)
 
 // Form schema
 const schema = z.object({
   title: z.string().min(1, 'Title is required').max(255),
   description: z.string().optional(),
   startTime: z.string().min(1, 'Start time is required'),
-  endTime: z.string().optional(),
+  endTime: z.string().min(1, 'End time is required'),
   location: z.string().optional(),
 })
 
@@ -66,7 +67,7 @@ watch(
 )
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  loading.value = true
+  _events.loading.value = true
 
   try {
     // Prepare data with proper date format
@@ -81,28 +82,30 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     let result
     if (props.eventId) {
       // Update existing event
-      result = await $fetch(`/api/events/${props.eventId}`, {
-        method: 'PATCH',
-        body: submitData,
-      })
+      result = await _events.updateEvent(props.eventId, submitData)
+      // result = await $fetch(`/api/events/${props.eventId}`, {
+      //   method: 'PATCH',
+      //   body: submitData,
+      // })
 
-      toast.add({
-        title: 'Success',
-        description: 'Event updated successfully',
-        color: 'success',
-      })
+      // toast.add({
+      //   title: 'Success',
+      //   description: 'Event updated successfully',
+      //   color: 'success',
+      // })
     } else {
       // Create new event
-      result = await $fetch('/api/events', {
-        method: 'POST',
-        body: submitData,
-      })
+      result = await _events.createEvent(submitData)
+      // result = await $fetch('/api/events', {
+      //   method: 'POST',
+      //   body: submitData,
+      // })
 
-      toast.add({
-        title: 'Success',
-        description: 'Event created successfully',
-        color: 'success',
-      })
+      // toast.add({
+      //   title: 'Success',
+      //   description: 'Event created successfully',
+      //   color: 'success',
+      // })
     }
 
     emit('success', result.event)
@@ -127,7 +130,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       color: 'error',
     })
   } finally {
-    loading.value = false
+    _events.loading.value = false
   }
 }
 
@@ -206,7 +209,7 @@ function handleCancel() {
       </UButton>
       <UButton
         type="submit"
-        :loading="loading"
+        :loading="_events.loading.value"
       >
         {{ eventId ? 'Update Event' : 'Create Event' }}
       </UButton>
