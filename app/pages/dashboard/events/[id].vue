@@ -60,6 +60,12 @@ const { execute: fetchData } = await useAsyncData(`ev-${id.value}`, async () => 
     }
   }
   return _d
+}, {
+  immediate: false,
+  server: false
+})
+onBeforeMount(async () => {
+  await fetchData()
 })
 
 // permissions
@@ -190,6 +196,25 @@ function formatDate(date: string) {
     minute: '2-digit',
   })
 }
+
+// call delete
+const deleteOpen = ref(false)
+const onDeleteEvent = async () => {
+  try {
+    await events.deleteEvent(id.value)
+    cancelDelete()
+    setTimeout(() => { 
+      navigateTo('/dashboard/events')
+    }, 1000)
+  } catch (error) {
+    //
+  }
+}
+
+function cancelDelete() {
+  //
+  deleteOpen.value = !deleteOpen.value
+}
 </script>
 
 <template>
@@ -222,7 +247,7 @@ function formatDate(date: string) {
                 icon: 'i-lucide-trash-2',
                 color: 'error' as const,
                 onSelect: () => {
-                    
+                  deleteOpen = true
                 }
               }] : [])
             ]]"
@@ -481,6 +506,28 @@ function formatDate(date: string) {
       </div>
       <div v-else>
       </div>
+      <ConfirmDialog
+        v-bind="{
+          title: 'Delete Event',
+          open: deleteOpen,
+          description: 'Note that all information related to the event will be deleted completely. This action is irreversible',
+          confirmColor: 'error',
+          confirmText: 'Delete' }"
+        @cancel="cancelDelete"
+        @confirm="onDeleteEvent"
+      >
+        <div class="space-y-1 5 text-center">
+          <p class="text-highlighted text-lg">
+            {{ data?.event.title }}
+          </p>
+          <p
+            v-if="data?.event.description"
+            class="text-sm text-muted"
+          >
+            {{ data.event.description }}
+          </p>
+        </div>
+      </ConfirmDialog>
     </template>
   </u-dashboard-panel>
 </template>

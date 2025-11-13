@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { ButtonProps } from '@nuxt/ui'
+
 const props = withDefaults(
   defineProps<{
     open?: boolean
@@ -6,7 +8,7 @@ const props = withDefaults(
     description?: string
     confirmText?: string
     cancelText?: string
-    confirmColor?: 'primary' | 'error' | 'warning' | 'success' | 'neutral'
+    confirmColor?: ButtonProps['color']
     loading?: boolean
     icon?: string
   }>(),

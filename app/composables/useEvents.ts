@@ -316,9 +316,9 @@ export function useEvents() {
    * Delete an event
    */
   async function deleteEvent(eventId: number) {
-    if (!confirm('Are you sure you want to delete this event? This action cannot be undone.')) {
-      return false
-    }
+    // if (!confirm('Are you sure you want to delete this event? This action cannot be undone.')) {
+    //   return false
+    // }
 
     loading.value = true
 
