@@ -6,12 +6,14 @@ export default eventHandler(async (event) => {
   // Require authenticated user
   const session = await requireUserSession(event);
   
-  const { pathname } = await useValidatedParams(
+  let { pathname } = await useValidatedParams(
     event,
     z.object({
       pathname: z.string(),
     }),
   );
+
+  pathname =  pathname.split('-').join('/').trim()
 
   // Get user with roles to check permissions
   const user = await getUserWithRoles(event);
@@ -21,16 +23,17 @@ export default eventHandler(async (event) => {
   const hasManagePermission = user && hasFellowshipPermission(user, FellowshipPermission.MANAGE_POSTS);
   
   // Check if the file belongs to the user (gallery files are prefixed with userId)
-  // @ts-expect-error - Session user has id property
-  const userId = session.user?.id;
-  const isOwner = pathname.startsWith(`gallery/${userId}/`);
+  // const userId = session.user?.id;
+  // const isOwner = pathname.startsWith(`gallery/`);
 
-  if (!hasManagePermission && !isOwner) {
+  if (!hasManagePermission) {
     throw createError({
       statusCode: 403,
       statusMessage: 'You do not have permission to delete this image',
     });
   }
 
-  return hubBlob().del(pathname);
+  await hubBlob().del(pathname);
+  
+  return sendNoContent(event)
 });

@@ -6,15 +6,20 @@ const props = withDefaults(
   defineProps<{
     file?: File | null
     src?: string
-    alt: string
+    alt?: string
     isSkip?: boolean
     loading?: boolean
+    multiple?: boolean
+    fileUploadClass?: string
   }>(),
   {
     file: null,
     src: '',
+    alt: '',
     isSkip: false,
     loading: false,
+    multiple: false,
+    fileUploadClass: '"w-96 min-h-48"'
   },
 )
 const emits = defineEmits(['update:file', 'update:src', 'update:alt', 'submit', 'skip'])
@@ -99,11 +104,12 @@ async function onSubmit(event: FormSubmitEvent<schema>) {
     >
       <u-file-upload
         v-model="file"
+        :multiple="multiple"
         label="Drop your image here"
         description="PNG, JPG (max. 5MB)"
         accept="image/jpg, image/png, image/jpeg"
         position="inside"
-        class="w-96 min-h-48"
+        :class="fileUploadClass"
       >
       </u-file-upload>
     </UFormField>

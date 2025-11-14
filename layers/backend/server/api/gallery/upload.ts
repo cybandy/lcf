@@ -1,8 +1,6 @@
 export default eventHandler(async (event) => {
-  const session = await requireUserSession(event);
-  
-  // @ts-expect-error - Session user has id property
-  const userId = session.user?.id;
+  const {user} = await myRequireUserSession(event);
+  const userId = user.id;
 
   if (!userId) {
     throw createError({
@@ -16,7 +14,10 @@ export default eventHandler(async (event) => {
     multiple: false,
     put: {
       addRandomSuffix: true,
-      prefix: `gallery/${userId}/`, // Add userId prefix for ownership tracking
+      prefix: `gallery/`, // Add userId prefix for ownership tracking
+      customMetadata: {
+        userId
+      }
     },
     ensure: {
       maxSize: '8MB',

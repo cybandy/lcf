@@ -10,64 +10,86 @@ const toast = useToast()
 
 const open = ref(false)
 
-const links = [[{
-  label: 'Dashboard',
-  icon: 'i-lucide-layout-dashboard',
-  to: '/dashboard',
-  onSelect: () => {
-    open.value = false
-  }
-},
-{
-  label: 'Events',
-  icon: 'i-lucide-calendar-days',
-  to: '/dashboard/events',
-  onSelect: () => {
-    open.value = false
-  }
-}, {
-  label: 'Settings',
-  to: '/dashboard/settings',
-  icon: 'i-lucide-settings',
-  defaultOpen: true,
-  type: 'trigger',
-  children: [{
-    label: 'General',
-    to: '/dashboard/settings',
-    exact: true,
-    onSelect: () => {
-      open.value = false
-    }
-  }, {
-    label: 'Members',
-    to: '/dashboard/settings/members',
-    onSelect: () => {
-      open.value = false
-    }
-  },
-  {
-    label: 'Security',
-    to: '/dashboard/settings/security',
-    onSelect: () => {
-      open.value = false
-    }
-  }]
-}], [{
-  label: 'Feedback',
-  icon: 'i-lucide-message-circle',
-  to: 'https://github.com/nuxt-ui-templates/dashboard',
-  target: '_blank'
-}, {
-  label: 'Help & Support',
-  icon: 'i-lucide-info',
-  to: 'https://github.com/nuxt-ui-templates/dashboard',
-  target: '_blank'
-}]] satisfies NavigationMenuItem[][]
+const links = computed(() => {
+  const _ll = [] as NavigationMenuItem[][]
+  // first menu
+  _ll.push(
+    [{
+      label: 'Dashboard',
+      icon: 'i-lucide-layout-dashboard',
+      to: '/dashboard',
+      onSelect: () => {
+        open.value = false
+      }
+    },
+    {
+      label: 'Events',
+      icon: 'i-lucide-calendar-days',
+      to: '/dashboard/events',
+      onSelect: () => {
+        open.value = false
+      }
+    },
+    {
+      label: 'Gallery',
+      icon: 'i-lucide-gallery-horizontal',
+      to: '/dashboard/gallery',
+      onSelect: () => {
+        open.value = false
+      }
+    },
+    {
+      label: 'Settings',
+      to: '/dashboard/settings',
+      icon: 'i-lucide-settings',
+      defaultOpen: true,
+      type: 'trigger',
+      children: [{
+        label: 'General',
+        to: '/dashboard/settings',
+        exact: true,
+        onSelect: () => {
+          open.value = false
+        }
+      },
+      {
+        label: 'Members',
+        to: '/dashboard/settings/members',
+        onSelect: () => {
+          open.value = false
+        }
+      },
+      {
+        label: 'Security',
+        to: '/dashboard/settings/security',
+        onSelect: () => {
+          open.value = false
+        }
+      }]
+    }],
+  )
+
+  // second menu
+  _ll.push(
+    [{
+      label: 'Feedback',
+      icon: 'i-lucide-message-circle',
+      to: 'https://github.com/nuxt-ui-templates/dashboard',
+      target: '_blank'
+    }, {
+      label: 'Help & Support',
+      icon: 'i-lucide-info',
+      to: 'https://github.com/nuxt-ui-templates/dashboard',
+      target: '_blank'
+    }]
+  )
+  return _ll
+})
 
 const groups = computed(() => [{
   id: 'links',
   label: 'Go to',
-  items: links.flat()
+  items: links.value.flat()
 },])
 
 onMounted(async () => {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useFile } from '~/composables/useFile'
+import { useGallery } from '~/composables/useGallery'
 
 const isOpen = ref(false)
 
@@ -11,10 +11,14 @@ const uploadingImg = ref(false)
 const disconnect = ref(false)
 
 const toast = useToast()
-const { uploadImage, deleteImage, images } = useFile()
+const { uploadImage, deleteImage, getImages, files, isImage, isVideo } = useGallery()
 const { loggedIn, clear } = useUserSession()
 
-const active = useState()
+onBeforeMount(async () => {
+  await getImages()
+})
+
+const active = useState('active-gallery-file')
 
 const { isOverDropZone } = useDropZone(dropZoneRef, onDrop)
 
@@ -31,12 +35,11 @@ async function fileSelection(event: Event) {
 }
 
 async function onDrop(files: File[] | null) {
-  if (files) {
-    await uploadFile(files[0] as File)
-  }
+  await uploadFile(files)
 }
 
-async function uploadFile(file: File) {
+async function uploadFile(file: File | File[] | null | undefined) {
+  if (!file) return
   uploadingImg.value = true
 
   await uploadImage(file)
@@ -62,61 +65,70 @@ async function clearSession() {
 <template>
   <div>
     <section
-      v-if="images"
+      v-if="files && files.length"
       ref="dropZoneRef"
       class="relative h-screen gap-[22px] p-4"
     >
       <div
         class="w-full"
-        :class="{ 'masonry-container': images && images.length }"
+        :class="{ 'masonry-container': files && files.length }"
       >
+        <UPageCard
+          variant="outline"
+          class="masonry-item"
+        >
+          <UFileUpload
+            label="Drop your image here"
+            description="SVG, PNG, JPG or GIF (max. 8MB)"
+            class="w-full min-h-48"
+            @update:model-value="uploadFile"
+          />
+        </UPageCard>
         <ul
-          v-if="images && images.length"
+          v-if="files && files.length"
           class="grid grid-cols-1 gap-4 lg:block"
         >
           <li
-            v-for="image in images"
+            v-for="file in files"
             ref="mansoryItem"
-            :key="image.pathname"
+            :key="file.pathname"
             class="relative w-full group masonry-item"
           >
             <UButton
               v-if="loggedIn"
-              :loading="deletingImg === image.pathname"
+              :loading="deletingImg === file.pathname"
               color="neutral"
               icon="i-heroicons-trash-20-solid"
               class="absolute top-4 right-4 z-9999 opacity-0 group-hover:opacity-100"
-              @click="deleteFile(image.pathname)"
+              @click="deleteFile(file.pathname.split('/').join('-'))"
             />
             <NuxtLink
-              :to="`/detail/${image.pathname.split('.')[0]}`"
-              @click="active = image.pathname.split('.')[0]"
+              :to="`/dashboard/${file.pathname.split('.')[0]}`"
+              @click="active = file.pathname.split('.')[0]"
             >
               <img
-                v-if="image"
+                v-if="isImage(file)"
                 width="527"
                 height="430"
-                :src="`/images/${image.pathname}`"
-                :class="{ imageEl: image.pathname.split('.')[0] === active }"
-                class="h-auto w-full max-h-[430px] rounded-md transition-all duration-200 border-image brightness-[.8] hover:brightness-100 will-change-[filter] object-cover"
+                :src="`/files/${file.pathname}`"
+                :class="{ imageEl: file.pathname.split('.')[0] === active }"
+                class="h-auto w-full max-h-[430px] rounded-md transition-all duration-200 border-file brightness-[.8] hover:brightness-100 will-change-[filter] object-cover"
               >
+              <video
+                v-else-if="isVideo(file)"
+                :src="`/files/${file.pathname}`"
+                class="h-auto w-full max-h-[430px] rounded-md transition-all duration-200 border-file brightness-[.8] hover:brightness-100 will-change-[filter] object-cover"
+              />
             </NuxtLink>
           </li>
         </ul>
       </div>
     </section>
-    <div
-      v-else
-      class="flex items-center space-x-4 z-10"
-    >
-      <USkeleton
-        class="h-12 w-12 bg-white-500"
-        :ui="{ rounded: 'rounded-full' }"
+    <div v-else>
+      <UEmpty
+        title="Gallery Empty"
+        icon="i-lucide-image-off"
       />
-      <div class="space-y-2">
-        <USkeleton class="h-4 w-[250px] bg-white-500" />
-        <USkeleton class="h-4 w-[200px] bg-white-500" />
-      </div>
     </div>
   </div>
 </template>
@@ -124,7 +136,7 @@ async function clearSession() {
 <style scoped lang="postcss">
 @media (min-width: 768px) {
   .imageEl {
-    view-transition-name: vtn-image;
+    view-transition-name: vtn-file;
   }
 
   .bottom-menu-description {
@@ -135,15 +147,15 @@ async function clearSession() {
     view-transition-name: vtn-bottom-menu-button;
   }
 
-  .container-image {
+  .container-file {
     background-color: rgba(255, 255, 255, 0.1)
   }
 
-  .container-image:hover {
+  .container-file:hover {
     background-color: transparent;
   }
 
-  .border-image {
+  .border-file {
     border-width: 1.15px;
     border-color: rgba(255, 255, 255, 0.1)
   }
