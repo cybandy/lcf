@@ -1,4 +1,4 @@
-interface BlobObject {
+export interface BlobObject {
   pathname: string
   contentType: string | undefined
   size: number
@@ -13,14 +13,22 @@ export const useGallery = () => {
   const files = ref<BlobObject[]>()
   const router = useRouter()
   const toast = useToast()
+  const loading = ref(false)
+
+  // authorization
+  const permission = usePermissions()
+  
+  const isAuthorizedGallery = computed(() => permission.canPerform('delete', 'gallery')
+  )
 
   /**
    * Fetch
    */
   // https://hub.nuxt.com/docs/storage/blob#useupload
-  const upload = useUpload('/api/gallery/upload', { multiple: false })
+  const upload = useUpload('/api/gallery/upload', { multiple: true })
   
   async function getImages() {
+    loading.value = true
     const file = await $fetch('/api/gallery', {
       method: 'get'
     })
@@ -29,31 +37,38 @@ export const useGallery = () => {
       ...x,
       uploadedAt: new Date(x.uploadedAt),
     }))
+    loading.value = false
   }
 
-  async function uploadImage(image: File | File[], filter: boolean = false) {
+  async function uploadImage(image: File[], filter: boolean = false) {
+    if (!isAuthorizedGallery.value) return
     try {
-      await upload(image).catch(err => toast.add({
-        color: 'error',
-        title: 'Failed to upload image',
-        description: err.data?.message || err.message
-      }))
-      toast.add({
-        title: 'File Uploaded',
-        color: 'success'
-      })
+      await upload(image)
+        .catch(err => toast.add({
+          color: 'error',
+          title: 'Failed to upload image',
+          description: err.data?.message || err.message
+        }))
+        .then(() => {
+          toast.add({
+            title: 'File Uploaded',
+            color: 'success'
+          })
+        })
+      
       getImages()
 
       if (filter) {
         router.push('/')
       }
     } catch (error) {
-      toast.add({ title: 'Oops!!!', description: 'An error occurred try again later', color: 'error' })
+      // toast.add({ title: 'Oops!!!', description: 'An error occurred try again later', color: 'error' })
     }
   }
 
-  async function deleteImage(pathname: string) {
-    await $fetch(`/api/gallery/${pathname}`, { method: 'DELETE' })
+  async function deleteImage(pathnames: string | string[]) {
+    if (!isAuthorizedGallery.value) return
+    await $fetch(`/api/gallery`, { method: 'DELETE', body: { pathnames } })
 
     getImages()
   }
@@ -73,6 +88,7 @@ export const useGallery = () => {
     uploadImage,
     deleteImage,
     isImage,
-    isVideo
+    isVideo,
+    isAuthorizedGallery
   }
 }

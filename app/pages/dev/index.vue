@@ -2,17 +2,14 @@
 useHead({
     title: 'Dev Page'
 })
-const permissions = usePermissions()
+definePageMeta({
+  layout: 'canvas'
+})
+const active = ref({
+  index:2, title: ''
+})
 </script>
 
 <template>
-  <pre>
-    {{ permissions.getUserPermissions() }}
-    {{ permissions.can(permissions.FellowshipPermission.CREATE_EVENTS) }}
-    {{ permissions.userIsAdmin.value }}
-    {{ permissions.userIsPastor.value }}
-    {{ permissions.currentUser.value }}
-
-    {{ permissions.FellowshipPermission }}
-  </pre>
+  <image-detail v-model:active="active" />
 </template>

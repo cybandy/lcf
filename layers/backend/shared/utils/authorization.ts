@@ -385,6 +385,10 @@ export function canPerformAction(
     case 'post':
       if (action === 'read') return true;
       return hasFellowshipPermission(user, FellowshipPermission.MANAGE_POSTS);
+    
+    case 'gallery':
+      if (action === 'read') return true
+      return hasFellowshipPermission(user, FellowshipPermission.MANAGE_POSTS)
   }
 
   return false;

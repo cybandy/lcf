@@ -1,73 +1,74 @@
 <script setup lang="ts">
 import { useGallery } from '~/composables/useGallery'
 
-const isOpen = ref(false)
-
 const dropZoneRef = ref<HTMLElement>()
-const fileInput = ref<HTMLInputElement>()
 const mansoryItem = ref<Array<HTMLElement>>([])
 const deletingImg = ref('')
 const uploadingImg = ref(false)
-const disconnect = ref(false)
 
 const toast = useToast()
-const { uploadImage, deleteImage, getImages, files, isImage, isVideo } = useGallery()
+const { uploadImage, deleteImage, getImages, files, isImage, isVideo, isAuthorizedGallery } = useGallery()
 const { loggedIn, clear } = useUserSession()
 
 onBeforeMount(async () => {
   await getImages()
 })
 
-const active = useState('active-gallery-file')
+const active = ref({
+  title: '',
+  index: 0
+})
+// modal
+const galleryOpen = ref(false)
 
 const { isOverDropZone } = useDropZone(dropZoneRef, onDrop)
-
-function openFilePicker() {
-  fileInput.value?.click()
-}
-
-async function fileSelection(event: Event) {
-  const target = event.target as HTMLInputElement
-
-  if (target.files?.[0]) {
-    await uploadFile(target.files[0])
-  }
-}
 
 async function onDrop(files: File[] | null) {
   await uploadFile(files)
 }
 
-async function uploadFile(file: File | File[] | null | undefined) {
+const key = ref(new Date().getMilliseconds())
+async function uploadFile(file: File[] | null | undefined) {
   if (!file) return
   uploadingImg.value = true
 
   await uploadImage(file)
     .catch(() => toast.add({ title: 'An error occurred', description: 'Please try again', color: 'error' }))
     .finally(() => uploadingImg.value = false)
+
+  key.value = new Date().getMilliseconds()
 }
 
-async function deleteFile(pathname: string) {
-  deletingImg.value = pathname
+async function deleteFile(pathname: string | string[]) {
+  if (typeof pathname === 'string') {
+    deletingImg.value = pathname
+  }
 
   await deleteImage(pathname)
     .catch(() => toast.add({ title: 'An error occurred', description: 'Please try again', color: 'error' }))
     .finally(() => deletingImg.value = '')
 }
 
-async function clearSession() {
-  disconnect.value = true
-
-  await clear().finally(() => disconnect.value = false)
+function ElementClicked(title: string, index: number) {
+  // active.value.title = title
+  active.value = { title, index }
+  galleryOpen.value = true
 }
 </script>
 
 <template>
   <div>
+    <!-- <UButton
+      label="click me"
+      @click="() => { ElementClicked('nice', 4) }"
+    /> -->
     <section
       v-if="files && files.length"
       ref="dropZoneRef"
-      class="relative h-screen gap-[22px] p-4"
+      class="relative h-full gap-[22px] p-4"
+      :class="[
+        isOverDropZone && 'ring ring-accented rounded-xl'
+      ]"
     >
       <div
         class="w-full"
@@ -78,9 +79,13 @@ async function clearSession() {
           class="masonry-item"
         >
           <UFileUpload
+            v-if="isAuthorizedGallery && loggedIn"
+            :key="key"
             label="Drop your image here"
             description="SVG, PNG, JPG or GIF (max. 8MB)"
             class="w-full min-h-48"
+            :dropzone="false"
+            multiple
             @update:model-value="uploadFile"
           />
         </UPageCard>
@@ -89,47 +94,75 @@ async function clearSession() {
           class="grid grid-cols-1 gap-4 lg:block"
         >
           <li
-            v-for="file in files"
+            v-for="(file, ind) in files"
             ref="mansoryItem"
             :key="file.pathname"
             class="relative w-full group masonry-item"
           >
             <UButton
-              v-if="loggedIn"
+              v-if="loggedIn && isAuthorizedGallery"
               :loading="deletingImg === file.pathname"
               color="neutral"
               icon="i-heroicons-trash-20-solid"
               class="absolute top-4 right-4 z-9999 opacity-0 group-hover:opacity-100"
-              @click="deleteFile(file.pathname.split('/').join('-'))"
+              @click="deleteFile(file.pathname)"
             />
-            <NuxtLink
-              :to="`/dashboard/${file.pathname.split('.')[0]}`"
-              @click="active = file.pathname.split('.')[0]"
+           
+            <img
+              v-if="isImage(file)"
+              width="527"
+              height="430"
+              :src="`/files/${file.pathname}`"
+              :class="{ imageEl: file.pathname.split('.')[0] === active.title }"
+              class="h-auto w-full max-h-[430px] rounded-md transition-all duration-200 border-file brightness-[.8] hover:brightness-100 will-change-[filter] object-cover"
+              @click="() => { ElementClicked(file.pathname, ind) }"
             >
-              <img
-                v-if="isImage(file)"
-                width="527"
-                height="430"
-                :src="`/files/${file.pathname}`"
-                :class="{ imageEl: file.pathname.split('.')[0] === active }"
-                class="h-auto w-full max-h-[430px] rounded-md transition-all duration-200 border-file brightness-[.8] hover:brightness-100 will-change-[filter] object-cover"
-              >
-              <video
-                v-else-if="isVideo(file)"
-                :src="`/files/${file.pathname}`"
-                class="h-auto w-full max-h-[430px] rounded-md transition-all duration-200 border-file brightness-[.8] hover:brightness-100 will-change-[filter] object-cover"
-              />
-            </NuxtLink>
+            <video
+              v-else-if="isVideo(file)"
+              :src="`/files/${file.pathname}`"
+              class="h-auto w-full max-h-[430px] rounded-md transition-all duration-200 border-file brightness-[.8] hover:brightness-100 will-change-[filter] object-cover"
+              :autoplay="false"
+              :controls="true"
+              :disable-picture-in-picture="true"
+              @click="() => { ElementClicked(file.pathname, ind) }"
+            />
           </li>
         </ul>
       </div>
     </section>
     <div v-else>
       <UEmpty
-        title="Gallery Empty"
+        title="Hello, check back in a few minutes"
+        description="We are populating our gallery. Can't wait to share our joy with you."
         icon="i-lucide-image-off"
       />
     </div>
+
+    <UModal
+      v-model:open="galleryOpen"
+      :title="active.title"
+      fullscreen
+      :ui="{
+        overlay: 'bg-elevated',
+        content: 'bg-default/80'
+      }"
+    >
+      <template #content>
+        <UButton
+          icon="i-lucide-x"
+          variant="ghost"
+          color="neutral"
+          class="fixed top-4 right-4"
+          @click="() => {
+            galleryOpen = !galleryOpen
+          }"
+        />
+        <image-detail
+          v-model:active="active"
+          class="h-screen grid items-center"
+        />
+      </template>
+    </UModal>
   </div>
 </template>
 
