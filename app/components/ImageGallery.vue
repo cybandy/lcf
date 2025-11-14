@@ -1,6 +1,13 @@
 <script setup lang="ts">
 import { useGallery } from '~/composables/useGallery'
 
+type Props = {
+  isPublic?: boolean
+}
+const props = withDefaults(defineProps<Props>(), {
+  isPublic: false
+})
+
 const dropZoneRef = ref<HTMLElement>()
 const mansoryItem = ref<Array<HTMLElement>>([])
 const deletingImg = ref('')
@@ -29,6 +36,7 @@ async function onDrop(files: File[] | null) {
 
 const key = ref(new Date().getMilliseconds())
 async function uploadFile(file: File[] | null | undefined) {
+  if (props.isPublic) return
   if (!file) return
   uploadingImg.value = true
 
@@ -67,7 +75,7 @@ function ElementClicked(title: string, index: number) {
       ref="dropZoneRef"
       class="relative h-full gap-[22px] p-4"
       :class="[
-        isOverDropZone && 'ring ring-accented rounded-xl'
+        isOverDropZone && !isPublic && 'ring ring-accented rounded-xl'
       ]"
     >
       <div
@@ -75,6 +83,7 @@ function ElementClicked(title: string, index: number) {
         :class="{ 'masonry-container': files && files.length }"
       >
         <UPageCard
+          v-if="!isPublic"
           variant="outline"
           class="masonry-item"
         >
@@ -100,7 +109,7 @@ function ElementClicked(title: string, index: number) {
             class="relative w-full group masonry-item"
           >
             <UButton
-              v-if="loggedIn && isAuthorizedGallery"
+              v-if="loggedIn && isAuthorizedGallery && !isPublic"
               :loading="deletingImg === file.pathname"
               color="neutral"
               icon="i-heroicons-trash-20-solid"

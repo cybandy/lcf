@@ -1,11 +1,14 @@
 <script lang="ts" setup>
-await useNuxtApp().$file.getImages()
+useSeoMeta({
+  title: 'Gallery',
+  description: 'Nice pictures'
+})
 </script>
 
 <template>
   <div>
     <UPageHero title="Gallery" />
-    <ImageGallery />
+    <ImageGallery :is-public="true" />
   </div>
 </template>
 

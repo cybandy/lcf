@@ -13,10 +13,17 @@ const { user } = useMyUserSession()
 </script>
 
 <template>
-  <div>
-    dashboard page
-    <pre>{{ user }}</pre>
-  </div>
+  <u-page-hero
+    title="Under Construction"
+    description="Working on it"
+  >
+    <template #headline>
+      <u-icon
+        name="i-lucide-construction"
+        class="text-warning size-12"
+      />
+    </template>
+  </u-page-hero>
 </template>
 
 <style scoped>
