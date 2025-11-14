@@ -221,5 +221,22 @@ export const collections = {
         youtube: z.string(),
       })
     })
-  })
+  }),
+  event: defineCollection({
+    source: '4.event.yml',
+    type: 'page',
+    schema: z.object({
+      hero: createSectionBaseSchema().extend({
+        // image: createImageSchema()
+      }),
+      cta: createBaseSchema().extend({
+        links: z.array(createLinkSchema())
+      }),
+      sections: z.object({
+        ongoing: createBaseSchema(),
+        upcoming: createBaseSchema(),
+        featured: createBaseSchema(),
+      })
+    })
+  }),
 }

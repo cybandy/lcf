@@ -29,10 +29,10 @@ export default defineAppConfig({
     header: {
       menu: {
         columns: [
-          // {
-          //   label: 'New Here',
-          //   to: '/'
-          // },
+          {
+            label: 'Home',
+            to: '/'
+          },
           {
             label: 'About Us',
             to: '/about-us',

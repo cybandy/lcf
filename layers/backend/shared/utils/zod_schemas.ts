@@ -93,7 +93,7 @@ export const EventSchema = {
   update: createUpdateSchema(schema.events),
 };
 
-export type Event = typeof schema.events.$inferSelect; //z.infer<typeof EventSchema.select>;
+export type Event = Omit<typeof schema.events.$inferSelect, 'createdAt' | 'updatedAt' | 'creatorId'>;
 
 export const AttendanceSchema = {
   insert: createInsertSchema(schema.attendance),

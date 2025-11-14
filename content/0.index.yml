@@ -212,5 +212,5 @@ cta:
   description: So are we. We can't wait to have you join us in fellowship, praise, and worship to our heavenly Father.
   links:
     - label: Come, Let's go
-      to: '#'
+      to: '/join-us'
       trailingIcon: i-lucide-arrow-right

@@ -1,0 +1,53 @@
+seo:
+  title: "Events & Activities | L'Aquila Christian Fellowship"
+  description: "Discover upcoming events, regular activities, and community gatherings organized by L'Aquila Christian Fellowship. Join worship nights, small groups, outreach, and social events — all are welcome."
+  keywords:
+    - events
+    - lcf
+    - community
+    - worship
+    - small-groups
+    - outreach
+  image: /images/events/events-hero.jpg
+  canonical: https://lcf.example.org/events
+  robots: index, follow
+navigation: true
+layout: events
+title: 'Events & Activities'
+intro:
+  heading: 'Connect. Worship. Serve.'
+  description: "Find ways to join our community through worship nights, study groups, outreach programs and social events. See what's coming up and RSVP to attend."
+hero:
+  title: 'Events [&]{class="text-primary"} Activities'
+  description: 'Stay connected — check the calendar for upcoming gatherings and activities.'
+  # image: /images/hero-events.jpg
+  icon: i-mdi-calendar-star
+cta:
+  title: 'View Calendar & RSVP'
+  description: 'Explore upcoming events and manage your RSVPs.'
+  links:
+    - label: 'See Events'
+      to: '/dashboard/events'
+      trailingIcon: i-lucide-arrow-right
+
+sections:
+  upcoming:
+    title: 'Upcoming Events'
+    description: 'Events happening soon — worship nights, outreach, and community gatherings.'
+  ongoing:
+    title: 'Regular Activities'
+    description: 'Weekly meetings, small groups, prayer meetings, and volunteer opportunities.'
+  featured:
+    title: 'Featured Series'
+    description: 'Highlighted programs and seasonal series to join.'
+tags:
+  - worship
+  - community
+  - outreach
+  - small-groups
+  - youth
+openGraph:
+  title: 'Events & Activities — LCF'
+  description: 'Join LCF events: worship, fellowship, outreach and more.'
+  image: /images/events/events-og.jpg
+  type: website

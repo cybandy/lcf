@@ -226,7 +226,8 @@ function skipToNext() {
           </div>
           <div class="min-w-full flex justify-center">
             <forms-personal-information
-              v-model="user!"
+              v-if="user"
+              v-model="user"
               :loading="personalLoading"
               :is-skip="stepper?.hasNext"
               class="min-w-2/3"
