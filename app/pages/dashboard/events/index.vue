@@ -71,11 +71,12 @@ async function deleteEvent(id: number) {
 }
 
 // Handle successful create/edit
-function handleEventSuccess() {
-  showCreateModal.value = false
-  showEditModal.value = false
-  selectedEvent.value = null
-  eventListRef.value?.refresh()
+function handleEventSuccess(_d: { id: number }) {
+  if (_d && !_d.id) return
+
+  setTimeout(() => {
+    navigateTo(`/dashboard/events/${_d.id}`)
+  }, 300)
 }
 
 // Handle edit from detail modal
@@ -205,7 +206,7 @@ const tabs = computed(() => {
               description="Enter the details in the form below"
             >
               <DashboardEventsEventForm
-                @success="handleEventSuccess"
+                @success="(ev:{id:number}) => { handleEventSuccess(ev) }"
                 @cancel="activeTab = 'list'"
               />
             </UPageCard>

@@ -35,28 +35,40 @@ const { execute: fetchData } = await useAsyncData(`ev-${id.value}`, async () => 
   if (_d) {
     data.value = _d
 
-    // data for editing
-    editData.value = {
-      eventId: id.value,
-      initialData: {
-        title: _d.event.title,
-        description: _d.event.description,
-        startTime: new Date(_d.event.startTime),
-        endTime: new Date(_d.event.endTime!),
-        location: _d.event.location,
-      }
-    }
-
     // check past data status
     if (events.isPastEvent(_d.event)) {
       const _at = await events.checkUserAttended(id.value, user.value.id)
       pastData.value.attendance = _at
+
+      // data for editing: since it is a past event, this will just be re-copying the details for a new event.
+      editData.value = {
+        // eventId: id.value,
+        initialData: {
+          title: _d.event.title,
+          description: _d.event.description,
+          startTime: new Date(),
+          // endTime: new Date(_d.event.endTime!),
+          location: _d.event.location,
+        }
+      }
       return {
         data: _d,
         pastData: {
           attendance: _at
         }
       }
+    }
+  }
+
+  // data for editing
+  editData.value = {
+    eventId: id.value,
+    initialData: {
+      title: _d.event.title,
+      description: _d.event.description,
+      startTime: new Date(_d.event.startTime),
+      endTime: new Date(_d.event.endTime!),
+      location: _d.event.location,
     }
   }
   return _d
@@ -74,6 +86,7 @@ const canViewAllRsvp = events.canViewAllRsvps
 const current_menu = ref<'view' | 'edit' | 'all'>('view')
 
 const menu = computed(() => {
+  if (!data.value) return []
   const _m: NavigationMenuItem[] = [
     {
       label: 'View',
@@ -89,8 +102,8 @@ const menu = computed(() => {
   if (events.canEditAllEvents.value) {
     _m.push(
       {
-        label: 'Edit',
-        icon: 'i-lucide-pencil',
+        label: events.isPastEvent(data.value.event) ? 'Duplicate' : 'Edit',
+        icon: events.isPastEvent(data.value.event) ? 'i-lucide-copy' : 'i-lucide-pencil',
         active: current_menu.value === 'edit',
         onSelect: () => {
           if (current_menu.value === 'edit') return
@@ -232,32 +245,34 @@ function cancelDelete() {
             variant="ghost"
             label="Check-In"
           />
-          <UDropdownMenu
-            v-if="permissions.can(permissions.FellowshipPermission.EDIT_ALL_EVENTS) || permissions.can(permissions.FellowshipPermission.DELETE_EVENTS)"
-            :items="[[
-              ...(permissions.can(permissions.FellowshipPermission.EDIT_ALL_EVENTS) ? [{
-                label: 'Edit Event',
-                icon: 'i-lucide-pencil',
-                onSelect: () => {
-                  current_menu = 'edit'
-                }
-              }] : []),
-              ...(permissions.can(permissions.FellowshipPermission.DELETE_EVENTS) ? [{
-                label: 'Delete Event',
-                icon: 'i-lucide-trash-2',
-                color: 'error' as const,
-                onSelect: () => {
-                  deleteOpen = true
-                }
-              }] : [])
-            ]]"
-          >
-            <UButton
-              icon="i-lucide-ellipsis-vertical"
-              color="neutral"
-              variant="ghost"
-            />
-          </UDropdownMenu>
+          <ClientOnly>
+            <UDropdownMenu
+              v-if="permissions.can(permissions.FellowshipPermission.EDIT_ALL_EVENTS) || permissions.can(permissions.FellowshipPermission.DELETE_EVENTS)"
+              :items="[[
+                ...(permissions.can(permissions.FellowshipPermission.EDIT_ALL_EVENTS) ? [{
+                  label: 'Edit',
+                  icon: 'i-lucide-pencil',
+                  onSelect: () => {
+                    current_menu = 'edit'
+                  }
+                }] : []),
+                ...(permissions.can(permissions.FellowshipPermission.DELETE_EVENTS) ? [{
+                  label: 'Delete Event',
+                  icon: 'i-lucide-trash-2',
+                  color: 'error' as const,
+                  onSelect: () => {
+                    deleteOpen = true
+                  }
+                }] : [])
+              ]]"
+            >
+              <UButton
+                icon="i-lucide-ellipsis-vertical"
+                color="neutral"
+                variant="ghost"
+              />
+            </UDropdownMenu>
+          </ClientOnly>
         </template>
       </u-dashboard-navbar>
 
@@ -403,7 +418,7 @@ function cancelDelete() {
               </p>
               <UButton
                 to="/dashboard/events"
-                label="Events"
+                label="Go to Events"
                 color="neutral"
               />
             </div>
@@ -442,11 +457,11 @@ function cancelDelete() {
               </div>
             
               <p class="text-dimmed">
-                It was an exciting time in the LORD and we hope you enjoyed it. We have a few events coming up soon check them out.
+                It was an exciting time in the presence of the LORD and we hope you enjoyed it. We have a few events coming up soon check them out.
               </p>
               <UButton
                 to="/dashboard/events"
-                label="Events"
+                label="Go to Events"
                 color="neutral"
               />
             </div>

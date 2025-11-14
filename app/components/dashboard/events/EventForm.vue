@@ -15,10 +15,7 @@ export interface DashboardEventForm {
 
 const props = defineProps<DashboardEventForm>()
 
-const emit = defineEmits<{
-  success: [event: unknown]
-  cancel: []
-}>()
+const emit = defineEmits(['success', 'cancel'])
 
 const _events = useEvents()
 const toast = useToast()
