@@ -1,3 +1,4 @@
+import type { ButtonProps } from '@nuxt/ui'
 import type { BlobObject } from '@nuxthub/core'
 
 export interface FilePlugin {
@@ -6,3 +7,5 @@ export interface FilePlugin {
   uploadImage: (image: File, filter?: boolean) => Promise<void>
   deleteImage: (pathname: string) => Promise<void>
 }
+
+export type UIColors = NonNullable<ButtonProps['color']>

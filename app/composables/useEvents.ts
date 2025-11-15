@@ -5,6 +5,7 @@
  */
 
 import { formatDistance } from 'date-fns'
+import type { ButtonProps } from '@nuxt/ui'
 
 export interface EventData {
   id: number
@@ -72,7 +73,7 @@ export interface AttendanceData {
   } | null
 }
 
-export type EventStatus = 'upcoming' | 'past' | 'ongoing'
+export type EventStatus = 'all' | 'upcoming' | 'past' | 'ongoing'
 
 export function useEvents() {
   const toast = useToast()
@@ -142,9 +143,11 @@ export function useEvents() {
     try {
       const response = await $fetch<{ events: EventData[], total: number }>('/api/events', {
         query: {
-          ...(options?.status === 'upcoming' && { upcoming: 'true' }),
-          ...(options?.status === 'past' && { past: 'true' }),
-          ...(options?.limit && { limit: options.limit }),
+          ...(options?.status && { status: options.status }),
+          ...(options?.limit && { limit: options.limit })
+          // ...(options?.status === 'upcoming' && { upcoming: 'true' }),
+          // ...(options?.status === 'past' && { past: 'true' }),
+          // ...(options?.limit && { limit: options.limit }),
         },
       })
 
@@ -505,7 +508,7 @@ export function useEvents() {
   /**
    * Format date for display
    */
-  function formatDate(date: Date | string, options?: Intl.DateTimeFormatOptions) {
+  function formatDate(date: Date | string, locale: Intl.LocalesArgument = 'en-US', options?: Intl.DateTimeFormatOptions) {
     const defaultOptions: Intl.DateTimeFormatOptions = {
       month: 'short',
       day: 'numeric',
@@ -514,7 +517,7 @@ export function useEvents() {
       minute: '2-digit',
     }
 
-    return new Date(date).toLocaleString('en-US', options || defaultOptions)
+    return new Date(date).toLocaleString(locale, options || defaultOptions)
   }
 
   /**
@@ -566,6 +569,17 @@ export function useEvents() {
   }
 
   /**
+   * Check if event is upcoming
+   * @param event 
+   * @returns 
+   */
+  function isUpcomingEvent(event: EventData) {
+    const now = new Date()
+    const start = new Date(event.startTime)
+    return now < start
+  }
+
+  /**
    * Get event status
    */
   function getEventStatus(event: EventData): EventStatus {
@@ -573,7 +587,9 @@ export function useEvents() {
       return 'ongoing'
     if (isPastEvent(event))
       return 'past'
-    return 'upcoming'
+    if (isUpcomingEvent(event))
+      return 'upcoming'
+    return 'all'
   }
 
   /**
@@ -597,6 +613,22 @@ export function useEvents() {
    */
   function getRsvpStatusLabel(status: string): string {
     return status.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())
+  }
+
+  /**
+   * Event list table
+   */
+  function getEventStatusColor(status: EventStatus): UIColors {
+    switch (status) {
+      case 'upcoming':
+        return 'primary'
+      case 'past':
+        return 'error'
+      case 'ongoing':
+        return 'success'
+      default:
+        return 'neutral'
+    }
   }
 
   // ============================================================================
@@ -642,8 +674,12 @@ export function useEvents() {
     getRelativeTime,
     isPastEvent,
     isOngoingEvent,
+    isUpcomingEvent,
     getEventStatus,
     getRsvpStatusColor,
     getRsvpStatusLabel,
+
+    // Event list
+    getEventStatusColor
   }
 }

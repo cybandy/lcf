@@ -1,84 +1,27 @@
 <script setup lang="ts">
-import { h } from 'vue'
-import type { TableColumn, TableRow, DropdownMenuItem, NavigationMenuItem } from '@nuxt/ui'
-import { formatDistance } from 'date-fns'
-
-interface EventData {
-  id: number
-  title: string
-  description?: string | null
-  startTime: Date
-  endTime?: Date | null
-  location?: string | null
-  creatorId?: string | null
-  creator?: {
-    id: string
-    firstName: string
-    lastName: string
-    avatar?: string | null
-  } | null
-}
+import { h, resolveComponent } from 'vue'
+import type { TableColumn, TableRow, DropdownMenuItem, NavigationMenuItem, EmptyProps, BadgeProps } from '@nuxt/ui'
+import type { EventData, EventStatus } from '~/composables/useEvents'
 
 const emit = defineEmits<{
   view: [id: number]
   edit: [event: EventData]
+  duplicate: [event: EventData]
   delete: [id: number]
 }>()
 
 const permissions = usePermissions()
-const toast = useToast()
-const loading = ref(false)
-const events = ref<EventData[]>([])
-const filterUpcoming = ref(true)
-type EventStatus = "past" | "ongoing" | "upcoming"
-const eventStatus = ref<EventStatus>('upcoming')
-
-// Fetch events
-async function fetchEvents() {
-  loading.value = true
-  try {
-    const response = await $fetch<{ events: EventData[], total: number }>('/api/events', {
-      query: {
-        status: eventStatus.value
-      },
-    })
-    events.value = response.events
-  } catch (error) {
-    toast.add({
-      title: 'Error',
-      description: 'Failed to fetch events',
-      color: 'error',
-    })
-  } finally {
-    loading.value = false
-  }
-}
+const { loading, fetchEvents, events, formatDate, formatFullDate, getRelativeTime, canCreateEvents, canDeleteEvents, canEditAllEvents, getEventStatusColor, getEventStatus } = useEvents()
+const fetchOptions = ref<{ limit: number, status: EventStatus }>({
+  limit: 1000,
+  status: 'all'
+})
+// type EventStatus = "past" | "ongoing" | "upcoming"
 
 // Initial fetch
 onMounted(() => {
-  fetchEvents()
+  fetchEvents(fetchOptions.value)
 })
-
-// Watch filter changes
-watch(eventStatus, () => {
-  fetchEvents()
-})
-
-// Format date for display
-function formatDate(date: Date) {
-  return new Date(date).toLocaleString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-    hour: 'numeric',
-    minute: '2-digit',
-  })
-}
-
-// Get relative time
-function getRelativeTime(date: Date) {
-  return formatDistance(new Date(date), new Date(), { addSuffix: true })
-}
 
 // Check if event is past
 function isPastEvent(event: EventData) {
@@ -86,18 +29,36 @@ function isPastEvent(event: EventData) {
 }
 
 // Table columns
+const table = useTemplateRef('table')
+const UCheckbox = resolveComponent('UCheckbox')
 const columns = computed<TableColumn<EventData>[]>(() => [
   {
+    id: 'select',
+    header: ({ table }) =>
+      h(UCheckbox, {
+        modelValue: table.getIsSomePageRowsSelected()
+          ? 'indeterminate'
+          : table.getIsAllPageRowsSelected(),
+        'onUpdate:modelValue': (value: boolean | 'indeterminate') =>
+          table.toggleAllPageRowsSelected(!!value),
+        'aria-label': 'Select all'
+      }),
+    cell: ({ row }) =>
+      h(UCheckbox, {
+        modelValue: row.getIsSelected(),
+        'onUpdate:modelValue': (value: boolean | 'indeterminate') => row.toggleSelected(!!value),
+        'aria-label': 'Select row'
+      })
+  },
+  {
     accessorKey: 'title',
-    header: 'Event',
+    header: 'Title',
     cell: ({ row }) => {
       const event = row.original
       return h('div', { class: 'flex flex-col gap-1' }, [
         h('div', { class: 'font-medium' }, event.title),
         event.location
           ? h('div', { class: 'text-sm text-muted flex items-center gap-1' }, [
-              h('span', { class: 'i-lucide-map-pin', style: 'width: 14px; height: 14px;' }),
-              event.location,
             ])
           : null,
       ])
@@ -105,16 +66,35 @@ const columns = computed<TableColumn<EventData>[]>(() => [
   },
   {
     accessorKey: 'startTime',
-    header: 'Start Time',
+    header: 'Date',
     cell: ({ row }) => {
       const event = row.original
+      const status = getEventStatus(event)
       return h('div', { class: 'flex flex-col gap-1' }, [
-        h('div', {}, formatDate(event.startTime)),
-        h('div', {
-          class: isPastEvent(event) ? 'text-sm text-muted' : 'text-sm text-primary',
-        }, getRelativeTime(event.startTime)),
+        h('span', { class: 'text-sm' }, formatDate(event.startTime, 'en-GB', {
+          hour12: true,
+          hour: '2-digit',
+          minute: '2-digit',
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric'
+        })),
+        h(resolveComponent('UBadge'), {
+          label: getRelativeTime(event.startTime),
+          color: getEventStatusColor(status),
+          variant: 'soft',
+          class: 'shrink-0 w-fit'
+        } as BadgeProps),
       ])
     },
+  },
+  {
+    id: 'location',
+    header: 'Location',
+    cell: ({ row }) => {
+      const event = row.original
+      return h('span', { class: 'text-muted' }, event.location || '-')
+    }
   },
   {
     accessorKey: 'creator',
@@ -122,16 +102,16 @@ const columns = computed<TableColumn<EventData>[]>(() => [
     cell: ({ row }) => {
       const creator = row.original.creator
       if (!creator) return h('span', { class: 'text-muted' }, '—')
-
       return h(
         'div',
         { class: 'flex items-center gap-2' },
         [
           creator.avatar
-            ? h('img', {
+            ? h(resolveComponent('UAvatar'), {
                 src: creator.avatar,
                 alt: `${creator.firstName} ${creator.lastName}`,
-                class: 'w-6 h-6 rounded-full',
+                size: 'sm'
+                // class: 'w-6 h-6 rounded-full',
               })
             : h('div', {
                 class: 'w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-xs font-medium',
@@ -153,15 +133,22 @@ const columns = computed<TableColumn<EventData>[]>(() => [
         },
       ] as DropdownMenuItem[]
 
-      if (permissions.can(permissions.FellowshipPermission.EDIT_ALL_EVENTS)) {
+      if (canEditAllEvents.value) {
         items.push({
           label: 'Edit',
           icon: 'i-lucide-pencil',
           onSelect: () => emit('edit', event),
         })
       }
+      if (canCreateEvents.value) {
+        items.push({
+          label: 'Duplicate',
+          icon: 'i-lucide-copy',
+          onSelect: () => emit('duplicate', event),
+        })
+      }
 
-      if (permissions.can(permissions.FellowshipPermission.DELETE_EVENTS)) {
+      if (canDeleteEvents.value) {
         items.push({
           type: 'separator' as const,
         }, {
@@ -199,36 +186,46 @@ defineExpose({
   refresh: fetchEvents,
 })
 
-const table = useTemplateRef('table')
 const rowSelection = ref<Record<string, boolean>>({})
 function onSelect(e: Event, row: TableRow<EventData>) {
   row.toggleSelected(!row.getIsSelected())
-  setTimeout(() => {
-    navigateTo(`/dashboard/events/${row.original.id}`)
-  }, 500)
+  // setTimeout(() => {
+  //   navigateTo(`/dashboard/events/${row.original.id}`)
+  // }, 500)
 }
 
 const statusMenu = computed(() => [
   [
     {
-      label: 'Upcoming',
-      active: eventStatus.value === 'upcoming',
+      label: 'All',
+      active: fetchOptions.value.status === 'all',
       onSelect: () => {
-        eventStatus.value = 'upcoming'
+        fetchOptions.value.status = 'all'
+        fetchEvents(fetchOptions.value)
+      }
+    },
+    {
+      label: 'Upcoming',
+      active: fetchOptions.value.status === 'upcoming',
+      onSelect: () => {
+        fetchOptions.value.status = 'upcoming'
+        fetchEvents(fetchOptions.value)
       }
     },
     {
       label: 'Past',
-      active: eventStatus.value === 'past',
+      active: fetchOptions.value.status === 'past',
       onSelect: () => {
-        eventStatus.value = 'past'
+        fetchOptions.value.status = 'past'
+        fetchEvents(fetchOptions.value)
       }
     },
     {
       label: 'Ongoing',
-      active: eventStatus.value === 'ongoing',
+      active: fetchOptions.value.status === 'ongoing',
       onSelect: () => {
-        eventStatus.value = 'ongoing'
+        fetchOptions.value.status = 'ongoing'
+        fetchEvents(fetchOptions.value)
       }
     },
   ],
@@ -237,7 +234,7 @@ const statusMenu = computed(() => [
       label: 'Refresh',
       icon: 'i-lucide-refresh-cw',
       onSelect: async () => {
-        await fetchEvents()
+        await fetchEvents(fetchOptions.value)
       }
     }
   ]
@@ -246,8 +243,32 @@ const statusMenu = computed(() => [
 const description_ = {
   upcoming: 'You are invited to all our upcoming events',
   past: 'Check our ongoing and upcoming events for a similar impactful events',
-  ongoing: "Kindly join us and your life won't be the same"
+  ongoing: "Kindly join us and your life won't be the same",
+  all: 'You are invited to all our upcoming events'
 }
+
+const emptyProps = computed(() => {
+  return {
+    icon: "i-lucide-calendar-off",
+    title: `No ${fetchOptions.value.status} events found`,
+    description: "It looks like you haven't added any projects. Create one to get started.",
+    actions: [
+      {
+        icon: 'i-lucide-plus',
+        label: 'Create new'
+      },
+      {
+        icon: 'i-lucide-refresh-cw',
+        label: 'Refresh',
+        color: 'neutral',
+        variant: 'subtle',
+        onClick: () => {
+          fetchEvents(fetchOptions.value)
+        }
+      }
+    ],
+  } as EmptyProps
+})
 </script>
 
 <template>
@@ -262,8 +283,8 @@ const description_ = {
     </u-dashboard-toolbar>
 
     <u-page-card
-      :title="eventStatus"
-      :description="description_[eventStatus]"
+      :title="fetchOptions.status"
+      :description="description_[fetchOptions.status]"
       variant="outline"
       :ui="{
         title: 'uppercase'
@@ -279,12 +300,7 @@ const description_ = {
         @select="onSelect"
       >
         <template #empty>
-          <div class="text-center py-12">
-            <div class="i-lucide-calendar-off text-4xl text-muted mx-auto mb-2" />
-            <p class="text-muted">
-              {{ filterUpcoming ? 'No upcoming events' : 'No past events' }}
-            </p>
-          </div>
+          <UEmpty v-bind="emptyProps" />
         </template>
       </UTable>
     </u-page-card>

@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
 
   // Optional filters
   const { status, limit, offset } = await useValidatedQuery(event, z.object({
-    status: z.enum(['upcoming', 'past', 'ongoing']).optional().default('upcoming'),
+    status: z.enum(['upcoming', 'past', 'ongoing', 'all']).optional().default('upcoming'),
     limit: zh.intAsString.optional().default('50'),
     offset: zh.intAsString.optional().default('0'),
   }))
