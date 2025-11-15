@@ -2,16 +2,19 @@
 import { h, resolveComponent } from 'vue'
 import type { TableColumn, TableRow, DropdownMenuItem, NavigationMenuItem, EmptyProps, BadgeProps } from '@nuxt/ui'
 import type { EventData, EventStatus } from '~/composables/useEvents'
+import { upperFirst } from 'es-toolkit'
+import { getPaginationRowModel } from '@tanstack/vue-table'
 
 const emit = defineEmits<{
   view: [id: number]
-  edit: [event: EventData]
-  duplicate: [event: EventData]
-  delete: [id: number]
+  edit: [event: EventData & { id?: number | undefined }]
+  duplicate: [event: EventData & { id?: number }]
+  delete: [event: EventData]
 }>()
 
-const permissions = usePermissions()
-const { loading, fetchEvents, events, formatDate, formatFullDate, getRelativeTime, canCreateEvents, canDeleteEvents, canEditAllEvents, getEventStatusColor, getEventStatus } = useEvents()
+const { isOwner } = usePermissions()
+
+const { loading, fetchEvents, events, formatDate, deleteEvent, getRelativeTime, canCreateEvents, canDeleteEvents, canEditAllEvents, getEventStatusColor, getEventStatus } = useEvents()
 const fetchOptions = ref<{ limit: number, status: EventStatus }>({
   limit: 1000,
   status: 'all'
@@ -23,9 +26,28 @@ onMounted(() => {
   fetchEvents(fetchOptions.value)
 })
 
-// Check if event is past
-function isPastEvent(event: EventData) {
-  return new Date(event.startTime) < new Date()
+// deleting Event
+const selectedEvent = ref<EventData | null>(null)
+// call delete
+const deleteOpen = ref(false)
+
+const onDeleteEvent = async (event: EventData) => {
+  selectedEvent.value = event
+  deleteOpen.value = true
+}
+
+async function confirmDelete() {  
+  if (!selectedEvent.value) return
+  try {
+    await deleteEvent(selectedEvent.value.id)
+    await fetchEvents(fetchOptions.value)
+    cancelDelete()
+  } catch (error) {
+    //
+  }
+}
+function cancelDelete() {
+  deleteOpen.value = !deleteOpen.value
 }
 
 // Table columns
@@ -52,6 +74,7 @@ const columns = computed<TableColumn<EventData>[]>(() => [
   },
   {
     accessorKey: 'title',
+    id: 'title',
     header: 'Title',
     cell: ({ row }) => {
       const event = row.original
@@ -133,7 +156,7 @@ const columns = computed<TableColumn<EventData>[]>(() => [
         },
       ] as DropdownMenuItem[]
 
-      if (canEditAllEvents.value) {
+      if (canEditAllEvents.value || isOwner(event.creatorId)) {
         items.push({
           label: 'Edit',
           icon: 'i-lucide-pencil',
@@ -141,10 +164,14 @@ const columns = computed<TableColumn<EventData>[]>(() => [
         })
       }
       if (canCreateEvents.value) {
+        const { id, startTime, ...ev } = event
         items.push({
           label: 'Duplicate',
           icon: 'i-lucide-copy',
-          onSelect: () => emit('duplicate', event),
+          onSelect: () => emit('duplicate', {
+            ...ev,
+            startTime: (new Date()).toISOString()
+          } as EventData & { id?: number }),
         })
       }
 
@@ -155,7 +182,10 @@ const columns = computed<TableColumn<EventData>[]>(() => [
           label: 'Delete',
           icon: 'i-lucide-trash-2',
           color: 'error' as const,
-          onSelect: () => emit('delete', event.id),
+          onSelect: async () => {
+            emit('delete', event)
+            await onDeleteEvent(event)
+          },
         })
       }
 
@@ -180,10 +210,13 @@ const columns = computed<TableColumn<EventData>[]>(() => [
     },
   },
 ])
-
-// Expose refresh method
-defineExpose({
-  refresh: fetchEvents,
+const pagination = ref({
+  pageIndex: 0,
+  pageSize: 5
+})
+// columnVisibility
+const columnVisibility = ref({
+  id: false
 })
 
 const rowSelection = ref<Record<string, boolean>>({})
@@ -194,38 +227,44 @@ function onSelect(e: Event, row: TableRow<EventData>) {
   // }, 500)
 }
 
+async function localFetch(status: EventStatus) {
+  fetchOptions.value.status = status
+  try {
+    await fetchEvents(fetchOptions.value)
+    table.value?.tableApi.setPageIndex(1)
+  } catch (error) {
+    //
+  }
+}
+
 const statusMenu = computed(() => [
   [
     {
       label: 'All',
       active: fetchOptions.value.status === 'all',
-      onSelect: () => {
-        fetchOptions.value.status = 'all'
-        fetchEvents(fetchOptions.value)
+      onSelect: async () => {
+        await localFetch('all')
       }
     },
     {
       label: 'Upcoming',
       active: fetchOptions.value.status === 'upcoming',
-      onSelect: () => {
-        fetchOptions.value.status = 'upcoming'
-        fetchEvents(fetchOptions.value)
+      onSelect: async () => {
+        await localFetch('upcoming')
       }
     },
     {
       label: 'Past',
       active: fetchOptions.value.status === 'past',
-      onSelect: () => {
-        fetchOptions.value.status = 'past'
-        fetchEvents(fetchOptions.value)
+      onSelect: async () => {
+        await localFetch('past')
       }
     },
     {
       label: 'Ongoing',
       active: fetchOptions.value.status === 'ongoing',
-      onSelect: () => {
-        fetchOptions.value.status = 'ongoing'
-        fetchEvents(fetchOptions.value)
+      onSelect: async () => {
+        await localFetch('ongoing')
       }
     },
   ],
@@ -269,6 +308,13 @@ const emptyProps = computed(() => {
     ],
   } as EmptyProps
 })
+
+const columnFilters = ref([
+  {
+    id: 'title',
+    value: ''
+  }
+])
 </script>
 
 <template>
@@ -290,19 +336,104 @@ const emptyProps = computed(() => {
         title: 'uppercase'
       }"
     >
-      <UTable
-        ref="table"
-        v-model:row-selection="rowSelection"
-        :data="events"
-        :columns="columns"
-        :loading="loading"
-        class="flex-1"
-        @select="onSelect"
+      <u-page-card
+        variant="naked"
+        class="w-full flex-1"
+        :ui="{
+          body: 'w-full',
+          header: 'w-full flex items-center justify-between',
+          footer: 'w-full'
+        }"
       >
-        <template #empty>
-          <UEmpty v-bind="emptyProps" />
+        <template #header>
+          <UInput
+            :model-value="table?.tableApi?.getColumn('title')?.getFilterValue() as string"
+            class="max-w-sm"
+            placeholder="Filter title..."
+            @update:model-value="table?.tableApi?.getColumn('title')?.setFilterValue($event)"
+          />
+          <UDropdownMenu
+            :items="
+              table?.tableApi
+                ?.getAllColumns()
+                .filter((column) => column.getCanHide())
+                .map((column) => ({
+                  label: upperFirst(column.id),
+                  type: 'checkbox' as const,
+                  checked: column.getIsVisible(),
+                  onUpdateChecked(checked: boolean) {
+                    table?.tableApi?.getColumn(column.id)?.toggleVisibility(!!checked)
+                  },
+                  onSelect(e: Event) {
+                    e.preventDefault()
+                  }
+                }))
+            "
+            :content="{ align: 'end' }"
+          >
+            <UButton
+              label="Columns"
+              color="neutral"
+              variant="outline"
+              trailing-icon="i-lucide-chevron-down"
+            />
+          </UDropdownMenu>
         </template>
-      </UTable>
+
+        <template #body>
+          <UTable
+            ref="table"
+            v-model:row-selection="rowSelection"
+            v-model:column-visibility="columnVisibility"
+            v-model:column-filters="columnFilters"
+            v-model:pagination="pagination"
+            :pagination-options="{
+              getPaginationRowModel: getPaginationRowModel()
+            }"
+            :data="events"
+            :columns="columns"
+            :loading="loading"
+            class="flex-1"
+            @select="onSelect"
+          >
+            <template #empty>
+              <UEmpty v-bind="emptyProps" />
+            </template>
+          </UTable>
+        </template>
+
+        <template #footer>
+          <UPagination
+            :default-page="(table?.tableApi.getState().pagination.pageIndex || 0) + 1"
+            :items-per-page="table?.tableApi?.getState().pagination.pageSize"
+            :total="table?.tableApi?.getFilteredRowModel().rows.length"
+            @update:page="(p) => table?.tableApi?.setPageIndex(p - 1)"
+          />
+        </template>
+      </u-page-card>
     </u-page-card>
+
+    <ConfirmDialog
+      v-bind="{
+        title: 'Delete Event',
+        open: deleteOpen,
+        description: 'Note that all information related to the event will be deleted completely. This action is irreversible',
+        confirmColor: 'error',
+        confirmText: 'Delete' }"
+      @cancel="cancelDelete"
+      @confirm="confirmDelete"
+    >
+      <div class="space-y-1 5 text-center">
+        <p class="text-highlighted text-lg">
+          {{ selectedEvent?.title }}
+        </p>
+        <p
+          v-if="selectedEvent?.description"
+          class="text-sm text-muted"
+        >
+          {{ selectedEvent?.description }}
+        </p>
+      </div>
+    </ConfirmDialog>
   </div>
 </template>

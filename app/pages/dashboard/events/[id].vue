@@ -165,39 +165,6 @@ const stats = computed(() => [
     iconColor: 'text-success' as const
   },
 ])
-// const stats = computed(() => {
-//   if (!data.value) return undefined
-//   return [
-//     {
-//       title: 'Attending',
-//       icon: 'i-lucide-check-circle',
-//       value: data.value.rsvpCounts.attending?.count || 0,
-//       color: 'secondary',
-//       guests: data.value?.rsvpCounts.attending?.totalGuests || undefined,
-//     },
-//     {
-//       title: 'Maybe',
-//       icon: 'i-lucide-help-circle',
-//       value: data.value?.rsvpCounts.maybe?.count || 0,
-//       color: 'warning',
-//       guests: data.value?.rsvpCounts.maybe?.totalGuests || undefined,
-//     },
-//     {
-//       title: 'Not Attending',
-//       icon: 'i-lucide-help-circle',
-//       value: data.value.rsvpCounts.not_attending?.count || 0,
-//       color: 'error',
-//       guests: undefined,
-//     },
-//     {
-//       title: 'Checked In',
-//       icon: 'i-lucide-users',
-//       value: data.value.attendanceCount || 0,
-//       color: 'success',
-//       guests: undefined
-//     },
-//   ] as EventStat[]
-// })
 
 function formatDate(date: string) {
   return new Date(date).toLocaleString('en-US', {

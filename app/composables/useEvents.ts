@@ -5,7 +5,6 @@
  */
 
 import { formatDistance } from 'date-fns'
-import type { ButtonProps } from '@nuxt/ui'
 
 export interface EventData {
   id: number
@@ -545,13 +544,15 @@ export function useEvents() {
    * Check if event is past
    */
   function isPastEvent(event: EventData | Date | string) {
-    const eventDate = event instanceof Date
-      ? event
-      : typeof event === 'string'
-        ? new Date(event)
-        : new Date(event.startTime)
-
-    return eventDate < new Date()
+    const now = new Date()
+    
+    if (event instanceof Date || typeof event === 'string') {
+      return new Date(event) < now
+    } else {
+      const st_ev = new Date(event.startTime)
+      const end_ev = new Date(event.endTime!)
+      return st_ev < now && end_ev < now
+    }
   }
 
   /**
