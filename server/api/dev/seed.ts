@@ -30,5 +30,4 @@ export default defineEventHandler(async (event) => {
   const { result } = await runTask("db:seed", { payload });
 
   return { result };
-  // return payload
 })

@@ -71,7 +71,7 @@ function ElementClicked(title: string, index: number) {
       @click="() => { ElementClicked('nice', 4) }"
     /> -->
     <section
-      v-if="files && files.length"
+      v-if="isAuthorizedGallery || (files && files.length)"
       ref="dropZoneRef"
       class="relative h-full gap-[22px] p-4"
       :class="[
