@@ -94,7 +94,7 @@ export default defineTask({
 
     const allUsers = [adminUser, pastorUser, ...regularUsers];
 
-    //too much data causes errors
+    // too much data causes errors
     await Promise.all(
       chunk(allUsers, 5).map((x) => {
         return db.insert(tables.users).values(x);
@@ -124,7 +124,7 @@ export default defineTask({
       .insert(tables.roles)
       .values(rolesData)
       .returning();
-    const roleMap = new Map(insertedRoles.map((r) => [r.name, r.id]));
+    const roleMap = new Map(insertedRoles.map(r => [r.name, r.id]));
     console.log(`🎭 Created ${insertedRoles.length} roles`);
 
     // 3. Assign user roles
@@ -134,7 +134,7 @@ export default defineTask({
       { userId: pastorUser.id, roleId: roleMap.get('Pastor')! },
       { userId: pastorUser.id, roleId: roleMap.get('Editor')! },
       // Assign random roles to some other users
-      ...regularUsers.map((x) => ({
+      ...regularUsers.map(x => ({
         userId: x.id,
         roleId: faker.helpers.arrayElement([
           roleMap.get('Editor')!,
@@ -151,7 +151,7 @@ export default defineTask({
       //   ]),
       // })),
     ];
-    //too much data causes errors
+    // too much data causes errors
     await Promise.all(
       chunk(userRolesData, 5).map((x) => {
         return db.insert(tables.userRoles).values(x);
@@ -196,9 +196,9 @@ export default defineTask({
 
     // 5. Assign members to groups
     const membersToGroupsData: Array<{
-      userId: string;
-      groupId: number;
-      role: 'leader' | 'member';
+      userId: string
+      groupId: number
+      role: 'leader' | 'member'
     }> = [];
     insertedGroups.forEach((group, index) => {
       // Assign leaders (first 2 users as leaders for some groups)
@@ -218,7 +218,7 @@ export default defineTask({
         // Avoid duplicate entries
         if (
           !membersToGroupsData.some(
-            (m) => m.userId === userId && m.groupId === group.id,
+            m => m.userId === userId && m.groupId === group.id,
           )
         ) {
           membersToGroupsData.push({
@@ -230,7 +230,7 @@ export default defineTask({
       });
     });
 
-    //too much data causes errors
+    // too much data causes errors
     await Promise.all(
       chunk(membersToGroupsData, 7).map((x) => {
         return db.insert(tables.membersToGroups).values(x);
@@ -300,22 +300,22 @@ export default defineTask({
       });
     }
 
-    //too much data causes errors
+    // too much data causes errors
 
     const insertedEvents = [] as Array<{
-      id: number;
-      createdAt: Date;
-      updatedAt: Date;
-      description: string | null;
-      title: string;
-      startTime: Date;
-      endTime: Date | null;
-      location: string | null;
-      creatorId: string | null;
+      id: number
+      createdAt: Date
+      updatedAt: Date
+      description: string | null
+      title: string
+      startTime: Date
+      endTime: Date | null
+      location: string | null
+      creatorId: string | null
     }>;
     await chunk(eventsData, 7).map(async (x) => {
       const e_ids = await db.insert(tables.events).values(x).returning();
-      eventIds.push(...e_ids.map((x) => x.id));
+      eventIds.push(...e_ids.map(x => x.id));
       insertedEvents.push(...e_ids);
     });
 
@@ -350,17 +350,17 @@ export default defineTask({
     });
 
     await Promise.all(
-      chunk(postsData, 5).map((x) => db.insert(tables.posts).values(x)),
+      chunk(postsData, 5).map(x => db.insert(tables.posts).values(x)),
     );
     // await db.insert(tables.posts).values(postsData);
     console.log(`📝 Created ${postsData.length} posts`);
 
     // 8. Create event RSVPs
     const rsvpData: Array<{
-      userId: string;
-      eventId: number;
-      status: 'attending' | 'not_attending' | 'maybe';
-      guestCount: number;
+      userId: string
+      eventId: number
+      status: 'attending' | 'not_attending' | 'maybe'
+      guestCount: number
     }> = [];
     insertedEvents.forEach((event) => {
       // Random subset of users RSVP to each event
@@ -382,19 +382,19 @@ export default defineTask({
     });
 
     await Promise.all(
-      chunk(rsvpData, 5).map((x) => db.insert(tables.eventRsvps).values(x)),
+      chunk(rsvpData, 5).map(x => db.insert(tables.eventRsvps).values(x)),
     );
     // await db.insert(tables.eventRsvps).values(rsvpData);
     console.log(`✅ Created ${rsvpData.length} event RSVPs`);
 
     // 9. Create attendance records for past events
     const attendanceData: Array<{
-      userId: string;
-      eventId: number;
-      checkInTime: Date;
+      userId: string
+      eventId: number
+      checkInTime: Date
     }> = [];
     const pastEvents = insertedEvents.filter(
-      (e) => e.startTime.getTime() < Date.now(),
+      e => e.startTime.getTime() < Date.now(),
     );
 
     pastEvents.forEach((event) => {
@@ -415,7 +415,7 @@ export default defineTask({
     });
 
     await Promise.all(
-      chunk(attendanceData, 5).map((x) =>
+      chunk(attendanceData, 5).map(x =>
         db.insert(tables.attendance).values(x),
       ),
     );
@@ -454,10 +454,10 @@ export default defineTask({
 
     // Create images for albums
     const imagesData: Array<{
-      albumId: number;
-      uploaderId: string;
-      url: string;
-      caption: string;
+      albumId: number
+      uploaderId: string
+      url: string
+      caption: string
     }> = [];
     insertedAlbums.forEach((album) => {
       const imageCount = faker.number.int({ min: 3, max: 8 });
@@ -472,23 +472,23 @@ export default defineTask({
     });
 
     await Promise.all(
-      chunk(imagesData, 5).map((x) => db.insert(tables.images).values(x)),
+      chunk(imagesData, 5).map(x => db.insert(tables.images).values(x)),
     );
     // await db.insert(tables.images).values(imagesData);
     console.log(`🖼️  Created ${imagesData.length} images`);
 
     // 11. Create timers for future events
     const timersData: Array<{
-      id: string;
-      label: string;
-      totalDuration: number;
-      eventId: number;
-      speakerId: string;
-      organizerId: string;
+      id: string
+      label: string
+      totalDuration: number
+      eventId: number
+      speakerId: string
+      organizerId: string
     }> = [];
     const timerIds: string[] = [];
     const futureEvents = insertedEvents
-      .filter((e) => e.startTime.getTime() > Date.now())
+      .filter(e => e.startTime.getTime() > Date.now())
       .slice(0, 4);
 
     futureEvents.forEach((event) => {
@@ -505,17 +505,17 @@ export default defineTask({
     });
 
     await Promise.all(
-      chunk(timersData, 5).map((x) => db.insert(tables.timers).values(x)),
+      chunk(timersData, 5).map(x => db.insert(tables.timers).values(x)),
     );
     // await db.insert(tables.timers).values(timersData);
     console.log(`⏱️  Created ${timersData.length} timers`);
 
     // 12. Create timer segments
     const segmentsData: Array<{
-      timerId: string;
-      label: string;
-      duration: number;
-      order: number;
+      timerId: string
+      label: string
+      duration: number
+      order: number
     }> = [];
     timerIds.forEach((timerId) => {
       const segments = [
@@ -534,7 +534,7 @@ export default defineTask({
     });
 
     await Promise.all(
-      chunk(segmentsData, 5).map((x) =>
+      chunk(segmentsData, 5).map(x =>
         db.insert(tables.timerSegments).values(x),
       ),
     );
@@ -543,14 +543,14 @@ export default defineTask({
 
     // 13. Create group applications
     const applicationsData: Array<{
-      userId: string;
-      groupId: number;
-      status: 'pending' | 'approved' | 'rejected';
-      reviewedById?: string | null;
-      reviewedAt?: Date | null;
+      userId: string
+      groupId: number
+      status: 'pending' | 'approved' | 'rejected'
+      reviewedById?: string | null
+      reviewedAt?: Date | null
     }> = [];
     const nonMemberUsers = userIds
-      .filter((userId) => !membersToGroupsData.some((m) => m.userId === userId))
+      .filter(userId => !membersToGroupsData.some(m => m.userId === userId))
       .slice(0, 5);
 
     nonMemberUsers.forEach((userId) => {
@@ -570,7 +570,7 @@ export default defineTask({
     });
 
     await Promise.all(
-      chunk(applicationsData, 5).map((x) =>
+      chunk(applicationsData, 5).map(x =>
         db.insert(tables.groupApplications).values(x),
       ),
     );
@@ -579,10 +579,10 @@ export default defineTask({
 
     // 14. Create group invitations
     const invitationsData: Array<{
-      groupId: number;
-      invitedUserId: string;
-      inviterUserId: string;
-      status: 'pending' | 'accepted' | 'declined';
+      groupId: number
+      invitedUserId: string
+      inviterUserId: string
+      status: 'pending' | 'accepted' | 'declined'
     }> = [];
     const uninvitedUsers = userIds.slice(-5); // Last 5 users
 
@@ -604,7 +604,7 @@ export default defineTask({
     });
 
     await Promise.all(
-      chunk(invitationsData, 5).map((x) =>
+      chunk(invitationsData, 5).map(x =>
         db.insert(tables.groupInvitations).values(x),
       ),
     );
@@ -613,10 +613,10 @@ export default defineTask({
 
     // 15. Create notifications
     const notificationsData: Array<{
-      userId: string;
-      message: string;
-      link?: string | null;
-      isRead: boolean;
+      userId: string
+      message: string
+      link?: string | null
+      isRead: boolean
     }> = [];
     userIds.forEach((userId) => {
       const notificationCount = faker.number.int({ min: 1, max: 5 });
@@ -643,7 +643,7 @@ export default defineTask({
     });
 
     await Promise.all(
-      chunk(notificationsData, 5).map((x) =>
+      chunk(notificationsData, 5).map(x =>
         db.insert(tables.notifications).values(x),
       ),
     );

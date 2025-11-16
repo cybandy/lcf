@@ -19,6 +19,10 @@ export default defineNuxtConfig({
     enabled: true
   },
 
+  runtimeConfig: {
+    seed: process.env.SEED_DB_API_KEY || 'dev'
+  },
+
   css: ['~/assets/css/main.css'],
 
   routeRules: {
