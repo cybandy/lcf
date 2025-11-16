@@ -3,6 +3,14 @@ definePageMeta({
   middleware: 'auth',
   layout: 'dashboard',
 })
+
+useSeoMeta({
+  title: 'Events',
+  description: 'View, manage, and RSVP to upcoming fellowship events and activities',
+  ogTitle: 'Events - Dashboard',
+  ogDescription: 'Manage church events, track RSVPs, and monitor attendance',
+})
+
 const { canCreateEvents } = useEvents()
 // Active tab
 const activeTab = ref('list')

@@ -17,8 +17,10 @@ onMounted(async () => {
 
 // Set SEO meta
 useSeoMeta({
-  title: computed(() => currentGroup.value?.name || 'Group'),
-  description: computed(() => currentGroup.value?.description || 'Group details'),
+  title: computed(() => currentGroup.value?.name ? `${currentGroup.value.name} - Groups` : 'Group Details'),
+  description: computed(() => currentGroup.value?.description || 'View group information, members, and activities'),
+  ogTitle: computed(() => currentGroup.value?.name || 'Group Details'),
+  ogDescription: computed(() => currentGroup.value?.description || 'Fellowship group details and member information'),
 })
 </script>
 

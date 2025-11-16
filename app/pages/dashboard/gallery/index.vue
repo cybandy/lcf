@@ -3,6 +3,13 @@ definePageMeta({
   middleware: 'auth',
   layout: 'dashboard',
 })
+
+useSeoMeta({
+  title: 'Gallery',
+  description: 'Browse and manage fellowship photo galleries, albums, and shared memories',
+  ogTitle: 'Gallery - Dashboard',
+  ogDescription: 'View and organize fellowship photos and event albums',
+})
 </script>
 
 <template>

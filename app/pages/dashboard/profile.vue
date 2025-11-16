@@ -21,6 +21,13 @@ const links = [
     }
   ]
 ] satisfies NavigationMenuItem[][]
+
+useSeoMeta({
+  title: 'Profile',
+  description: 'View and manage your profile, groups, and notification settings',
+  ogTitle: 'Profile - Dashboard',
+  ogDescription: 'Manage your personal information, group memberships, and notification preferences',
+})
 </script>
 
 <template>

@@ -3,6 +3,14 @@ definePageMeta({
   layout: 'dashboard',
   middleware: ['auth']
 })
+
+useSeoMeta({
+  title: 'Groups & Ministries',
+  description: 'Explore and join fellowship groups, ministries, and small groups to connect and grow together',
+  ogTitle: 'Groups & Ministries - Dashboard',
+  ogDescription: 'Browse and manage your fellowship group memberships and ministry involvement',
+})
+
 const groupsComposable = useGroups()
 const { groups, loading: pending, fetchAuthorizedGroups, fetchPublicGroups, canCreateGroups, createGroup } = groupsComposable
 

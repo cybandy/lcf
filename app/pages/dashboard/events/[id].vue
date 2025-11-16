@@ -9,6 +9,13 @@ definePageMeta({
 })
 
 const id = computed(() => Number(useRoute().params.id))
+
+useSeoMeta({
+  title: computed(() => data.value?.event.title ? `${data.value.event.title} - Events` : 'Event Details'),
+  description: computed(() => data.value?.event.description || 'View event details, RSVP, and check attendance information'),
+  ogTitle: computed(() => data.value?.event.title || 'Event Details'),
+  ogDescription: computed(() => data.value?.event.description || 'Fellowship event details and information'),
+})
 if (!id.value) {
   navigateTo('/dashboard/events')
 }

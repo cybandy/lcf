@@ -3,6 +3,13 @@ definePageMeta({
   layout: 'dashboard',
   middleware: ['auth']
 })
+
+useSeoMeta({
+  title: 'Dashboard',
+  description: 'Your personal dashboard for managing fellowship activities and staying connected',
+  ogTitle: 'Dashboard - Life Christian Fellowship',
+  ogDescription: 'Manage your fellowship activities, events, groups, and profile',
+})
 </script>
 
 <template>

@@ -20,6 +20,13 @@ const links = [[
   }
 ]
 ] satisfies NavigationMenuItem[][]
+
+useSeoMeta({
+  title: 'Settings',
+  description: 'Configure your account settings, security preferences, and fellowship management options',
+  ogTitle: 'Settings - Dashboard',
+  ogDescription: 'Manage your account settings and fellowship configuration',
+})
 </script>
 
 <template>
