@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import type { BlobObject } from '~/composables/useGallery';
-
 type Props = {
   active: { title: string, index: number }
 }
@@ -14,7 +12,7 @@ const { getImages, isImage, isVideo, isAuthorizedGallery, files } = useGallery()
 await getImages()
 
 // modal
-const galleryOpen = ref(false)
+// const galleryOpen = ref(false)
 const carousel = useTemplateRef('carousel')
 const onClickPrev = () => {
   active.value.index--
@@ -37,7 +35,7 @@ onMounted(() => {
 
 <template>
   <div>
-    <UContainer class="flex flex-col items-center max-h-screen">
+    <UContainer class="flex flex-col items-center max-h-screen max-w-dvw">
       <div class="w-full sm:min-w-5/6 md:w-2/3 h-full">
         <UCarousel
           v-slot="{ item: file }"
@@ -46,7 +44,7 @@ onMounted(() => {
           arrows
           :prev="{ onClick: onClickPrev }"
           :next="{ onClick: onClickNext }"
-          class="w-full mx-auto"
+          class="w-full mx-auto car"
           :ui="{
             container: '',
             item: 'h-full'

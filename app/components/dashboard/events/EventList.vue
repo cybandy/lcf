@@ -318,7 +318,7 @@ const columnFilters = ref([
 </script>
 
 <template>
-  <div class="space-y-4">
+  <div class="space-y-4 w-full max-w-dvw overflow-x-hidden">
     <u-dashboard-toolbar>
       <UNavigationMenu
         :items="statusMenu"
@@ -342,13 +342,14 @@ const columnFilters = ref([
         :ui="{
           body: 'w-full',
           header: 'w-full flex items-center justify-between',
-          footer: 'w-full'
+          footer: 'w-full',
+          wrapper: 'w-full'
         }"
       >
         <template #header>
           <UInput
-            :model-value="table?.tableApi?.getColumn('title')?.getFilterValue() as string"
-            class="max-w-sm"
+            :model-value="(table?.tableApi?.getColumn('title')?.getFilterValue() as string)"
+            class="w-1/2 sm:max-w-sm"
             placeholder="Filter title..."
             @update:model-value="table?.tableApi?.getColumn('title')?.setFilterValue($event)"
           />
@@ -393,7 +394,7 @@ const columnFilters = ref([
             :data="events"
             :columns="columns"
             :loading="loading"
-            class="flex-1"
+            class="w-full max-w-dvw"
             @select="onSelect"
           >
             <template #empty>

@@ -125,7 +125,10 @@ onMounted(async () => {
 </script>
 
 <template>
-  <UDashboardGroup unit="rem">
+  <UDashboardGroup
+    unit="rem"
+    class="max-w-dvw overflow-hidden"
+  >
     <UDashboardSidebar
       id="default"
       v-model:open="open"

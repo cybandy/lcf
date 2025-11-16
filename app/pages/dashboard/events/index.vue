@@ -67,7 +67,10 @@ const tabs = computed(() => {
 </script>
 
 <template>
-  <UDashboardPanel id="events">
+  <UDashboardPanel
+    id="events"
+    class="w-full"
+  >
     <!-- Header -->
     <template #header>
       <UDashboardNavbar
@@ -122,7 +125,7 @@ const tabs = computed(() => {
       </div> -->
     </template>
     <template #body>
-      <div class="space-y-6">
+      <div class="space-y-6 w-full">
         <!-- Tabs -->
         <UTabs
           v-if="tabs.length > 1"
