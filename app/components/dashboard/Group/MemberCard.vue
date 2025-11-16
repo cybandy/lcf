@@ -14,7 +14,6 @@ const roleLabel = computed(() => props.member.role === 'leader' ? 'Group Leader'
   <UPageCard
     variant="outline"
     orientation="vertical"
-    title="Personal Information"
     :ui="{
       wrapper: '',
       root: 'relative'

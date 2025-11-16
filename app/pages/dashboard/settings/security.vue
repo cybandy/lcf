@@ -17,9 +17,11 @@ useSeoMeta({
     <UPageCard
       title="Role Management"
       description="Manage member roles and permissions across the fellowship"
+      :ui="{
+        body: 'h-fit',
+        root: 'block'
+      }"
     >
-      <!-- Admin Role Management (Only visible to admins) -->
-      <!-- <DashboardSecurityAdminRoleManagement v-if="userIsAdmin" /> -->
       <DashboardSecurityAdminRoleManagementV2 v-if="userIsAdmin" />
     </UPageCard>
   </div>

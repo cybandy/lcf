@@ -60,13 +60,13 @@ const links = computed(() => {
           open.value = false
         }
       },
-      {
-        label: 'Members',
-        to: '/dashboard/settings/members',
-        onSelect: () => {
-          open.value = false
-        }
-      },
+      // {
+      //   label: 'Members',
+      //   to: '/dashboard/settings/members',
+      //   onSelect: () => {
+      //     open.value = false
+      //   }
+      // },
       {
         label: 'Security',
         to: '/dashboard/settings/security',
