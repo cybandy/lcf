@@ -29,7 +29,6 @@ const props = defineProps<{ events: Event[], title?: string }>();
       <EventCard
         v-for="event in events"
         :key="event.id"
-        v-motion-item
         :event="event"
       />
     </div>

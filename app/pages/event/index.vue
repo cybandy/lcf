@@ -3,7 +3,7 @@ import type { Event } from '~~/shared/utils/zod_schemas'
 
 definePageMeta({
   layout: 'default',
-  middleware: 'auth'
+  middleware: 'guest'
 })
 
 const { data: page } = await useAsyncData('event', () => queryCollection('event').first())

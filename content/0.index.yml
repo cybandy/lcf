@@ -14,7 +14,7 @@ hero:
         icon: i-lucide-arrow-right
         trailing: true
         to: '#'
-        size: xl
+        size: md
       - label: Visit Us
         color: neutral
         variant: subtle

@@ -67,7 +67,8 @@ export default defineNuxtConfig({
   nitro: {
     experimental: {
       tasks: true,
-      // websocket: true
+      // websocket: true,
+      openAPI: true
     }
   },
 

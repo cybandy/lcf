@@ -4,19 +4,21 @@ const global = useAppConfig().global
 const items = global.header.menu.columns
 
 const { loggedIn } = useMyUserSession()
+const open = ref(false)
 </script>
 
 <template>
   <UHeader
+    v-model:open="open"
     mode="slideover"
     :ui="{
       root: 'bg-inverted border-b-0'
     }"
     :toggle="{
-      ui: {
-        base: 'text-inverted'
-      }
+      color: 'neutral',
+      variant: !open ? 'solid' : 'ghost'
     }"
+    class="header"
   >
     <template #left>
       <NuxtLink to="/">
@@ -48,7 +50,7 @@ const { loggedIn } = useMyUserSession()
         variant="solid"
         to="/dashboard"
         label="Dashboard"
-        size="xl"
+        size="md"
         trailing-icon="i-lucide-layout-grid"
         class="hidden lg:inline-flex"
         :ui="{ label: '' }"
@@ -59,7 +61,7 @@ const { loggedIn } = useMyUserSession()
         variant="solid"
         to="/join-us"
         label="Join Us"
-        size="xl"
+        size="md"
         trailing-icon="i-lucide-arrow-right"
         class="hidden lg:inline-flex"
         :ui="{ label: '' }"
@@ -79,7 +81,7 @@ const { loggedIn } = useMyUserSession()
         label="Join Us"
         color="primary"
         variant="solid"
-        to="#"
+        to="/join-us"
         block
         class="mb-3"
       />
@@ -91,12 +93,12 @@ const { loggedIn } = useMyUserSession()
         block
         class="mb-3"
       />
-      <UButton
+      <!-- <UButton
         label="Sign up"
         color="neutral"
         to="/signup"
         block
-      />
+      /> -->
     </template>
   </UHeader>
 </template>

@@ -32,7 +32,7 @@ function onSubmit() {
           :ui="{
             root: 'grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4',
             left: 'sm:mb-0 sm:mt-10 lg:mt-0',
-            center: 'order-none sm:order-first lg:order-none col-span-full lg:col-span-1 grid grid-cols-2',
+            center: 'order-0 sm:order-first lg:order-0 col-span-full lg:col-span-1 grid grid-cols-2',
             right: ' lg:mt-0'
           }"
         >
