@@ -82,13 +82,11 @@ const links = computed(() => {
     [{
       label: 'Feedback',
       icon: 'i-lucide-message-circle',
-      to: 'https://github.com/nuxt-ui-templates/dashboard',
-      target: '_blank'
+      to: '#',
     }, {
       label: 'Help & Support',
       icon: 'i-lucide-info',
-      to: 'https://github.com/nuxt-ui-templates/dashboard',
-      target: '_blank'
+      to: '#',
     }]
   )
   return _ll

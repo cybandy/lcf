@@ -89,6 +89,7 @@ export const useGallery = () => {
     deleteImage,
     isImage,
     isVideo,
-    isAuthorizedGallery
+    isAuthorizedGallery,
+    loading
   }
 }

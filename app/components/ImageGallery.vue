@@ -14,7 +14,7 @@ const deletingImg = ref('')
 const uploadingImg = ref(false)
 
 const toast = useToast()
-const { uploadImage, deleteImage, getImages, files, isImage, isVideo, isAuthorizedGallery } = useGallery()
+const { uploadImage, deleteImage, getImages, files, isImage, isVideo, isAuthorizedGallery, loading } = useGallery()
 const { loggedIn, clear } = useUserSession()
 
 onBeforeMount(async () => {
@@ -96,7 +96,16 @@ function ElementClicked(title: string, index: number) {
             :dropzone="false"
             multiple
             @update:model-value="uploadFile"
-          />
+          >
+            <template #actions="{ }">
+              <UButton
+                v-if="loading"
+                loading
+                label="Upload"
+                color="neutral"
+              />
+            </template>
+          </UFileUpload>
         </UPageCard>
         <ul
           v-if="files && files.length"
@@ -117,24 +126,37 @@ function ElementClicked(title: string, index: number) {
               @click="deleteFile(file.pathname)"
             />
            
-            <img
-              v-if="isImage(file)"
-              width="527"
-              height="430"
-              :src="`/files/${file.pathname}`"
-              :class="{ imageEl: file.pathname.split('.')[0] === active.title }"
-              class="h-auto w-full max-h-[430px] rounded-md transition-all duration-200 border-file brightness-[.8] hover:brightness-100 will-change-[filter] object-cover"
-              @click="() => { ElementClicked(file.pathname, ind) }"
+            <UContextMenu
+              :items="[
+                {
+                  label: 'Delete',
+                  icon: 'i-lucide-trash',
+                  color: 'error',
+                  onSelect: () => {
+                    deleteFile(file.pathname)
+                  }
+                }
+              ]"
             >
-            <video
-              v-else-if="isVideo(file)"
-              :src="`/files/${file.pathname}`"
-              class="h-auto w-full max-h-[430px] rounded-md transition-all duration-200 border-file brightness-[.8] hover:brightness-100 will-change-[filter] object-cover"
-              :autoplay="false"
-              :controls="true"
-              :disable-picture-in-picture="true"
-              @click="() => { ElementClicked(file.pathname, ind) }"
-            />
+              <img
+                v-if="isImage(file)"
+                width="527"
+                height="430"
+                :src="`/files/${file.pathname}`"
+                :class="{ imageEl: file.pathname.split('.')[0] === active.title }"
+                class="h-auto w-full max-h-[430px] rounded-md transition-all duration-200 border-file brightness-[.8] hover:brightness-100 will-change-[filter] object-cover"
+                @click="() => { ElementClicked(file.pathname, ind) }"
+              >
+              <video
+                v-else-if="isVideo(file)"
+                :src="`/files/${file.pathname}`"
+                class="h-auto w-full max-h-[430px] rounded-md transition-all duration-200 border-file brightness-[.8] hover:brightness-100 will-change-[filter] object-cover"
+                :autoplay="false"
+                :controls="true"
+                :disable-picture-in-picture="true"
+                @click="() => { ElementClicked(file.pathname, ind) }"
+              />
+            </UContextMenu>
           </li>
         </ul>
       </div>
