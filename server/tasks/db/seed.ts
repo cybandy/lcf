@@ -37,7 +37,7 @@ export default defineTask({
     console.log('🗑️  Cleared existing data');
 
     // 1. Create users with password
-    const _pwd = await hashPassword('123@Abc');
+    const _pwd = await hashPassword('1234@Abcde');
     const userIds: string[] = [];
 
     // Create admin user
