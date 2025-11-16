@@ -2,7 +2,7 @@
 import { ref, computed, onUnmounted, shallowRef } from 'vue'
 
 // Define the structure for a speaker's time segment
-export interface TimerSegment {
+export interface TimerSegmentUI {
   id: number
   label: string
   // When this segment *ends* (in seconds from the start)
@@ -18,7 +18,7 @@ export const useEventTimer = () => {
   const totalDuration = ref(0) // Total time in seconds
   const elapsedTime = ref(0) // Time elapsed in seconds
   const isRunning = ref(false)
-  const segments = ref<TimerSegment[]>([])
+  const segments = ref<TimerSegmentUI[]>([])
   const timerHandle = shallowRef<ReturnType<typeof setInterval> | null>(null)
 
   // --- Computed State ---

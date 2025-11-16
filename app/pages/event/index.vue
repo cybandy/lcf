@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { Event } from '#layers/backend/shared/utils/zod_schemas'
+import type { Event } from '~~/shared/utils/zod_schemas'
 
 definePageMeta({
   layout: 'default',

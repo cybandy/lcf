@@ -1,4 +1,4 @@
-import { FellowshipPermission } from '#layers/backend/shared/utils/authorization';
+import { FellowshipPermission } from '~~/shared/utils/authorization';
 
 export type GroupMemberUser = {
   id: string

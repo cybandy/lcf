@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Event } from '#layers/backend/shared/utils/zod_schemas'
+import type { Event } from '~~/shared/utils/zod_schemas'
 
 const props = defineProps<{ event: Event }>();
 

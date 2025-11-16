@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Role, User } from '#layers/backend/shared/utils/zod_schemas'
+import type { Role, User } from '~~/shared/utils/zod_schemas'
 
 const toast = useToast()
 
@@ -18,7 +18,7 @@ const availableRoles = ref<Role[]>([])
 const loading = ref(false)
 const selectedUser = ref<UserWithRoles | null>(null)
 const showAssignRoleModal = ref(false)
-const selectedRoleToAssign = ref<number | null>(null)
+const selectedRoleToAssign = ref<number | undefined>(undefined)
 const assigningRole = ref(false)
 
 // Fetch users with roles
@@ -59,7 +59,7 @@ async function fetchRoles() {
 // Open assign role modal
 function openAssignRoleModal(user: UserWithRoles) {
   selectedUser.value = user
-  selectedRoleToAssign.value = null
+  selectedRoleToAssign.value = undefined
   showAssignRoleModal.value = true
 }
 
@@ -67,7 +67,7 @@ function openAssignRoleModal(user: UserWithRoles) {
 const availableRolesToAssign = computed(() => {
   if (!selectedUser.value) return []
   const userRoleIds = selectedUser.value.roles.map(r => r.id)
-  return availableRoles.value.filter(role => !userRoleIds.includes(role.id))
+  return availableRoles.value.filter(role => !userRoleIds.includes(role.id)).map(x => ({ ...x, description: x.description ? x.description : undefined }))
 })
 
 // Assign role to user

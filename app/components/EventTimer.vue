@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { breakpointsTailwind } from '@vueuse/core'
-// import type { TimerSegment } from '~/composables/useEventTimer' // Import the interface
 
 const {
   totalDuration,
@@ -27,7 +26,7 @@ const segmentDuration = ref(3)
 
 // --- Local state for Edit Modal ---
 const isEditModalOpen = ref(false)
-const segmentToEdit = ref<TimerSegment | null>(null)
+const segmentToEdit = ref<{ id: number, label: string, endTime: number, duration: number } | null>(null)
 const editLabel = ref('')
 const editDuration = ref(0)
 
@@ -51,7 +50,7 @@ const handleAddSegment = () => {
 }
 
 // --- Modal Logic ---
-const openEditModal = (segment: TimerSegment) => {
+const openEditModal = (segment: { id: number, label: string, endTime: number, duration: number }) => {
   segmentToEdit.value = segment
   editLabel.value = segment.label
   editDuration.value = segment.duration / 60 // Convert seconds back to minutes for UI

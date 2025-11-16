@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { checkPasswordStrength } from '#layers/backend/shared/utils/misc';
+import { checkPasswordStrength } from '~~/shared/utils/misc';
 
 const show = ref(false);
 

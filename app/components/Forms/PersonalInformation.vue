@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import * as z from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui'
-import type { User } from '#layers/backend/shared/utils/zod_schemas'
+import type { User } from '~~/shared/utils/zod_schemas'
 
 type TUser = Partial<Omit<User, 'id'>>
 

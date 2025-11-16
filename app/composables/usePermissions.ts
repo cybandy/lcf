@@ -5,7 +5,7 @@
  * Uses the shared authorization utilities and session data.
  */
 
-import type { Role } from '#layers/backend/shared/utils/zod_schemas';
+import type { Role } from '~~/shared/utils/zod_schemas';
 import {
   FellowshipPermission,
   GroupPermission,
@@ -23,7 +23,7 @@ import {
   canManageGroup,
   canPerformAction,
   getAllUserPermissions,
-} from '#layers/backend/shared/utils/authorization';
+} from '~~/shared/utils/authorization';
 
 // Extend the session user type to include roles
 interface SessionUser {

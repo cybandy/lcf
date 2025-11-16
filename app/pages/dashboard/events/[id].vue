@@ -203,6 +203,12 @@ function cancelDelete() {
       <u-dashboard-navbar :title="data?.event.title">
         <template #leading>
           <u-dashboard-sidebar-collapse />
+          <UButton
+            icon="i-lucide-arrow-left"
+            color="neutral"
+            variant="ghost"
+            to="/dashboard/events"
+          />
         </template>
         <template #right>
           <UButton

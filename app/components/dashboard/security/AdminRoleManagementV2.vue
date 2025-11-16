@@ -2,7 +2,7 @@
 import { h, resolveComponent } from 'vue'
 import type { Row } from '@tanstack/vue-table'
 import type { TableColumn, SelectProps } from '@nuxt/ui'
-import type { Role, User } from '#layers/backend/shared/utils/zod_schemas'
+import type { Role, User } from '~~/shared/utils/zod_schemas'
 
 const toast = useToast()
 
