@@ -4,13 +4,13 @@ import type * as z from 'zod';
 
 export async function updateUserSession(
   event: H3Event,
-  user: User,
+  user: UserWithRoles,
 ) {
   await replaceUserSession(event, { user });
 }
 
 interface myUserSessionRequired extends UserSessionRequired {
-  user: z.output<typeof UserSchema.select>
+  user: UserWithRoles
 }
 export async function myRequireUserSession(
   event: H3Event,

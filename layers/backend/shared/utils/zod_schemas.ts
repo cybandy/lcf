@@ -45,7 +45,7 @@ export const RoleSchema = {
   update: createUpdateSchema(schema.roles),
 };
 
-export type Role = z.infer<typeof RoleSchema.select>;
+export type Role = typeof schema.roles.$inferSelect
 
 export const TimerSchema = {
   insert: createInsertSchema(schema.timers),

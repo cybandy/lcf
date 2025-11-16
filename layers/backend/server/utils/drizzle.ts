@@ -19,6 +19,7 @@ export {
   between,
   asc,
   desc,
+  inArray
 } from 'drizzle-orm';
 
 export const tables = schema;

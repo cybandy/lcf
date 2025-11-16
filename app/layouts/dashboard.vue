@@ -39,6 +39,14 @@ const links = computed(() => {
       }
     },
     {
+      label: 'Groups',
+      icon: 'i-lucide-users',
+      to: '/dashboard/groups',
+      onSelect: () => {
+        open.value = false
+      }
+    },
+    {
       label: 'Settings',
       to: '/dashboard/settings',
       icon: 'i-lucide-settings',
